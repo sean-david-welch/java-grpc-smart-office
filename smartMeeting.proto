@@ -1,0 +1,61 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+package smartMeeting;
+
+service SmartMeetingRoom {
+  rpc BookRoom (BookRoomRequest) returns (ActionResponse) {}
+  rpc CancelBooking (CancelBookingRequest) returns (ActionResponse) {}
+  rpc CheckAvailability (CheckAvailabilityRequest) returns (AvailabilityResponse) {}
+}
+
+enum RoomStatus {
+  UNKNOWN = 0;
+  AVAILABLE = 1;
+  OCCUPIED = 2;
+  MAINTENANCE = 3;
+}
+
+enum ErrorCode {
+  NONE = 0;
+  NOT_FOUND = 1;
+  CONFLICT = 2;
+  UNAUTHORIZED = 3;
+}
+
+message BookRoomRequest {
+  string roomId = 1;
+  google.protobuf.Timestamp startTime = 2;
+  google.protobuf.Timestamp endTime = 3;
+  string userId = 4;
+}
+
+message CancelBookingRequest {
+  string bookingId = 1;
+}
+
+message CheckAvailabilityRequest {
+  string roomId = 1;
+  google.protobuf.Timestamp date = 2;
+  bool requestDetails = 3;
+}
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode error_code = 2;
+}
+
+message AvailabilityResponse {
+  RoomStatus status = 1;
+  repeated google.protobuf.Timestamp availableTimes = 2;
+  bool success = 3;
+  string message = 4;
+  RoomDetails details = 5;
+}
+
+message RoomDetails {
+  string roomId = 1;
+  string name = 2;
+  string location = 3;
+  int32 capacity = 4;
+}

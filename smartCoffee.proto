@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package smartcoffee;
+package smartCoffee;
 
 service SmartCoffeeMachine {
   rpc BrewCoffee (BrewCoffeeRequest) returns (ActionResponse) {}
