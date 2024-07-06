@@ -23,11 +23,26 @@ enum ErrorCode {
   UNAUTHORIZED = 3;
 }
 
+message Timestamp {
+    google.protobuf.Timestamp value = 1;
+}
+
+message RoomDetails {
+  string roomId = 1;
+  string name = 2;
+  string location = 3;
+  int32 capacity = 4;
+}
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode error_code = 2;
+}
+
 message BookRoomRequest {
   string roomId = 1;
-  google.protobuf.Timestamp startTime = 2;
-  google.protobuf.Timestamp endTime = 3;
-  string userId = 4;
+  string userId = 2;
+  Timestamp timeSlot = 3;
 }
 
 message CancelBookingRequest {
@@ -36,26 +51,12 @@ message CancelBookingRequest {
 
 message CheckAvailabilityRequest {
   string roomId = 1;
-  google.protobuf.Timestamp date = 2;
-  bool requestDetails = 3;
-}
-
-message ActionResponse {
-  bool success = 1;
-  ErrorCode error_code = 2;
+  Timestamp timeSlot = 2;
 }
 
 message AvailabilityResponse {
-  RoomStatus status = 1;
-  repeated google.protobuf.Timestamp availableTimes = 2;
-  bool success = 3;
-  string message = 4;
-  RoomDetails details = 5;
-}
-
-message RoomDetails {
-  string roomId = 1;
-  string name = 2;
-  string location = 3;
-  int32 capacity = 4;
+  bool success = 1;
+  RoomStatus status = 2;
+  RoomDetails details = 3;
+  repeated Timestamp availableTimes = 4;
 }
