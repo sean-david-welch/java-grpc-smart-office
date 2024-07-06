@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package smartcoffee;
+
+service SmartCoffeeMachine {
+  rpc BrewCoffee (BrewCoffeeRequest) returns (ActionResponse) {}
+  rpc CheckInventory (CheckInventoryRequest) returns (InventoryResponse) {}
+  rpc RefillInventory (RefillItemRequest) returns (InventoryResponse) {}
+}
+
+enum CoffeeType {
+  UNKNOWN_COFFEE = 0;
+  AMERICANO = 1;
+  FLAT_WHITE = 2;
+  CORTADO = 3;
+}
+
+enum CupSize {
+  NONE = 0;
+  SMALL = 1;
+  MEDIUM = 2;
+  LARGE = 3;
+}
+
+enum Strength {
+  UNKNOWN_STRENGTH = 0;
+  SINGLE_SHOT = 1;
+  DOUBLE_SHOT = 2;
+}
+
+enum InventoryItem {
+  UNKNOWN_ITEM = 0;
+  MILK = 1;
+  WATER = 2;
+  COFFEE_BEANS = 3;
+}
+
+message BrewCoffeeRequest {
+  CoffeeType coffeeType = 1;
+  CupSize cupSize = 2;
+  Strength strength = 3;
+}
+
+message CheckInventoryRequest {
+  InventoryItem item = 1;
+}
+
+message RefillItemRequest {
+  InventoryItem item = 1;
+  int32 quantity = 2;
+}
+
+message ActionResponse {
+  bool success = 1;
+}
+
+message InventoryResponse {
+  int32 quantity = 1;
+  bool success = 2;
+}
