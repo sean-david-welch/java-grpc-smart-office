@@ -2,12 +2,14 @@ syntax = "proto3";
 
 package smartCoffee;
 
+// Service Methods
 service SmartCoffeeMachine {
   rpc BrewCoffee (BrewCoffeeRequest) returns (ActionResponse) {}
   rpc CheckInventory (CheckInventoryRequest) returns (InventoryResponse) {}
   rpc RefillInventory (RefillItemRequest) returns (InventoryResponse) {}
 }
 
+// Utility types
 enum CoffeeType {
   UNKNOWN_COFFEE = 0;
   AMERICANO = 1;
@@ -35,6 +37,7 @@ enum InventoryItem {
   COFFEE_BEANS = 3;
 }
 
+// Request/Response Methods
 message BrewCoffeeRequest {
   CoffeeType coffeeType = 1;
   CupSize cupSize = 2;

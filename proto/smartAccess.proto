@@ -1,0 +1,68 @@
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package smartAccess;
+
+// Service methods
+service SmartAccessControl {
+  rpc UnlockDoor (UnlockDoorRequest) returns (ActionResponse) {}
+  rpc LockDoor (LockDoorRequest) returns (ActionResponse) {}
+  rpc LogAccess (LogAccessRequest) returns (ActionResponse) {}
+}
+
+// Utility Types
+enum DoorStatus {
+  UNKNOWN = 0;
+  LOCKED = 1;
+  UNLOCKED = 2;
+}
+
+enum AccessLevel {
+  UNKNOWN_LEVEL = 0;
+  GENERAL = 1;
+  STAFF = 2;
+  ADMIN = 3;
+}
+
+enum ErrorCode {
+  NONE = 0;
+  ACCESS_DENIED = 1;
+  DOOR_NOT_FOUND = 2;
+  SYSTEM_ERROR = 3;
+}
+
+message Timestamp {
+    google.protobuf.Timestamp value = 1;
+}
+
+message AccessCredentials {
+  string badgeId = 1;
+  string pin = 2;
+  AccessLevel level = 3;
+}
+
+// Request/Response Types
+message UnlockDoorRequest {
+  string doorId = 1;
+  string userId = 2;
+  AccessCredentials credentials = 3;
+}
+
+message LockDoorRequest {
+  string doorId = 1;
+  string userId = 2;
+}
+
+message LogAccessRequest {
+  string doorId = 1;
+  string userId = 2;
+  Timestamp accessTime = 3;
+  DoorStatus result = 4;
+}
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode error_code = 2;
+}
