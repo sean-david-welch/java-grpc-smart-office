@@ -7,8 +7,8 @@ package smartAccess;
 // Service methods
 service SmartAccessControl {
   rpc UnlockDoor (UnlockDoorRequest) returns (ActionResponse) {}
-  rpc LockDoor (LockDoorRequest) returns (ActionResponse) {}
-  rpc LogAccess (LogAccessRequest) returns (ActionResponse) {}
+  rpc RaiseAlarm (RaiseAlarmRequest) returns (ActionResponse) {}
+  rpc GetAccessLogs (GetAccessLogsRequest) returns (AccessLogsResponse) {}
 }
 
 // Utility Types
@@ -42,6 +42,12 @@ message AccessCredentials {
   AccessLevel level = 3;
 }
 
+message LogEntry {
+  string userId = 1;
+  Timestamp accessTime = 2;
+  DoorStatus status = 3;
+}
+
 // Request/Response Types
 message UnlockDoorRequest {
   string doorId = 1;
@@ -49,16 +55,20 @@ message UnlockDoorRequest {
   AccessCredentials credentials = 3;
 }
 
-message LockDoorRequest {
+message GetAccessLogsRequest {
   string doorId = 1;
-  string userId = 2;
+  Timestamp startTime = 2;
+  Timestamp endTime = 3;
 }
 
-message LogAccessRequest {
+message RaiseAlarmRequest {
   string doorId = 1;
-  string userId = 2;
-  Timestamp accessTime = 3;
-  DoorStatus result = 4;
+  AccessCredentials credentials = 3;
+}
+
+message AccessLogsResponse {
+  repeated LogEntry logs = 1;
+  ErrorCode error_code = 2;
 }
 
 message ActionResponse {
