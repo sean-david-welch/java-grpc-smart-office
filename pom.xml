@@ -46,19 +46,6 @@
             <artifactId>grpc-stub</artifactId>
             <version>1.65.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java -->
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>protoc-gen-grpc-java</artifactId>
-            <version>1.65.1</version>
-            <type>pom</type>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api -->
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -89,7 +76,7 @@
                         io.grpc:protoc-gen-grpc-java:1.65.1:exe:${os.detected.classifier}
                     </pluginArtifact>
                     <protoSourceRoot>src/main/resources</protoSourceRoot>
-                    <outputDirectory>src/main/java</outputDirectory>
+                    <outputDirectory>target/generated-sources/protobuf</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

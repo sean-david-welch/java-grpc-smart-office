@@ -3,7 +3,7 @@ option java_package = "services.smartAccess";
 option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 
-package servicessmartAccess;
+package services.smartAccess;
 
 // Service methods
 service SmartAccessControl {
