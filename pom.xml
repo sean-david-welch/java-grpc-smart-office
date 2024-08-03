@@ -88,8 +88,8 @@
                     <pluginArtifact>
                         io.grpc:protoc-gen-grpc-java:1.65.1:exe:${os.detected.classifier}
                     </pluginArtifact>
-                    <protoSourceRoot>${project.basedir}/src/main/resources</protoSourceRoot>
-                    <outputDirectory>${project.build.directory}/generated-sources/protobuf</outputDirectory>
+                    <protoSourceRoot>src/main/resources</protoSourceRoot>
+                    <outputDirectory>src/main/java</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

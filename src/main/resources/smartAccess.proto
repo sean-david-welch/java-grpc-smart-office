@@ -1,8 +1,9 @@
 syntax = "proto3";
 option java_package = "services.smartAccess";
+option java_multiple_files = true;
 import "google/protobuf/timestamp.proto";
 
-package smartAccess;
+package servicessmartAccess;
 
 // Service methods
 service SmartAccessControl {
