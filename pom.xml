@@ -40,21 +40,27 @@
             <artifactId>grpc-protobuf</artifactId>
             <version>1.65.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.grpc/grpc-protobuf -->
         <!-- https://mvnrepository.com/artifact/io.grpc/grpc-stub -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
             <version>1.65.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.grpc/protoc-gen-grpc-java -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>protoc-gen-grpc-java</artifactId>
+            <version>1.65.1</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
-      <build>
+    <build>
         <extensions>
             <extension>
                 <groupId>kr.motd.maven</groupId>
                 <artifactId>os-maven-plugin</artifactId>
-                <version>1.7.1</version>
+                <version>1.6.1</version>
             </extension>
         </extensions>
         <plugins>
@@ -63,11 +69,13 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <protocArtifact>com.google.protobuf:protoc:3.25.1:exe:${os.detected.classifier}</protocArtifact>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:3.3.0:exe:${os.detected.classifier}
+                    </protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.65.1:exe:${os.detected.classifier}</pluginArtifact>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}
+                    </pluginArtifact>
                 </configuration>
                 <executions>
                     <execution>
@@ -80,5 +88,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
