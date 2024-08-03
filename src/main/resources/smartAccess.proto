@@ -1,8 +1,8 @@
 syntax = "proto3";
-
+option java_package = "services.smartAccess";
+option java_outer_classname = "SmartAccess";
 import "google/protobuf/timestamp.proto";
-
-package services.smartAccess;
+import "common.proto";
 
 // Service methods
 service SmartAccessControl {
@@ -23,13 +23,6 @@ enum AccessLevel {
   GENERAL = 1;
   STAFF = 2;
   ADMIN = 3;
-}
-
-enum ErrorCode {
-  NONE = 0;
-  ACCESS_DENIED = 1;
-  DOOR_NOT_FOUND = 2;
-  SYSTEM_ERROR = 3;
 }
 
 message Timestamp {
@@ -68,10 +61,5 @@ message RaiseAlarmRequest {
 
 message AccessLogsResponse {
   repeated LogEntry logs = 1;
-  ErrorCode error_code = 2;
-}
-
-message ActionResponse {
-  bool success = 1;
   ErrorCode error_code = 2;
 }

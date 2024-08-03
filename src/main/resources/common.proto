@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode error_code = 2;
+}
+
+enum ErrorCode {
+  NONE = 0;
+  ACCESS_DENIED = 1;
+  DOOR_NOT_FOUND = 2;
+  SYSTEM_ERROR = 3;
+}

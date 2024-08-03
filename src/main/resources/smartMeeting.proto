@@ -1,7 +1,8 @@
 syntax = "proto3";
+option java_package = "services.smartMeeting";
+option java_outer_classname = "SmartMeeting";
 import "google/protobuf/timestamp.proto";
-
-package services.smartMeeting;
+import "common.proto";
 
 // Service Methods
 service SmartMeetingRoom {
@@ -18,13 +19,6 @@ enum RoomStatus {
   MAINTENANCE = 3;
 }
 
-enum ErrorCode {
-  NONE = 0;
-  NOT_FOUND = 1;
-  CONFLICT = 2;
-  UNAUTHORIZED = 3;
-}
-
 message Timestamp {
     google.protobuf.Timestamp value = 1;
 }
@@ -37,11 +31,6 @@ message RoomDetails {
 }
 
 // Request/Response Types
-message ActionResponse {
-  bool success = 1;
-  ErrorCode error_code = 2;
-}
-
 message BookRoomRequest {
   string roomId = 1;
   string userId = 2;

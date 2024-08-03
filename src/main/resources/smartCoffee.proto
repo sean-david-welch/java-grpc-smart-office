@@ -1,6 +1,7 @@
 syntax = "proto3";
-
-package services.smartCoffee;
+option java_package = "services.smartCoffee";
+option java_outer_classname = "SmartCoffee";
+import "common.proto";
 
 // Service Methods
 service SmartCoffeeMachine {
@@ -51,10 +52,6 @@ message CheckInventoryRequest {
 message RefillItemRequest {
   InventoryItem item = 1;
   int32 quantity = 2;
-}
-
-message ActionResponse {
-  bool success = 1;
 }
 
 message InventoryResponse {
