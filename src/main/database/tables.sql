@@ -25,7 +25,7 @@ create table if not exists logEntry (
 ) strict;
 
 -- smart coffee service
-create table if not exists inventoryTtem (
+create table if not exists inventoryItem (
     id text primary key,
     item text not null,
     quantity text not null
@@ -35,13 +35,13 @@ create table if not exists inventoryTtem (
 create table if not exists roomDetails (
     roomId text primary key,
     name text not null,
-    location text not null
-    capacity text not null
+    location text not null,
+    capacity text not null,
     status text not null
 ) strict;
 
 create table if not exists booking (
-    bookingId text primary key
+    bookingId text primary key,
     roomId text not null,
     userId text not null,
     timeslot text not null
