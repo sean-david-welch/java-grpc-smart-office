@@ -3,6 +3,7 @@ package services.smartMeeting;
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 
+import java.sql.Connection;
 import java.util.*;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
@@ -10,7 +11,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     private final Map<String, RoomDetails> rooms;
     private final Map<String, Map<services.smartMeeting.Timestamp, String>> bookings;
 
-    public SmartMeetingRoomImpl() {
+    public SmartMeetingRoomImpl(Connection conn) {
         rooms = new HashMap<>();
         bookings = new HashMap<>();
 

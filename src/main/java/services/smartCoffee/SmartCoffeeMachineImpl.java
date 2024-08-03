@@ -2,6 +2,7 @@ package services.smartCoffee;
 
 import io.grpc.stub.StreamObserver;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
 
     private final Map<InventoryItem, Integer> inventory;
 
-    public SmartCoffeeMachineImpl() {
+    public SmartCoffeeMachineImpl(Connection conn) {
         inventory = new HashMap<>();
         inventory.put(InventoryItem.MILK, 1000);
         inventory.put(InventoryItem.WATER, 2000);

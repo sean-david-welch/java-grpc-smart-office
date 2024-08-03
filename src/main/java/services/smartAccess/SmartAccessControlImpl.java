@@ -2,11 +2,17 @@ package services.smartAccess;
 
 import io.grpc.stub.StreamObserver;
 
-import javax.swing.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessControlImplBase {
+
+    private final Connection conn;
+
+    public SmartAccessControlImpl(Connection conn) {
+        this.conn = conn;
+    }
 
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
