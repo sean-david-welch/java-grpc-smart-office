@@ -1,7 +1,6 @@
 syntax = "proto3";
 option java_package = "services.smartAccess";
 option java_outer_classname = "SmartAccess";
-import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 // Service methods
@@ -23,10 +22,6 @@ enum AccessLevel {
   GENERAL = 1;
   STAFF = 2;
   ADMIN = 3;
-}
-
-message Timestamp {
-    google.protobuf.Timestamp value = 1;
 }
 
 message AccessCredentials {

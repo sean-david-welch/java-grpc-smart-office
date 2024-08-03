@@ -19,7 +19,7 @@ enum CoffeeType {
 }
 
 enum CupSize {
-  NONE = 0;
+  EMPTY = 0;
   SMALL = 1;
   MEDIUM = 2;
   LARGE = 3;

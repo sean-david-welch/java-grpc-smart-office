@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 
 message ActionResponse {
   bool success = 1;
@@ -10,4 +11,8 @@ enum ErrorCode {
   ACCESS_DENIED = 1;
   DOOR_NOT_FOUND = 2;
   SYSTEM_ERROR = 3;
+}
+
+message Timestamp {
+    google.protobuf.Timestamp value = 1;
 }

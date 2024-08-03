@@ -1,7 +1,6 @@
 syntax = "proto3";
 option java_package = "services.smartMeeting";
 option java_outer_classname = "SmartMeeting";
-import "google/protobuf/timestamp.proto";
 import "common.proto";
 
 // Service Methods
@@ -13,14 +12,10 @@ service SmartMeetingRoom {
 
 // Utility Types
 enum RoomStatus {
-  UNKNOWN = 0;
+  UNAVAILABLE = 0;
   AVAILABLE = 1;
   OCCUPIED = 2;
   MAINTENANCE = 3;
-}
-
-message Timestamp {
-    google.protobuf.Timestamp value = 1;
 }
 
 message RoomDetails {
