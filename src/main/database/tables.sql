@@ -46,3 +46,34 @@ create table if not exists booking (
     userId text not null,
     timeslot text not null
 ) strict;
+
+-- dummy data creation
+insert into door (id, status) values
+('door1', 'locked'),
+('door2', 'unlocked'),
+('door3', 'locked');
+
+insert into accessCredentials (badgeid, pin, accesslevel) values
+('badge1', '1234', 'admin'),
+('badge2', '5678', 'user'),
+('badge3', '9101', 'user');
+
+insert into logEntry (userid, accesstime, status) values
+('user1', '2024-08-03 09:00:00', 'granted'),
+('user2', '2024-08-03 10:00:00', 'denied'),
+('user3', '2024-08-03 11:00:00', 'granted');
+
+insert into inventoryItem (id, item, quantity) values
+('item1', 'Coffee Beans', '10'),
+('item2', 'Sugar', '20'),
+('item3', 'Milk', '15');
+
+insert into roomDetails (roomId, name, location, capacity, status) values
+('room1', 'Conference Room A', 'First Floor', '10', 'available'),
+('room2', 'Conference Room B', 'Second Floor', '8', 'occupied'),
+('room3', 'Meeting Room C', 'First Floor', '5', 'available');
+
+insert into booking (bookingId, roomId, userId, timeslot) values
+('booking1', 'room1', 'user1', '2024-08-03 10:00:00 - 11:00:00'),
+('booking2', 'room2', 'user2', '2024-08-03 11:00:00 - 12:00:00'),
+('booking3', 'room3', 'user3', '2024-08-03 12:00:00 - 13:00:00');
