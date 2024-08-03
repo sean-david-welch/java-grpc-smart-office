@@ -2,6 +2,7 @@ package services.smartAccess;
 
 import io.grpc.stub.StreamObserver;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,18 +12,10 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean unlocked = unlockDoorLogic(request);
 
-        ActionResponse response;
-        if (unlocked) {
-            response = ActionResponse.newBuilder()
-                    .setSuccess(true)
-                    .setErrorCode(ErrorCode.NONE)
-                    .build();
-        } else {
-            response = ActionResponse.newBuilder()
-                    .setSuccess(false)
-                    .setErrorCode(ErrorCode.ACCESS_DENIED)
-                    .build();
-        }
+        ActionResponse response = ActionResponse.newBuilder()
+                .setSuccess(unlocked)
+                .setErrorCode(unlocked ? ErrorCode.NONE : ErrorCode.ACCESS_DENIED)
+                .build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
