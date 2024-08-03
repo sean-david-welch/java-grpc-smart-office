@@ -1,7 +1,8 @@
 syntax = "proto3";
 option java_package = "services.smartCoffee";
-option java_outer_classname = "SmartCoffee";
-import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+package smartCoffee;
 
 // Service Methods
 service SmartCoffeeMachine {
@@ -36,6 +37,22 @@ enum InventoryItem {
   MILK = 1;
   WATER = 2;
   COFFEE_BEANS = 3;
+}
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode error_code = 2;
+}
+
+enum ErrorCode {
+  NONE = 0;
+  ACCESS_DENIED = 1;
+  DOOR_NOT_FOUND = 2;
+  SYSTEM_ERROR = 3;
+}
+
+message Timestamp {
+    google.protobuf.Timestamp value = 1;
 }
 
 // Request/Response Methods
