@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package smartCoffee;
+package services.smartCoffee;
 
 // Service Methods
 service SmartCoffeeMachine {
