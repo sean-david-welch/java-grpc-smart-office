@@ -66,16 +66,20 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
         try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
             doorStmt.setString(1, doorID);
+            updateDoorStatus(doorID, "locked");
+
             ResultSet doorResult = doorStmt.executeQuery();
 
             if (!doorResult.next()) {
                 System.out.println("Door ID not found: " + doorID);
+                updateDoorStatus(doorID, "locked");
                 return false;
             }
 
             String doorStatus = doorResult.getString("status");
             if (!"locked".equals(doorStatus)) {
                 System.out.println("Door is not locked: " + doorID);
+                updateDoorStatus(doorID, "locked");
                 return false;
             }
 
@@ -86,15 +90,18 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
                 if (!credResult.next()) {
                     System.out.println("No matching access credentials for badgeID: " + userID);
+                    updateDoorStatus(doorID, "locked");
                     return false;
                 }
 
                 String userAccessLevel = credResult.getString("accessLevel");
                 if (!userAccessLevel.equals(accessLevel.toString())) {
                     System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+                    updateDoorStatus(doorID, "locked");
                     return false;
                 }
                 System.out.println("Door unlocked: " + doorID);
+                updateDoorStatus(doorID, "unlocked");
                 return true;
             }
         } catch (SQLException e) {
@@ -103,8 +110,27 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         }
     }
 
+    private void updateDoorStatus(String doorID, String status) {
+    String updateDoorStatusQuery = "UPDATE door SET status = ? WHERE id = ?";
+
+    try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
+        updateStmt.setString(1, status);
+        updateStmt.setString(2, doorID);
+        updateStmt.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error updating door status: " + e.getMessage());
+    }
+}
+
     private boolean raiseAlarmLogic(RaiseAlarmRequest request) {
         String doorID = request.getDoorId();
+        String pin = request.getCredentials().getPin();
+        AccessLevel accessLevel =  request.getCredentials().getLevel();
+
+        String doorQuery = "select id from door where id = ? and pin = ?";
+        String credentialsQuery = "select accessLevel from accessCredentials where accessLevel = ?";
+
+
 
         return true;
     }
