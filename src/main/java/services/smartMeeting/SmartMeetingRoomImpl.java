@@ -1,13 +1,9 @@
 package services.smartMeeting;
 
-import io.grpc.stub.StreamObserver;
 import com.google.protobuf.Timestamp;
+import io.grpc.stub.StreamObserver;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
 
@@ -103,10 +99,18 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         List<services.smartMeeting.Timestamp> availableTimes = new ArrayList<>();
 
         if (status == RoomStatus.OCCUPIED) {
-            availableTimes.add(services.smartMeeting.Timestamp.newBuilder()
-                    .setSeconds(timeSlot.getSeconds() + 3600)
-                    .setNanos(timeSlot.getNanos())
-                    .build());
+            Timestamp googleTimestamp = timeSlot.getValue();
+
+            Timestamp newGoogleTimestamp = Timestamp.newBuilder()
+                    .setSeconds(googleTimestamp.getSeconds() + 3600)
+                    .setNanos(googleTimestamp.getNanos())
+                    .build();
+
+            services.smartMeeting.Timestamp newTimeSlot = services.smartMeeting.Timestamp.newBuilder()
+                    .setValue(newGoogleTimestamp)
+                    .build();
+
+            availableTimes.add(newTimeSlot);
         }
 
         return AvailabilityResponse.newBuilder()
@@ -116,4 +120,5 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 .addAllAvailableTimes(availableTimes)
                 .build();
     }
+
 }
