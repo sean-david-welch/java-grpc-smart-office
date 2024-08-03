@@ -19,7 +19,7 @@ create table if not exists accessCredentials (
 ) strict;
 
 create table if not exists logEntry (
-    userid text primary key,
+    doorId text primary key,
     accesstime text not null,
     status text not null
 ) strict;
@@ -58,7 +58,7 @@ insert into accessCredentials (badgeid, pin, accesslevel) values
 ('badge2', '5678', 'user'),
 ('badge3', '9101', 'user');
 
-insert into logEntry (userid, accesstime, status) values
+insert into logEntry (doorId, accesstime, status) values
 ('user1', '2024-08-03 09:00:00', 'granted'),
 ('user2', '2024-08-03 10:00:00', 'denied'),
 ('user3', '2024-08-03 11:00:00', 'granted');

@@ -153,7 +153,33 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     }
 
     private List<LogEntry> retrieveAccessLogs(GetAccessLogsRequest request) {
-        return new ArrayList<>();
+        List<LogEntry> logs = new ArrayList<>();
+        String query = "SELECT * FROM logEntry WHERE doorId = ? AND accesstime = ?";
+
+        String doorID = request.getDoorId();
+        String startTime = request.getStartTime().toString();
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, doorID);
+            stmt.setString(2, startTime);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String accessTimeStr = rs.getString("accessTime");
+                Timestamp protoTimestamp = Timestamp.newBuilder().build();
+
+                LogEntry logEntry = LogEntry.newBuilder()
+                        .setUserId(rs.getString("doorId"))
+                        .setAccessTime(protoTimestamp)
+                        .build();
+                logs.add(logEntry);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving access logs: " + e.getMessage());
+        }
+
+        return logs;
     }
 
     private void updateDoorStatus(String doorID, String status) {
