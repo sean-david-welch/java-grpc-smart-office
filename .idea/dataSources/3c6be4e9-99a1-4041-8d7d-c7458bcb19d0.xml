@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-08-03.17:40:07</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-08-04.08:18:38</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1711,7 +1711,7 @@
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_inventoryItem_1</UnderlyingIndexName>
     </key>
-    <column id="582" parent="559" name="userid">
+    <column id="582" parent="559" name="doorId">
       <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1727,12 +1727,12 @@
       <Position>3</Position>
     </column>
     <index id="585" parent="559" name="sqlite_autoindex_logEntry_1">
-      <ColNames>userid</ColNames>
+      <ColNames>doorId</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
     <key id="586" parent="559">
-      <ColNames>userid</ColNames>
+      <ColNames>doorId</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_logEntry_1</UnderlyingIndexName>
     </key>

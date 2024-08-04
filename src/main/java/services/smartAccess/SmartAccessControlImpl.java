@@ -17,6 +17,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         this.conn = conn;
     }
 
+    // External Grpc methods
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean unlocked = unlockDoorInternal(request);
@@ -32,7 +33,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
     @Override
     public void raiseAlarm(RaiseAlarmRequest request, StreamObserver<ActionResponse> responseObserver) {
-        boolean alarmRaised = raiseAlarmLogic(request);
+        boolean alarmRaised = raiseAlarmInternal(request);
 
         ActionResponse response = ActionResponse.newBuilder()
                 .setSuccess(alarmRaised)
@@ -56,6 +57,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
+    // Interal Logic Methods
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
         String doorID = request.getDoorId();
         String userID = request.getUserId();
@@ -110,7 +112,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         }
     }
 
-    private boolean raiseAlarmLogic(RaiseAlarmRequest request) {
+    private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
         String doorID = request.getDoorId();
         String pin = request.getCredentials().getPin();
         AccessLevel accessLevel = request.getCredentials().getLevel();
