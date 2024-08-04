@@ -59,9 +59,9 @@ insert into accessCredentials (badgeid, pin, accesslevel) values
 ('badge3', '9101', 'user');
 
 insert into logEntry (doorId, accesstime, status) values
-('user1', '2024-08-03 09:00:00', 'granted'),
-('user2', '2024-08-03 10:00:00', 'denied'),
-('user3', '2024-08-03 11:00:00', 'granted');
+('door1', '2024-08-03 09:00:00', 'granted'),
+('door2', '2024-08-03 10:00:00', 'denied'),
+('door3', '2024-08-03 11:00:00', 'granted');
 
 insert into inventoryItem (id, item, quantity) values
 ('item1', 'Coffee Beans', '10'),
