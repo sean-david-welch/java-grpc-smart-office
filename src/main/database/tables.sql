@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS access_log
     door_id     INTEGER NOT NULL,
     user_id     INTEGER NOT NULL,
     access_time TEXT    NOT NULL,
-    action      TEXT    NOT NULL CHECK (action IN ('UNLOCK', 'ALARM')),
     FOREIGN KEY (door_id) REFERENCES door (id),
     FOREIGN KEY (user_id) REFERENCES access_credentials (user_id)
 ) STRICT;
@@ -39,8 +38,7 @@ CREATE TABLE IF NOT EXISTS inventory_item
 CREATE TABLE IF NOT EXISTS coffee_order
 (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    coffee_type TEXT NOT NULL CHECK (coffee_type IN ('AMERICANO', 'FLAT_WHITE', 'CORTADO')),
-    order_time  TEXT NOT NULL
+    coffee_type TEXT NOT NULL CHECK (coffee_type IN ('AMERICANO', 'FLAT_WHITE', 'CORTADO'))
 ) STRICT;
 
 -- Smart Meeting Room Service
@@ -75,32 +73,32 @@ VALUES (101, 'GENERAL'),
        (103, 'GENERAL'),
        (104, 'ADMIN');
 
-INSERT INTO access_log (door_id, user_id, access_time, action)
-VALUES (1, 101, '2024-08-04 09:00:00', 'UNLOCK'),
-       (2, 102, '2024-08-04 10:30:00', 'UNLOCK'),
-       (3, 103, '2024-08-04 11:45:00', 'UNLOCK'),
-       (1, 104, '2024-08-04 13:15:00', 'ALARM');
+INSERT INTO access_log (door_id, user_id, access_time)
+VALUES (1, 101, '2024-08-04'),
+       (2, 102, '2024-08-04'),
+       (3, 103, '2024-08-04'),
+       (4, 104, '2024-08-04');
 
 -- Smart Coffee Service
-INSERT INTO inventory_item (id, item, quantity)
-VALUES (1, 'MILK', 1000),
-       (2, 'WATER', 5000),
-       (3, 'COFFEE_BEANS', 2000);
+INSERT INTO inventory_item (item, quantity)
+VALUES ('MILK', 1000),
+       ('WATER', 5000),
+       ('COFFEE_BEANS', 2000);
 
-INSERT INTO coffee_order (coffee_type, order_time)
-VALUES ('AMERICANO', '2024-08-04 08:30:00'),
-       ('FLAT_WHITE', '2024-08-04 09:15:00'),
-       ('CORTADO', '2024-08-04 10:00:00'),
-       ('AMERICANO', '2024-08-04 11:30:00');
+INSERT INTO coffee_order (coffee_type)
+VALUES ('AMERICANO'),
+       ('FLAT_WHITE'),
+       ('CORTADO'),
+       ('AMERICANO');
 
 -- Smart Meeting Room Service
 INSERT INTO room_details (room_id, name, location, status)
 VALUES (201, 'Boardroom A', 'Floor 2', 'AVAILABLE'),
        (202, 'Conference Room B', 'Floor 3', 'OCCUPIED'),
-       (203, 'Meeting Room C', 'Floor 4', 'UNAVAILABLE');
+       (203, 'Meeting Room C', 'Floor 4', 'AVAILABLE');
 
 INSERT INTO booking (room_id, user_id, time_slot)
-VALUES (201, 101, '2024-08-04 14:00:00-15:00:00'),
-       (202, 102, '2024-08-04 11:00:00-12:00:00'),
-       (203, 103, '2024-08-05 09:00:00-10:00:00'),
-       (201, 104, '2024-08-05 13:00:00-14:00:00');
+VALUES (201, 101, '2024-08-04'),
+       (202, 102, '2024-08-04'),
+       (203, 103, '2024-08-05'),
+       (201, 104, '2024-08-05');
