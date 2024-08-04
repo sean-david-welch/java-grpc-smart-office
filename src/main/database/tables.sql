@@ -92,7 +92,6 @@ values (1, 'americano'),
        (4, 'americano');
 
 -- Smart Meeting Room Service
--- Smart Meeting Room Service
 insert into room_details (room_id, location, status, available_times)
 values
     (4, 'floor 5', 'available', '["08:00-09:00", "13:00-14:00", "16:00-17:00"]'),
