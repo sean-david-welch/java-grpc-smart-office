@@ -3,23 +3,23 @@ package services.smartCoffee;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMachineImplBase {
 
-    private final Map<InventoryItem, Integer> inventory;
+    private final Connection conn;
+
 
     public SmartCoffeeMachineImpl(Connection conn) {
-        inventory = new HashMap<>();
-        inventory.put(InventoryItem.MILK, 1000);
-        inventory.put(InventoryItem.WATER, 2000);
-        inventory.put(InventoryItem.COFFEE_BEANS, 500);
+        this.conn = conn;
     }
 
+    // External Grpc methods
     @Override
     public void brewCoffee(BrewCoffeeRequest request, StreamObserver<ActionResponse> responseObserver) {
-        boolean brewed = brewCoffeeLogic(request);
+        boolean brewed = brewCoffeeInternal(request);
 
         ActionResponse response = ActionResponse.newBuilder()
                 .setSuccess(brewed)
@@ -45,7 +45,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
 
     @Override
     public void refillInventory(RefillItemRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        int newQuantity = refillInventoryLogic(request.getItem(), request.getQuantity());
+        int newQuantity = refillInventoryInternal(request.getItem(), request.getQuantity());
 
         InventoryResponse response = InventoryResponse.newBuilder()
                 .setQuantity(newQuantity)
@@ -56,29 +56,100 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         responseObserver.onCompleted();
     }
 
-    private boolean brewCoffeeLogic(BrewCoffeeRequest request) {
-
+    // Interal Logic Methods
+    private boolean brewCoffeeInternal(BrewCoffeeRequest request) {
         CoffeeType type = request.getCoffeeType();
         CupSize size = request.getCupSize();
         Strength strength = request.getStrength();
 
-        inventory.put(InventoryItem.COFFEE_BEANS, inventory.get(InventoryItem.COFFEE_BEANS) - 10);
-        inventory.put(InventoryItem.WATER, inventory.get(InventoryItem.WATER) - 100);
-        if (type != CoffeeType.AMERICANO) {
-            inventory.put(InventoryItem.MILK, inventory.get(InventoryItem.MILK) - 50);
+        int beansRequired = 0;
+        int waterRequired = 0;
+        int milkRequired = 0;
+
+        switch (type) {
+            case AMERICANO:
+                beansRequired = 10;
+                waterRequired = 100;
+                break;
+            case CORTADO:
+                beansRequired = 10;
+                milkRequired = 50;
+                break;
+            case FLAT_WHITE:
+                beansRequired = 10;
+                milkRequired = 100;
+                break;
+            default:
+                System.out.println("Unknown coffee type");
+                return false;
         }
 
-        return true;
+        try {
+            conn.setAutoCommit(false);
+
+            if (!checkIngredients(beansRequired, waterRequired, milkRequired)) {
+                conn.rollback();
+                System.out.println("Not enough ingredients");
+                return false;
+            }
+
+            updateInventoryQuantity(InventoryItem.COFFEE_BEANS, -beansRequired);
+            updateInventoryQuantity(InventoryItem.WATER, -waterRequired);
+            if (milkRequired > 0) {
+                updateInventoryQuantity(InventoryItem.MILK, -milkRequired);
+            }
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                System.out.println("error occurred while connecting to sql database" + e);
+            }
+            System.out.println("Error brewing coffee: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("error occurred before committing transaction" + e);
+            }
+        }
     }
 
-    private int getInventoryQuantity(InventoryItem item) {
-        return inventory.getOrDefault(item, 0);
+    private int getInventoryQuantity(InventoryItem item) throws SQLException {
+        String sql = "SELECT quantity FROM inventoryItem WHERE item = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, item.name());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quantity");
+            }
+        }
+        return 0;
     }
 
-    private int refillInventoryLogic(InventoryItem item, int quantity) {
-        int currentQuantity = inventory.getOrDefault(item, 0);
-        int newQuantity = currentQuantity + quantity;
-        inventory.put(item, newQuantity);
-        return newQuantity;
+    private int refillInventoryInternal(InventoryItem item, int quantity) {
+//        int currentQuantity = inventory.getOrDefault(item, 0);
+//        int newQuantity = currentQuantity + quantity;
+//        inventory.put(item, newQuantity);
+//        return newQuantity;
+        return 0;
+    }
+
+    private boolean checkIngredients(int beansRequired, int waterRequired, int milkRequired) throws SQLException {
+        return (getInventoryQuantity(InventoryItem.COFFEE_BEANS) >= beansRequired &&
+                getInventoryQuantity(InventoryItem.WATER) >= waterRequired &&
+                getInventoryQuantity(InventoryItem.MILK) >= milkRequired);
+    }
+
+    private void updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
+        String sql = "UPDATE inventoryItem SET quantity = quantity + ? WHERE item = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, change);
+            pstmt.setString(2, item.name());
+            pstmt.executeUpdate();
+        }
     }
 }

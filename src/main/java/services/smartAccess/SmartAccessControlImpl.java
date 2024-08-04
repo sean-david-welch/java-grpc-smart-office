@@ -66,7 +66,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         String doorQuery = "select id from door where id = ?";
         String credentialsQuery = "select accessLevel from accessCredentials where accessLevel = ? and badgeid = ?";
 
-        try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
+            try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
             doorStmt.setString(1, doorID);
             updateDoorStatus(doorID, "locked");
 
