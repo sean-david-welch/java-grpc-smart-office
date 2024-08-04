@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS coffee_order
 CREATE TABLE IF NOT EXISTS room_details
 (
     room_id  INTEGER PRIMARY KEY AUTOINCREMENT,
-    name     TEXT,
     location TEXT,
     status   TEXT CHECK (status IN ('UNAVAILABLE', 'AVAILABLE', 'OCCUPIED'))
 ) STRICT;
@@ -92,10 +91,10 @@ VALUES (1, 'AMERICANO'),
        (4, 'AMERICANO');
 
 -- Smart Meeting Room Service
-INSERT INTO room_details (room_id, name, location, status)
-VALUES (1, 'Boardroom A', 'Floor 2', 'AVAILABLE'),
-       (2, 'Conference Room B', 'Floor 3', 'OCCUPIED'),
-       (3, 'Meeting Room C', 'Floor 4', 'AVAILABLE');
+INSERT INTO room_details (room_id, location, status)
+VALUES (1, 'Floor 2', 'AVAILABLE'),
+       (2, 'Floor 3', 'OCCUPIED'),
+       (3, 'Floor 4', 'AVAILABLE');
 
 -- Corrected booking with valid room_id references
 INSERT INTO booking (booking_id, room_id, user_id, time_slot)

@@ -21,7 +21,6 @@ enum RoomStatus {
 
 message RoomDetails {
   int32 roomId = 1;
-  string name = 2;
   string location = 3;
 }
 

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
 
@@ -58,7 +59,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         int userId = request.getUserId();
         String timeSlot = request.getTimeSlot();
 
-        String roomQuery = "select status from room_details where room_id = ?";
+        String roomQuery = "select status and location from room_details where room_id = ?";
         String bookingQuery = "insert into booking (room_id, user_id, time_slot) values (?, ?, ?)";
 
         try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
@@ -74,7 +75,9 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             }
 
             try (PreparedStatement bookingStmt = conn.prepareStatement(bookingQuery)) {
-//                bookingStmt.setString();
+                bookingStmt.setInt(1, roomId);
+                bookingStmt.setInt(2, userId);
+                bookingStmt.setString(3, timeSlot);
 
                 return "booking complete";
             } catch (SQLException e) {
@@ -89,52 +92,53 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     }
 
     private boolean cancelBookingLogic(int bookingId) {
-//        for (Map<services.smartMeeting.Timestamp, String> roomBookings : bookings.values()) {
-//            if (roomBookings.containsValue(bookingId)) {
-//                roomBookings.values().removeIf(id -> id.equals(bookingId));
-//                return true;
-//            }
-//        }
-        return false;
+        String cancelQuery = "delete from booking where booking_id = ?";
+
+        try (PreparedStatement cancelStmt = conn.prepareStatement(cancelQuery)) {
+            cancelStmt.setInt(1, bookingId);
+            int affectedRows = cancelStmt.executeUpdate();
+            if (affectedRows == 0) {
+                System.out.println("No booking found with that ID");
+                return false;
+            }
+            System.out.println("Booking was deleted successfully!");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("An error occurred while querying the database" + e.getMessage());
+            return false;
+        }
     }
 
     private AvailabilityResponse checkAvailabilityLogic(CheckAvailabilityRequest request) {
-//        int roomId = request.getRoomId();
-//        String timeSlot = request.getTimeSlot();
-//
-//        if (!rooms.containsKey(roomId)) {
-//            return AvailabilityResponse.newBuilder()
-//                    .setSuccess(false)
-//                    .setStatus(RoomStatus.UNAVAILABLE)
-//                    .build();
-//        }
-//
-//        RoomDetails roomDetails = rooms.get(roomId);
-//        RoomStatus status = bookings.get(roomId).containsKey(timeSlot) ? RoomStatus.OCCUPIED : RoomStatus.AVAILABLE;
-//
-//        List<services.smartMeeting.Timestamp> availableTimes = new ArrayList<>();
-//
-//        if (status == RoomStatus.OCCUPIED) {
-//            Timestamp googleTimestamp = timeSlot.getValue();
-//
-//            Timestamp newGoogleTimestamp = Timestamp.newBuilder()
-//                    .setSeconds(googleTimestamp.getSeconds() + 3600)
-//                    .setNanos(googleTimestamp.getNanos())
-//                    .build();
-//
-//            services.smartMeeting.Timestamp newTimeSlot = services.smartMeeting.Timestamp.newBuilder()
-//                    .setValue(newGoogleTimestamp)
-//                    .build();
-//
-//            availableTimes.add(newTimeSlot);
-//        }
+        int roomId = request.getRoomId();
+        String timeSlot = request.getTimeSlot();
 
-        return AvailabilityResponse.newBuilder()
-//                .setSuccess(true)
-//                .setStatus(status)
-//                .setDetails(roomDetails)
-//                .addAllAvailableTimes(availableTimes)
-                .build();
+        String roomQuery = "select * from room_details where room_id = ?";
+        try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
+            roomStmt.setInt(1, roomId);
+            ResultSet roomResult = roomStmt.executeQuery();
+
+            if (!roomResult.next()) {
+                return AvailabilityResponse.newBuilder().setSuccess(false).build();
+            }
+
+
+            RoomDetails roomDetails = RoomDetails.newBuilder()
+                    .setRoomId(roomId)
+                    .setLocation(roomResult.getString("location"))
+                    .build();
+
+            // edit room details with available times in database'
+            List<String> availableTimes = new ArrayList<String>();
+            return AvailabilityResponse.newBuilder()
+                    .setSuccess(true)
+                    .setStatus(RoomStatus.valueOf(roomResult.getString("status")))
+                    .setDetails(roomDetails)
+                    .addAllAvailableTimes(availableTimes)
+                    .build();
+        } catch (SQLException e) {
+            System.out.println("an error occured while querying the database" + e.getMessage());
+            return AvailabilityResponse.newBuilder().setSuccess(false).build();
+        }
     }
-
 }
