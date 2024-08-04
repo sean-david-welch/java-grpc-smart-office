@@ -4,76 +4,103 @@ pragma foreign_keys = on;
 -- set journal mode to wal
 pragma journal_mode = wal;
 
--- create tables with safety features
+-- Smart Access Service
+CREATE TABLE IF NOT EXISTS door
+(
+    id     INTEGER PRIMARY KEY AUTOINCREMENT,
+    status TEXT NOT NULL CHECK (status IN ('LOCKED', 'UNLOCKED'))
+) STRICT;
 
--- smart access service
-create table if not exists door (
-    id text primary key,
-    status text not null
-) strict;
+CREATE TABLE IF NOT EXISTS access_credentials
+(
+    user_id      INTEGER PRIMARY KEY,
+    access_level TEXT NOT NULL CHECK (access_level IN ('UNKNOWN_LEVEL', 'GENERAL', 'ADMIN'))
+) STRICT;
 
-create table if not exists accessCredentials (
-    badgeid text primary key,
-    pin text not null,
-    accesslevel text not null
-) strict;
+CREATE TABLE IF NOT EXISTS access_log
+(
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    door_id     INTEGER NOT NULL,
+    user_id     INTEGER NOT NULL,
+    access_time TEXT    NOT NULL,
+    action      TEXT    NOT NULL CHECK (action IN ('UNLOCK', 'ALARM')),
+    FOREIGN KEY (door_id) REFERENCES door (id),
+    FOREIGN KEY (user_id) REFERENCES access_credentials (user_id)
+) STRICT;
 
-create table if not exists logEntry (
-    doorId text primary key,
-    accesstime text not null,
-    status text not null
-) strict;
+-- Smart Coffee Service
+CREATE TABLE IF NOT EXISTS inventory_item
+(
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    item     TEXT    NOT NULL UNIQUE CHECK (item IN ('MILK', 'WATER', 'COFFEE_BEANS')),
+    quantity INTEGER NOT NULL CHECK (quantity >= 0)
+) STRICT;
 
--- smart coffee service
-create table if not exists inventoryItem (
-    id text primary key,
-    item text not null,
-    quantity text not null
-) strict;
+CREATE TABLE IF NOT EXISTS coffee_order
+(
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    coffee_type TEXT NOT NULL CHECK (coffee_type IN ('AMERICANO', 'FLAT_WHITE', 'CORTADO')),
+    order_time  TEXT NOT NULL
+) STRICT;
 
--- smart meeting room service
-create table if not exists roomDetails (
-    roomId text primary key,
-    name text not null,
-    location text not null,
-    capacity text not null,
-    status text not null
-) strict;
+-- Smart Meeting Room Service
+CREATE TABLE IF NOT EXISTS room_details
+(
+    room_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    name     TEXT NOT NULL,
+    location TEXT NOT NULL,
+    status   TEXT NOT NULL CHECK (status IN ('UNAVAILABLE', 'AVAILABLE', 'OCCUPIED'))
+) STRICT;
 
-create table if not exists booking (
-    bookingId integer primary key autoincrement,
-    roomId text not null,
-    userId text not null,
-    timeslot text not null
-) strict;
+CREATE TABLE IF NOT EXISTS booking
+(
+    booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    room_id    INTEGER NOT NULL,
+    user_id    INTEGER NOT NULL,
+    time_slot  TEXT    NOT NULL,
+    FOREIGN KEY (room_id) REFERENCES room_details (room_id)
+) STRICT;
 
--- dummy data creation
-insert into door (id, status) values
-('door1', 'locked'),
-('door2', 'unlocked'),
-('door3', 'locked');
+-- dummy data creation --
 
-insert into accessCredentials (badgeid, pin, accesslevel) values
-('badge1', '1234', 'admin'),
-('badge2', '5678', 'user'),
-('badge3', '9101', 'user');
+-- Smart Access Service
+INSERT INTO door (status)
+VALUES ('LOCKED'),
+       ('UNLOCKED'),
+       ('LOCKED');
 
-insert into logEntry (doorId, accesstime, status) values
-('door1', '2024-08-03 09:00:00', 'granted'),
-('door2', '2024-08-03 10:00:00', 'denied'),
-('door3', '2024-08-03 11:00:00', 'granted');
+INSERT INTO access_credentials (user_id, access_level)
+VALUES (101, 'GENERAL'),
+       (102, 'ADMIN'),
+       (103, 'GENERAL'),
+       (104, 'ADMIN');
 
-insert into inventoryItem (id, item, quantity) values
-('item1', 'Coffee Beans', '10'),
-('item2', 'Sugar', '20'),
-('item3', 'Milk', '15');
+INSERT INTO access_log (door_id, user_id, access_time, action)
+VALUES (1, 101, '2024-08-04 09:00:00', 'UNLOCK'),
+       (2, 102, '2024-08-04 10:30:00', 'UNLOCK'),
+       (3, 103, '2024-08-04 11:45:00', 'UNLOCK'),
+       (1, 104, '2024-08-04 13:15:00', 'ALARM');
 
-insert into roomDetails (roomId, name, location, capacity, status) values
-('room1', 'Conference Room A', 'First Floor', '10', 'available'),
-('room2', 'Conference Room B', 'Second Floor', '8', 'occupied'),
-('room3', 'Meeting Room C', 'First Floor', '5', 'available');
+-- Smart Coffee Service
+INSERT INTO inventory_item (id, item, quantity)
+VALUES (1, 'MILK', 1000),
+       (2, 'WATER', 5000),
+       (3, 'COFFEE_BEANS', 2000);
 
-insert into booking (bookingId, roomId, userId, timeslot) values
-(1, 'room1', 'user1', '2024-08-03 10:00:00 - 11:00:00'),
-(2, 'room2', 'user2', '2024-08-03 11:00:00 - 12:00:00'),
-(3, 'room3', 'user3', '2024-08-03 12:00:00 - 13:00:00');
+INSERT INTO coffee_order (coffee_type, order_time)
+VALUES ('AMERICANO', '2024-08-04 08:30:00'),
+       ('FLAT_WHITE', '2024-08-04 09:15:00'),
+       ('CORTADO', '2024-08-04 10:00:00'),
+       ('AMERICANO', '2024-08-04 11:30:00');
+
+-- Smart Meeting Room Service
+INSERT INTO room_details (room_id, name, location, status)
+VALUES (201, 'Boardroom A', 'Floor 2', 'AVAILABLE'),
+       (202, 'Conference Room B', 'Floor 3', 'OCCUPIED'),
+       (203, 'Meeting Room C', 'Floor 4', 'UNAVAILABLE');
+
+INSERT INTO booking (room_id, user_id, time_slot)
+VALUES (201, 101, '2024-08-04 14:00:00-15:00:00'),
+       (202, 102, '2024-08-04 11:00:00-12:00:00'),
+       (203, 103, '2024-08-05 09:00:00-10:00:00'),
+       (201, 104, '2024-08-05 13:00:00-14:00:00');
