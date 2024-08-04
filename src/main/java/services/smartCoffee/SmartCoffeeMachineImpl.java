@@ -16,7 +16,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         this.conn = conn;
     }
 
-    // External Grpc methods
+    //  <-------- External Grpc methods -------->
     @Override
     public void brewCoffee(BrewCoffeeRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean brewed = brewCoffeeInternal(request);
@@ -76,7 +76,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
     }
 
-    // Interal Logic Methods
+    // <------- Interal Logic Methods ------->
     private boolean brewCoffeeInternal(BrewCoffeeRequest request) {
         CoffeeType type = request.getCoffeeType();
         CupSize size = request.getCupSize();

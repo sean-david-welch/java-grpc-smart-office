@@ -17,7 +17,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         this.conn = conn;
     }
 
-    // External Grpc methods
+    // <---------- External Grpc methods -------->
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean unlocked = unlockDoorInternal(request);
@@ -57,7 +57,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
-    // Interal Logic Methods
+    // <--------  Interal Logic Methods -------->
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
         String doorID = request.getDoorId();
         String userID = request.getUserId();
