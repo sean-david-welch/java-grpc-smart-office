@@ -28,12 +28,13 @@ enum ErrorCode {
 
 message AccessCredentials {
   int32 userId = 1;
-  AccessLevel level = 3;
+  AccessLevel level = 2;
 }
 
 message LogEntry {
   int32 userId = 1;
-  string accessTime = 2;
+  int32 doorId = 2;
+  string accessTime = 3;
 }
 
 // Request/Response Types
@@ -50,7 +51,8 @@ message GetAccessLogsRequest {
 
 message RaiseAlarmRequest {
   int32 doorId = 1;
-  AccessCredentials credentials = 2;
+  int32 userId = 2;
+  AccessCredentials credentials = 3;
 }
 
 message AccessLogsResponse {
