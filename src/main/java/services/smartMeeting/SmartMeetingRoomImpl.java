@@ -7,8 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
 
@@ -21,9 +19,9 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     //  <-------- External Grpc methods -------->
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
-        String bookingId = bookRoomLogic(request);
+        String bookingMessage = bookRoomLogic(request);
 
-        boolean success = bookingId != null;
+        boolean success = !bookingMessage.isEmpty();
         ActionResponse response = ActionResponse.newBuilder()
                 .setSuccess(success)
                 .setErrorCode(success ? ErrorCode.NONE : ErrorCode.SYSTEM_ERROR)
@@ -56,11 +54,11 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
 
     // <------- Interal Logic Methods ------->
     private String bookRoomLogic(BookRoomRequest request) {
-        String roomId = request.getRoomId();
-        String userId = request.getUserId();
-        Timestamp timeSlot = request.getTimeSlot();
+        int roomId = request.getRoomId();
+        int userId = request.getUserId();
+        String timeSlot = request.getTimeSlot();
 
-        String roomQuery = "select status from roomDetails where roomId = ?";
+        String roomQuery = "select status from room_details where room_id = ?";
         String bookingQuery = "insert into booking (roomId, userId, timeslot) values (?, ?, ?)";
 
         try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {

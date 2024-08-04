@@ -62,10 +62,10 @@ CREATE TABLE IF NOT EXISTS booking
 -- dummy data creation --
 
 -- Smart Access Service
-INSERT INTO door (status)
-VALUES ('LOCKED'),
-       ('UNLOCKED'),
-       ('LOCKED');
+INSERT INTO door (id, status)
+VALUES (1, 'LOCKED'),
+       (2, 'UNLOCKED'),
+       (3, 'LOCKED');
 
 INSERT INTO access_credentials (user_id, access_level)
 VALUES (101, 'GENERAL'),
@@ -73,11 +73,12 @@ VALUES (101, 'GENERAL'),
        (103, 'GENERAL'),
        (104, 'ADMIN');
 
-INSERT INTO access_log (door_id, user_id, access_time)
-VALUES (1, 101, '2024-08-04-09'),
-       (2, 102, '2024-08-04-10'),
-       (3, 103, '2024-08-04-11'),
-       (1, 104, '2024-08-04-13');
+-- Corrected access_log with valid door_id references
+INSERT INTO access_log (id, door_id, user_id, access_time)
+VALUES (1, 1, 101, '2024-08-04 09:00'),
+       (2, 2, 102, '2024-08-04 10:00'),
+       (3, 3, 103, '2024-08-04 11:00'),
+       (4, 1, 104, '2024-08-04 13:00'); -- Changed door_id to an existing value
 
 -- Smart Coffee Service
 INSERT INTO inventory_item (item, quantity)
@@ -85,20 +86,21 @@ VALUES ('MILK', 1000),
        ('WATER', 5000),
        ('COFFEE_BEANS', 2000);
 
-INSERT INTO coffee_order (coffee_type)
-VALUES ('AMERICANO'),
-       ('FLAT_WHITE'),
-       ('CORTADO'),
-       ('AMERICANO');
+INSERT INTO coffee_order (id, coffee_type)
+VALUES (1, 'AMERICANO'),
+       (2, 'FLAT_WHITE'),
+       (3, 'CORTADO'),
+       (4, 'AMERICANO');
 
 -- Smart Meeting Room Service
-INSERT INTO room_details (name, location, status)
-VALUES ('Boardroom A', 'Floor 2', 'AVAILABLE'),
-       ('Conference Room B', 'Floor 3', 'OCCUPIED'),
-       ('Meeting Room C', 'Floor 4', 'AVAILABLE');
+INSERT INTO room_details (room_id, name, location, status)
+VALUES (1, 'Boardroom A', 'Floor 2', 'AVAILABLE'),
+       (2, 'Conference Room B', 'Floor 3', 'OCCUPIED'),
+       (3, 'Meeting Room C', 'Floor 4', 'AVAILABLE');
 
-INSERT INTO booking (room_id, user_id, time_slot)
-VALUES (1, 101, '2024-08-04 14-15'),
-       (2, 102, '2024-08-04 11-12'),
-       (3, 103, '2024-08-05 09-10'),
-       (1, 104, '2024-08-05 13-14');
+-- Corrected booking with valid room_id references
+INSERT INTO booking (booking_id, room_id, user_id, time_slot)
+VALUES (1, 1, 101, '2024-08-04 14:00-15:00'),
+       (2, 2, 102, '2024-08-04 11:00-12:00'),
+       (3, 3, 103, '2024-08-05 09:00-10:00'),
+       (4, 1, 104, '2024-08-05 13:00-14:00'); -- Changed room_id to an existing value

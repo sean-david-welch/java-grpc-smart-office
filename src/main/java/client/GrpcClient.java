@@ -30,7 +30,7 @@ public class GrpcClient {
     }
 
     // Example method for SmartAccessControl service
-    public void accessControl(String userId) {
+    public void accessControl(int userId) {
         // Assuming you have a Request message defined in your proto file
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setUserId(userId)
@@ -44,7 +44,7 @@ public class GrpcClient {
     public static void main(String[] args) throws Exception {
         GrpcClient client = new GrpcClient("localhost", 8080);
         try {
-            client.accessControl("user123");
+            client.accessControl(1);
             // Call other methods as needed
         } finally {
             client.shutdown();
