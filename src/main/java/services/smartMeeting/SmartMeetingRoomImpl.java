@@ -88,7 +88,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         }
     }
 
-    private boolean cancelBookingLogic(String bookingId) {
+    private boolean cancelBookingLogic(int bookingId) {
 //        for (Map<services.smartMeeting.Timestamp, String> roomBookings : bookings.values()) {
 //            if (roomBookings.containsValue(bookingId)) {
 //                roomBookings.values().removeIf(id -> id.equals(bookingId));
