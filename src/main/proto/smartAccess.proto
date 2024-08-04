@@ -1,7 +1,7 @@
 syntax = "proto3";
-option java_package = "services.smartAccess";
+
 option java_multiple_files = true;
-import "google/protobuf/timestamp.proto";
+option java_package = "services.smartAccess";
 
 package services.smartAccess;
 
@@ -13,34 +13,10 @@ service SmartAccessControl {
 }
 
 // Utility Types
-enum DoorStatus {
-  UNKNOWN = 0;
-  LOCKED = 1;
-  UNLOCKED = 2;
-}
-
 enum AccessLevel {
   UNKNOWN_LEVEL = 0;
   GENERAL = 1;
-  STAFF = 2;
-  ADMIN = 3;
-}
-
-message AccessCredentials {
-  string badgeId = 1;
-  string pin = 2;
-  AccessLevel level = 3;
-}
-
-message LogEntry {
-  string userId = 1;
-  Timestamp accessTime = 2;
-  DoorStatus status = 3;
-}
-
-message ActionResponse {
-  bool success = 1;
-  ErrorCode error_code = 2;
+  ADMIN = 2;
 }
 
 enum ErrorCode {
@@ -50,29 +26,39 @@ enum ErrorCode {
   SYSTEM_ERROR = 3;
 }
 
-message Timestamp {
-    google.protobuf.Timestamp value = 1;
+message AccessCredentials {
+  int32 userId = 1;
+  AccessLevel level = 3;
+}
+
+message LogEntry {
+  int32 userId = 1;
+  string accessTime = 2;
 }
 
 // Request/Response Types
 message UnlockDoorRequest {
-  string doorId = 1;
-  string userId = 2;
+  int32 doorId = 1;
+  int32 userId = 2;
   AccessCredentials credentials = 3;
 }
 
 message GetAccessLogsRequest {
-  string doorId = 1;
-  Timestamp startTime = 2;
-  Timestamp endTime = 3;
+  int32 doorId = 1;
+  string time = 2;
 }
 
 message RaiseAlarmRequest {
-  string doorId = 1;
-  AccessCredentials credentials = 3;
+  int32 doorId = 1;
+  AccessCredentials credentials = 2;
 }
 
 message AccessLogsResponse {
   repeated LogEntry logs = 1;
-  ErrorCode error_code = 2;
+  ErrorCode errorCode = 2;
+}
+
+message ActionResponse {
+  bool success = 1;
+  ErrorCode errorCode = 2;
 }

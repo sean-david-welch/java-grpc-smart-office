@@ -1,30 +1,24 @@
 package services.smartMeeting;
 
-import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Connection;
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
 
-    private final Map<String, RoomDetails> rooms;
-    private final Map<String, Map<services.smartMeeting.Timestamp, String>> bookings;
+    private final Connection conn;
 
     public SmartMeetingRoomImpl(Connection conn) {
-        rooms = new HashMap<>();
-        bookings = new HashMap<>();
-
-        RoomDetails room1 = RoomDetails.newBuilder()
-                .setRoomId("room1")
-                .setName("Conference Room A")
-                .setLocation("1st Floor")
-                .setCapacity(10)
-                .build();
-        rooms.put("room1", room1);
-        bookings.put("room1", new HashMap<>());
+        this.conn = conn;
     }
 
+    //  <-------- External Grpc methods -------->
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
         String bookingId = bookRoomLogic(request);
@@ -60,17 +54,40 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         responseObserver.onCompleted();
     }
 
+    // <------- Interal Logic Methods ------->
     private String bookRoomLogic(BookRoomRequest request) {
         String roomId = request.getRoomId();
-        services.smartMeeting.Timestamp timeSlot = request.getTimeSlot();
+        String userId = request.getUserId();
+        Timestamp timeSlot = request.getTimeSlot();
 
-        if (!rooms.containsKey(roomId) || bookings.get(roomId).containsKey(timeSlot)) {
-            return null;
+        String roomQuery = "select status from roomDetails where roomId = ?";
+        String bookingQuery = "insert into booking (roomId, userId, timeslot) values (?, ?, ?)";
+
+        try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
+            roomStmt.setString(1, roomId);
+            ResultSet roomResult = roomStmt.executeQuery();
+            if (!roomResult.next()) return "No Room found with ID: " + roomId;
+
+            String status = roomResult.getString("status");
+            RoomStatus roomStatus = RoomStatus.valueOf(status);
+
+            if (roomStatus == RoomStatus.OCCUPIED || roomStatus == RoomStatus.UNAVAILABLE) {
+                return "Room is unavailable" + roomResult;
+            }
+
+            try (PreparedStatement bookingStmt = conn.prepareStatement(bookingQuery)) {
+                bookingStmt.setString();
+
+                return "booking complete";
+            } catch (SQLException e) {
+                System.out.println("An error occurred while writing to the database" + e);
+                return "booking not complete" + e;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("An error occurred while querying the database" + e);
+            return "Booking not complete" + e;
         }
-
-        String bookingId = UUID.randomUUID().toString();
-        bookings.get(roomId).put(timeSlot, bookingId);
-        return bookingId;
     }
 
     private boolean cancelBookingLogic(String bookingId) {

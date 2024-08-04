@@ -1,7 +1,7 @@
 syntax = "proto3";
-option java_package = "services.smartCoffee";
-import "google/protobuf/timestamp.proto";
+
 option java_multiple_files = true;
+option java_package = "services.smartCoffee";
 
 package services.smartCoffee;
 
@@ -20,19 +20,6 @@ enum CoffeeType {
   CORTADO = 3;
 }
 
-enum CupSize {
-  EMPTY = 0;
-  SMALL = 1;
-  MEDIUM = 2;
-  LARGE = 3;
-}
-
-enum Strength {
-  UNKNOWN_STRENGTH = 0;
-  SINGLE_SHOT = 1;
-  DOUBLE_SHOT = 2;
-}
-
 enum InventoryItem {
   UNKNOWN_ITEM = 0;
   MILK = 1;
@@ -40,27 +27,19 @@ enum InventoryItem {
   COFFEE_BEANS = 3;
 }
 
+enum ErrorCode {
+  NONE = 0;
+  SYSTEM_ERROR = 1;
+}
+
 message ActionResponse {
   bool success = 1;
   ErrorCode error_code = 2;
 }
 
-enum ErrorCode {
-  NONE = 0;
-  ACCESS_DENIED = 1;
-  DOOR_NOT_FOUND = 2;
-  SYSTEM_ERROR = 3;
-}
-
-message Timestamp {
-    google.protobuf.Timestamp value = 1;
-}
-
 // Request/Response Methods
 message BrewCoffeeRequest {
   CoffeeType coffeeType = 1;
-  CupSize cupSize = 2;
-  Strength strength = 3;
 }
 
 message CheckInventoryRequest {

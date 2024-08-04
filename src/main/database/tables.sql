@@ -41,7 +41,7 @@ create table if not exists roomDetails (
 ) strict;
 
 create table if not exists booking (
-    bookingId text primary key,
+    bookingId integer primary key autoincrement,
     roomId text not null,
     userId text not null,
     timeslot text not null
@@ -74,6 +74,6 @@ insert into roomDetails (roomId, name, location, capacity, status) values
 ('room3', 'Meeting Room C', 'First Floor', '5', 'available');
 
 insert into booking (bookingId, roomId, userId, timeslot) values
-('booking1', 'room1', 'user1', '2024-08-03 10:00:00 - 11:00:00'),
-('booking2', 'room2', 'user2', '2024-08-03 11:00:00 - 12:00:00'),
-('booking3', 'room3', 'user3', '2024-08-03 12:00:00 - 13:00:00');
+(1, 'room1', 'user1', '2024-08-03 10:00:00 - 11:00:00'),
+(2, 'room2', 'user2', '2024-08-03 11:00:00 - 12:00:00'),
+(3, 'room3', 'user3', '2024-08-03 12:00:00 - 13:00:00');

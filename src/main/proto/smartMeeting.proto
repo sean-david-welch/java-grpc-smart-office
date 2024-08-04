@@ -1,7 +1,7 @@
 syntax = "proto3";
-option java_package = "services.smartMeeting";
-import "google/protobuf/timestamp.proto";
+
 option java_multiple_files = true;
+option java_package = "services.smartMeeting";
 
 package services.smartMeeting;
 
@@ -17,14 +17,12 @@ enum RoomStatus {
   UNAVAILABLE = 0;
   AVAILABLE = 1;
   OCCUPIED = 2;
-  MAINTENANCE = 3;
 }
 
 message RoomDetails {
-  string roomId = 1;
+  int32 roomId = 1;
   string name = 2;
   string location = 3;
-  int32 capacity = 4;
 }
 
 message ActionResponse {
@@ -39,29 +37,25 @@ enum ErrorCode {
   SYSTEM_ERROR = 3;
 }
 
-message Timestamp {
-    google.protobuf.Timestamp value = 1;
-}
-
 // Request/Response Types
 message BookRoomRequest {
-  string roomId = 1;
-  string userId = 2;
-  Timestamp timeSlot = 3;
+  int32 roomId = 1;
+  int32 userId = 2;
+  string timeSlot = 3;
 }
 
 message CancelBookingRequest {
-  string bookingId = 1;
+  int32 bookingId = 1;
 }
 
 message CheckAvailabilityRequest {
-  string roomId = 1;
-  Timestamp timeSlot = 2;
+  int32 roomId = 1;
+  string timeSlot = 2;
 }
 
 message AvailabilityResponse {
   bool success = 1;
   RoomStatus status = 2;
   RoomDetails details = 3;
-  repeated Timestamp availableTimes = 4;
+  repeated string availableTimes = 4;
 }
