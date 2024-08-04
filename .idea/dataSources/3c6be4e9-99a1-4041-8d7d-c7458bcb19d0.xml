@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-08-04.12:04:58</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-08-04.20:20:03</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1754,23 +1754,23 @@
       <UnderlyingIndexName>sqlite_autoindex_inventory_item_1</UnderlyingIndexName>
     </key>
     <check id="597" parent="561">
-      <Predicate>status IN (&apos;UNAVAILABLE&apos;, &apos;AVAILABLE&apos;, &apos;OCCUPIED&apos;)</Predicate>
+      <Predicate>status in (&apos;unavailable&apos;, &apos;available&apos;, &apos;occupied&apos;)</Predicate>
     </check>
     <column id="598" parent="561" name="room_id">
       <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
+      <DasType>integer|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="599" parent="561" name="name">
-      <DasType>TEXT|0s</DasType>
+    <column id="599" parent="561" name="location">
+      <DasType>text|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="600" parent="561" name="location">
-      <DasType>TEXT|0s</DasType>
+    <column id="600" parent="561" name="status">
+      <DasType>text|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="601" parent="561" name="status">
-      <DasType>TEXT|0s</DasType>
+    <column id="601" parent="561" name="available_times">
+      <DasType>text|0s</DasType>
       <Position>4</Position>
     </column>
     <key id="602" parent="561">

@@ -122,7 +122,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 return AvailabilityResponse.newBuilder().setSuccess(false).build();
             }
 
-
             RoomDetails roomDetails = RoomDetails.newBuilder()
                     .setRoomId(roomId)
                     .setLocation(roomResult.getString("location"))
@@ -130,6 +129,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
 
             // edit room details with available times in database'
             List<String> availableTimes = new ArrayList<String>();
+            String sqlTimes = roomResult.getString("available_time");
             return AvailabilityResponse.newBuilder()
                     .setSuccess(true)
                     .setStatus(RoomStatus.valueOf(roomResult.getString("status")))
