@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-08-04.11:55:10</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-08-04.12:04:02</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1590,232 +1590,28 @@
     <argument id="554" parent="190">
       <Position>1</Position>
     </argument>
-    <table id="555" parent="191" name="access_credentials">
-      <Strict>1</Strict>
-    </table>
-    <table id="556" parent="191" name="access_log">
-      <Strict>1</Strict>
-    </table>
-    <table id="557" parent="191" name="booking">
-      <Strict>1</Strict>
-    </table>
-    <table id="558" parent="191" name="coffee_order">
-      <Strict>1</Strict>
-    </table>
-    <table id="559" parent="191" name="door">
-      <Strict>1</Strict>
-    </table>
-    <table id="560" parent="191" name="inventory_item">
-      <Strict>1</Strict>
-    </table>
-    <table id="561" parent="191" name="room_details">
-      <Strict>1</Strict>
-    </table>
-    <table id="562" parent="191" name="sqlite_master">
+    <table id="555" parent="191" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="563" parent="191" name="sqlite_sequence">
-      <System>1</System>
-    </table>
-    <check id="564" parent="555">
-      <Predicate>access_level IN (&apos;UNKNOWN_LEVEL&apos;, &apos;GENERAL&apos;, &apos;ADMIN&apos;)</Predicate>
-    </check>
-    <column id="565" parent="555" name="user_id">
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="566" parent="555" name="access_level">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <key id="567" parent="555">
-      <ColNames>user_id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="568" parent="556" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="569" parent="556" name="door_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="570" parent="556" name="user_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="571" parent="556" name="access_time">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <foreign-key id="572" parent="556">
-      <ColNames>door_id</ColNames>
-      <RefColNames>id</RefColNames>
-      <RefTableName>door</RefTableName>
-    </foreign-key>
-    <foreign-key id="573" parent="556">
-      <ColNames>user_id</ColNames>
-      <RefColNames>user_id</RefColNames>
-      <RefTableName>access_credentials</RefTableName>
-    </foreign-key>
-    <key id="574" parent="556">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="575" parent="557" name="booking_id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="576" parent="557" name="room_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="577" parent="557" name="user_id">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="578" parent="557" name="time_slot">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <foreign-key id="579" parent="557">
-      <ColNames>room_id</ColNames>
-      <RefColNames>room_id</RefColNames>
-      <RefTableName>room_details</RefTableName>
-    </foreign-key>
-    <key id="580" parent="557">
-      <ColNames>booking_id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <check id="581" parent="558">
-      <Predicate>coffee_type IN (&apos;AMERICANO&apos;, &apos;FLAT_WHITE&apos;, &apos;CORTADO&apos;)</Predicate>
-    </check>
-    <column id="582" parent="558" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="583" parent="558" name="coffee_type">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <key id="584" parent="558">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <check id="585" parent="559">
-      <Predicate>status IN (&apos;LOCKED&apos;, &apos;UNLOCKED&apos;)</Predicate>
-    </check>
-    <column id="586" parent="559" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="587" parent="559" name="status">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <key id="588" parent="559">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <check id="589" parent="560">
-      <Predicate>item IN (&apos;MILK&apos;, &apos;WATER&apos;, &apos;COFFEE_BEANS&apos;)</Predicate>
-    </check>
-    <check id="590" parent="560">
-      <Predicate>quantity &gt;= 0</Predicate>
-    </check>
-    <column id="591" parent="560" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="592" parent="560" name="item">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="593" parent="560" name="quantity">
-      <DasType>INTEGER|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="594" parent="560" name="sqlite_autoindex_inventory_item_1">
-      <ColNames>item</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="595" parent="560">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <key id="596" parent="560">
-      <ColNames>item</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_inventory_item_1</UnderlyingIndexName>
-    </key>
-    <check id="597" parent="561">
-      <Predicate>status IN (&apos;UNAVAILABLE&apos;, &apos;AVAILABLE&apos;, &apos;OCCUPIED&apos;)</Predicate>
-    </check>
-    <column id="598" parent="561" name="room_id">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>INTEGER|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="599" parent="561" name="name">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="600" parent="561" name="location">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="601" parent="561" name="status">
-      <DasType>TEXT|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <key id="602" parent="561">
-      <ColNames>room_id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="603" parent="562" name="type">
+    <column id="556" parent="555" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="604" parent="562" name="name">
+    <column id="557" parent="555" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="605" parent="562" name="tbl_name">
+    <column id="558" parent="555" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="606" parent="562" name="rootpage">
+    <column id="559" parent="555" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="607" parent="562" name="sql">
+    <column id="560" parent="555" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
-    </column>
-    <column id="608" parent="563" name="name">
-      <Position>1</Position>
-    </column>
-    <column id="609" parent="563" name="seq">
-      <Position>2</Position>
     </column>
   </database-model>
 </dataSource>
