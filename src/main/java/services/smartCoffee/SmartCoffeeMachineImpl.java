@@ -78,10 +78,8 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     // <------- Interal Logic Methods ------->
     private boolean brewCoffeeInternal(BrewCoffeeRequest request) {
         CoffeeType type = request.getCoffeeType();
-        CupSize size = request.getCupSize();
-        Strength strength = request.getStrength();
 
-        int beansRequired = 0;
+        int beansRequired;
         int waterRequired = 0;
         int milkRequired = 0;
 
@@ -141,7 +139,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     }
 
     private int getInventoryQuantity(InventoryItem item) throws SQLException {
-        String sql = "SELECT quantity FROM inventoryItem WHERE item = ?";
+        String sql = "select quantity from inventory_item where item = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, item.name());
             ResultSet rs = statement.executeQuery();
@@ -155,7 +153,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     }
 
     private int updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
-        String sql = "UPDATE inventoryItem SET quantity = quantity + ? WHERE item = ?";
+        String sql = "update main.inventory_item set quantity = quantity + ? WHERE item = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, change);
             statement.setString(2, item.name());
