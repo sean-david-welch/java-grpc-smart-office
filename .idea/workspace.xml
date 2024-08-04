@@ -4,54 +4,142 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="init project" />
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="add some basic unit test code">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartMeeting/SmartMeetingRoomImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartMeeting/SmartMeetingRoomImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "sean-david-welch"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sean-david-welch&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/sean-david-welch/distributed-systems-rpc.git",
-    "accountId": "f842c192-9cfe-41bd-ae89-82e30c1f43fd"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sean-david-welch/distributed-systems-rpc.git&quot;,
+    &quot;accountId&quot;: &quot;f842c192-9cfe-41bd-ae89-82e30c1f43fd&quot;
   }
+}</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
 }]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2k8xpSBpOtHdh5LMh34fcSJuB0y" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
     <option name="showScratchesAndConsoles" value="false" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.SmartMeetingRoomImplTest.executor": "Run",
+    "JUnit.SmartMeetingRoomImplTest.testBookRoom.executor": "Run",
+    "JUnit.SmartMeetingRoomImplTest.testCheckAvailability.executor": "Run",
+    "Maven.smartOffice [clean].executor": "Run",
+    "Maven.smartOffice [compile].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "settings.sync"
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Color Scheme Font"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
+  </component>
+  <component name="RunManager" selected="JUnit.SmartMeetingRoomImplTest.testBookRoom">
+    <configuration name="SmartMeetingRoomImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="smartMeeting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="smartMeeting" />
+      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartMeetingRoomImplTest.testBookRoom" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="smartMeeting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="smartMeeting" />
+      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
+      <option name="METHOD_NAME" value="testBookRoom" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartMeetingRoomImplTest.testCheckAvailability" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="smartMeeting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="smartMeeting" />
+      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
+      <option name="METHOD_NAME" value="testCheckAvailability" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SmartMeetingRoomImplTest.testBookRoom" />
+        <item itemvalue="JUnit.SmartMeetingRoomImplTest" />
+        <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailability" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -79,14 +167,378 @@
       <option name="project" value="LOCAL" />
       <updated>1722679226346</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ignore">
+      <option name="closed" value="true" />
+      <created>1722688380249</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722688380249</updated>
+    </task>
+    <task id="LOCAL-00003" summary="praise the lord I got the code gen working">
+      <option name="closed" value="true" />
+      <created>1722688923195</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722688923195</updated>
+    </task>
+    <task id="LOCAL-00004" summary="implement some basic logic for smart access control">
+      <option name="closed" value="true" />
+      <created>1722693604672</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722693604672</updated>
+    </task>
+    <task id="LOCAL-00005" summary="implement some basic logic for smart coffee machine">
+      <option name="closed" value="true" />
+      <created>1722693730105</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1722693730105</updated>
+    </task>
+    <task id="LOCAL-00006" summary="implement some basic logic for smart meeting room">
+      <option name="closed" value="true" />
+      <created>1722695091005</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1722695091005</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fix timestamp errors">
+      <option name="closed" value="true" />
+      <created>1722695303469</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1722695303469</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add instructions">
+      <option name="closed" value="true" />
+      <created>1722698234375</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1722698234375</updated>
+    </task>
+    <task id="LOCAL-00009" summary="update instructions">
+      <option name="closed" value="true" />
+      <created>1722698491462</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1722698491462</updated>
+    </task>
+    <task id="LOCAL-00010" summary="add server layer">
+      <option name="closed" value="true" />
+      <created>1722700857234</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1722700857234</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add database dependency">
+      <option name="closed" value="true" />
+      <created>1722705257808</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1722705257808</updated>
+    </task>
+    <task id="LOCAL-00012" summary="database connection">
+      <option name="closed" value="true" />
+      <created>1722705393739</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1722705393739</updated>
+    </task>
+    <task id="LOCAL-00013" summary="some changes to smart access control">
+      <option name="closed" value="true" />
+      <created>1722705427362</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1722705427362</updated>
+    </task>
+    <task id="LOCAL-00014" summary="base code for a grpc client">
+      <option name="closed" value="true" />
+      <created>1722705603131</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1722705603131</updated>
+    </task>
+    <task id="LOCAL-00015" summary="set up table schema">
+      <option name="closed" value="true" />
+      <created>1722706470471</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1722706470471</updated>
+    </task>
+    <task id="LOCAL-00016" summary="dummy data creation">
+      <option name="closed" value="true" />
+      <created>1722706610072</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1722706610072</updated>
+    </task>
+    <task id="LOCAL-00017" summary="add database">
+      <option name="closed" value="true" />
+      <created>1722706842446</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1722706842446</updated>
+    </task>
+    <task id="LOCAL-00018" summary="add database connections to services">
+      <option name="closed" value="true" />
+      <created>1722707269247</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1722707269247</updated>
+    </task>
+    <task id="LOCAL-00019" summary="unlock door internal logic">
+      <option name="closed" value="true" />
+      <created>1722710625772</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1722710625772</updated>
+    </task>
+    <task id="LOCAL-00020" summary="update door status">
+      <option name="closed" value="true" />
+      <created>1722711060322</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1722711060322</updated>
+    </task>
+    <task id="LOCAL-00021" summary="raise alarm logic">
+      <option name="closed" value="true" />
+      <created>1722711333403</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1722711333403</updated>
+    </task>
+    <task id="LOCAL-00022" summary="somewhat there with access log retrieval">
+      <option name="closed" value="true" />
+      <created>1722714363263</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1722714363263</updated>
+    </task>
+    <task id="LOCAL-00023" summary="changes">
+      <option name="closed" value="true" />
+      <created>1722759557841</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1722759557841</updated>
+    </task>
+    <task id="LOCAL-00024" summary="lint">
+      <option name="closed" value="true" />
+      <created>1722760632599</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1722760632599</updated>
+    </task>
+    <task id="LOCAL-00025" summary="add code for brew coffee internal">
+      <option name="closed" value="true" />
+      <created>1722762239814</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1722762239814</updated>
+    </task>
+    <task id="LOCAL-00026" summary="other methods for smart coffee machine">
+      <option name="closed" value="true" />
+      <created>1722763956111</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1722763956111</updated>
+    </task>
+    <task id="LOCAL-00027" summary="some commenting">
+      <option name="closed" value="true" />
+      <created>1722764396499</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1722764396499</updated>
+    </task>
+    <task id="LOCAL-00028" summary="something or other">
+      <option name="closed" value="true" />
+      <created>1722766636477</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1722766636477</updated>
+    </task>
+    <task id="LOCAL-00029" summary="refactor and simplify proto files a bit">
+      <option name="closed" value="true" />
+      <created>1722769999826</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1722769999826</updated>
+    </task>
+    <task id="LOCAL-00030" summary="refine sql tables">
+      <option name="closed" value="true" />
+      <created>1722770368044</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1722770368044</updated>
+    </task>
+    <task id="LOCAL-00031" summary="refine dummy data for new tables">
+      <option name="closed" value="true" />
+      <created>1722770864435</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1722770864435</updated>
+    </task>
+    <task id="LOCAL-00032" summary="sure">
+      <option name="closed" value="true" />
+      <created>1722771238433</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1722771238433</updated>
+    </task>
+    <task id="LOCAL-00033" summary="go for it">
+      <option name="closed" value="true" />
+      <created>1722771246954</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1722771246954</updated>
+    </task>
+    <task id="LOCAL-00034" summary="redo schema again hai">
+      <option name="closed" value="true" />
+      <created>1722772863894</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1722772863894</updated>
+    </task>
+    <task id="LOCAL-00035" summary="got it">
+      <option name="closed" value="true" />
+      <created>1722773091142</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1722773091142</updated>
+    </task>
+    <task id="LOCAL-00036" summary="redo meeting room later">
+      <option name="closed" value="true" />
+      <created>1722773284023</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1722773284023</updated>
+    </task>
+    <task id="LOCAL-00037" summary="temp fix for meeting room">
+      <option name="closed" value="true" />
+      <created>1722785859486</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1722785859486</updated>
+    </task>
+    <task id="LOCAL-00038" summary="correct errors in smart access control">
+      <option name="closed" value="true" />
+      <created>1722786643791</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1722786643791</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix errors in smart coffee machine">
+      <option name="closed" value="true" />
+      <created>1722787609512</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1722787609512</updated>
+    </task>
+    <task id="LOCAL-00040" summary="do smart meeting service">
+      <option name="closed" value="true" />
+      <created>1722789634546</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1722789634546</updated>
+    </task>
+    <task id="LOCAL-00041" summary="add some test dependencies">
+      <option name="closed" value="true" />
+      <created>1722790123680</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1722790123680</updated>
+    </task>
+    <task id="LOCAL-00042" summary="add some base test file">
+      <option name="closed" value="true" />
+      <created>1722790137727</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1722790137727</updated>
+    </task>
+    <task id="LOCAL-00043" summary="add some basic unit test code">
+      <option name="closed" value="true" />
+      <created>1722790718199</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1722790718199</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="init project" />
-    <option name="LAST_COMMIT_MESSAGE" value="init project" />
+    <MESSAGE value="unlock door internal logic" />
+    <MESSAGE value="update door status" />
+    <MESSAGE value="raise alarm logic" />
+    <MESSAGE value="somewhat there with access log retrieval" />
+    <MESSAGE value="changes" />
+    <MESSAGE value="lint" />
+    <MESSAGE value="add code for brew coffee internal" />
+    <MESSAGE value="other methods for smart coffee machine" />
+    <MESSAGE value="some commenting" />
+    <MESSAGE value="something or other" />
+    <MESSAGE value="refactor and simplify proto files a bit" />
+    <MESSAGE value="refine sql tables" />
+    <MESSAGE value="refine dummy data for new tables" />
+    <MESSAGE value="sure" />
+    <MESSAGE value="go for it" />
+    <MESSAGE value="redo schema again hai" />
+    <MESSAGE value="got it" />
+    <MESSAGE value="redo meeting room later" />
+    <MESSAGE value="temp fix for meeting room" />
+    <MESSAGE value="correct errors in smart access control" />
+    <MESSAGE value="fix errors in smart coffee machine" />
+    <MESSAGE value="do smart meeting service" />
+    <MESSAGE value="add some test dependencies" />
+    <MESSAGE value="add some base test file" />
+    <MESSAGE value="add some basic unit test code" />
+    <option name="LAST_COMMIT_MESSAGE" value="add some basic unit test code" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

@@ -19,13 +19,10 @@ class SmartMeetingRoomImplTest {
 
     @Mock
     private Connection mockConnection;
-
     @Mock
     private PreparedStatement mockPreparedStatement;
-
     @Mock
     private ResultSet mockResultSet;
-
     private SmartMeetingRoomImpl smartMeetingRoom;
 
     @BeforeEach
@@ -55,8 +52,24 @@ class SmartMeetingRoomImplTest {
         smartMeetingRoom.bookRoom(request, responseObserver);
 
         // Assert
-        assertTrue(responseObserver.getValues().get(0).getSuccess());
-        assertEquals(ErrorCode.NONE, responseObserver.getValues().get(0).getErrorCode());
+        assertTrue(responseObserver.isCompleted(), "The call was not completed");
+        assertFalse(responseObserver.getValues().isEmpty(), "No response was received");
+
+        System.out.println("Number of responses: " + responseObserver.getValues().size());
+        for (int i = 0; i < responseObserver.getValues().size(); i++) {
+            ActionResponse response = responseObserver.getValues().get(i);
+            System.out.println("Response " + i + ": " + (response != null ? response : "null"));
+        }
+
+        if (!responseObserver.getValues().isEmpty()) {
+            ActionResponse response = responseObserver.getValues().get(0);
+            assertNotNull(response, "Response is null");
+            if (response != null) {
+                assertTrue(response.getSuccess(), "Booking was not successful");
+                assertEquals(ErrorCode.NONE, response.getErrorCode(), "Unexpected error code");
+            }
+        }
+
         verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
         verify(mockPreparedStatement).setString(anyInt(), anyString());
     }
@@ -75,8 +88,8 @@ class SmartMeetingRoomImplTest {
         smartMeetingRoom.cancelBooking(request, responseObserver);
 
         // Assert
-        assertTrue(responseObserver.getValues().get(0).getSuccess());
-        assertEquals(ErrorCode.NONE, responseObserver.getValues().get(0).getErrorCode());
+        assertTrue(responseObserver.getValues().getFirst().getSuccess());
+        assertEquals(ErrorCode.NONE, responseObserver.getValues().getFirst().getErrorCode());
         verify(mockPreparedStatement).setInt(1, 1);
     }
 
