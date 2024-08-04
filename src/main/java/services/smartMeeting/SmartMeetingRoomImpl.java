@@ -1,5 +1,8 @@
 package services.smartMeeting;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Connection;
@@ -127,9 +130,17 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                     .setLocation(roomResult.getString("location"))
                     .build();
 
-            // edit room details with available times in database'
-            List<String> availableTimes = new ArrayList<String>();
+            List<String> availableTimes;
             String sqlTimes = roomResult.getString("available_time");
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                availableTimes = objectMapper.readValue(sqlTimes, new TypeReference<>() {
+                });
+            } catch (JsonProcessingException e) {
+                System.out.println("Error parsing JSON: " + e.getMessage());
+                return AvailabilityResponse.newBuilder().setSuccess(false).build();
+            }
             return AvailabilityResponse.newBuilder()
                     .setSuccess(true)
                     .setStatus(RoomStatus.valueOf(roomResult.getString("status")))
