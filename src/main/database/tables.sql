@@ -1,8 +1,8 @@
 -- enable foreign key constraints
-pragma foreign_keys = on;
+PRAGMA foreign_keys = ON;
 
 -- set journal mode to wal
-pragma journal_mode = wal;
+PRAGMA journal_mode = WAL;
 
 -- Smart Access Service
 CREATE TABLE IF NOT EXISTS door
@@ -74,10 +74,10 @@ VALUES (101, 'GENERAL'),
        (104, 'ADMIN');
 
 INSERT INTO access_log (door_id, user_id, access_time)
-VALUES (1, 101, '2024-08-04'),
-       (2, 102, '2024-08-04'),
-       (3, 103, '2024-08-04'),
-       (4, 104, '2024-08-04');
+VALUES (1, 101, '2024-08-04-09'),
+       (2, 102, '2024-08-04-10'),
+       (3, 103, '2024-08-04-11'),
+       (1, 104, '2024-08-04-13');
 
 -- Smart Coffee Service
 INSERT INTO inventory_item (item, quantity)
@@ -92,13 +92,13 @@ VALUES ('AMERICANO'),
        ('AMERICANO');
 
 -- Smart Meeting Room Service
-INSERT INTO room_details (room_id, name, location, status)
-VALUES (201, 'Boardroom A', 'Floor 2', 'AVAILABLE'),
-       (202, 'Conference Room B', 'Floor 3', 'OCCUPIED'),
-       (203, 'Meeting Room C', 'Floor 4', 'AVAILABLE');
+INSERT INTO room_details (name, location, status)
+VALUES ('Boardroom A', 'Floor 2', 'AVAILABLE'),
+       ('Conference Room B', 'Floor 3', 'OCCUPIED'),
+       ('Meeting Room C', 'Floor 4', 'AVAILABLE');
 
 INSERT INTO booking (room_id, user_id, time_slot)
-VALUES (201, 101, '2024-08-04'),
-       (202, 102, '2024-08-04'),
-       (203, 103, '2024-08-05'),
-       (201, 104, '2024-08-05');
+VALUES (1, 101, '2024-08-04 14-15'),
+       (2, 102, '2024-08-04 11-12'),
+       (3, 103, '2024-08-05 09-10'),
+       (1, 104, '2024-08-05 13-14');

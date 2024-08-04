@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-08-04.10:58:59</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-08-04.11:33:02</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1590,209 +1590,28 @@
     <argument id="554" parent="190">
       <Position>1</Position>
     </argument>
-    <table id="555" parent="191" name="accessCredentials">
-      <Strict>1</Strict>
-    </table>
-    <table id="556" parent="191" name="booking">
-      <Strict>1</Strict>
-    </table>
-    <table id="557" parent="191" name="door">
-      <Strict>1</Strict>
-    </table>
-    <table id="558" parent="191" name="inventoryItem">
-      <Strict>1</Strict>
-    </table>
-    <table id="559" parent="191" name="logEntry">
-      <Strict>1</Strict>
-    </table>
-    <table id="560" parent="191" name="roomDetails">
-      <Strict>1</Strict>
-    </table>
-    <table id="561" parent="191" name="sqlite_master">
+    <table id="555" parent="191" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="562" parent="191" name="sqlite_sequence">
-      <System>1</System>
-    </table>
-    <column id="563" parent="555" name="badgeid">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="564" parent="555" name="pin">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="565" parent="555" name="accesslevel">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="566" parent="555" name="sqlite_autoindex_accessCredentials_1">
-      <ColNames>badgeid</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="567" parent="555">
-      <ColNames>badgeid</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_accessCredentials_1</UnderlyingIndexName>
-    </key>
-    <column id="568" parent="556" name="bookingId">
-      <AutoIncrement>1</AutoIncrement>
-      <DasType>integer|0s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="569" parent="556" name="roomId">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="570" parent="556" name="userId">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="571" parent="556" name="timeslot">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <key id="572" parent="556">
-      <ColNames>bookingId</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="573" parent="557" name="id">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="574" parent="557" name="status">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <index id="575" parent="557" name="sqlite_autoindex_door_1">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="576" parent="557">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_door_1</UnderlyingIndexName>
-    </key>
-    <column id="577" parent="558" name="id">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="578" parent="558" name="item">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="579" parent="558" name="quantity">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="580" parent="558" name="sqlite_autoindex_inventoryItem_1">
-      <ColNames>id</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="581" parent="558">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_inventoryItem_1</UnderlyingIndexName>
-    </key>
-    <column id="582" parent="559" name="doorId">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="583" parent="559" name="accesstime">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="584" parent="559" name="status">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="585" parent="559" name="sqlite_autoindex_logEntry_1">
-      <ColNames>doorId</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="586" parent="559">
-      <ColNames>doorId</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_logEntry_1</UnderlyingIndexName>
-    </key>
-    <column id="587" parent="560" name="roomId">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="588" parent="560" name="name">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="589" parent="560" name="location">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="590" parent="560" name="capacity">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <column id="591" parent="560" name="status">
-      <DasType>text|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-    </column>
-    <index id="592" parent="560" name="sqlite_autoindex_roomDetails_1">
-      <ColNames>roomId</ColNames>
-      <NameSurrogate>1</NameSurrogate>
-      <Unique>1</Unique>
-    </index>
-    <key id="593" parent="560">
-      <ColNames>roomId</ColNames>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>sqlite_autoindex_roomDetails_1</UnderlyingIndexName>
-    </key>
-    <column id="594" parent="561" name="type">
+    <column id="556" parent="555" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="595" parent="561" name="name">
+    <column id="557" parent="555" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="596" parent="561" name="tbl_name">
+    <column id="558" parent="555" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="597" parent="561" name="rootpage">
+    <column id="559" parent="555" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="598" parent="561" name="sql">
+    <column id="560" parent="555" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
-    </column>
-    <column id="599" parent="562" name="name">
-      <Position>1</Position>
-    </column>
-    <column id="600" parent="562" name="seq">
-      <Position>2</Position>
     </column>
   </database-model>
 </dataSource>
