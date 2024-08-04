@@ -59,15 +59,15 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
     // <--------  Interal Logic Methods -------->
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
-        String doorID = request.getDoorId();
-        String userID = request.getUserId();
+        int doorID = request.getDoorId();
+        int userID = request.getUserId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
         String doorQuery = "select id from door where id = ?";
-        String credentialsQuery = "select accessLevel from accessCredentials where accessLevel = ? and badgeid = ?";
+        String credentialsQuery = "select access_level from access_credentials where user_id = ? and access_level = ?";
 
             try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
-            doorStmt.setString(1, doorID);
+            doorStmt.setInt(1, doorID);
             updateDoorStatus(doorID, "locked");
 
             ResultSet doorResult = doorStmt.executeQuery();
@@ -86,7 +86,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             }
 
             try (PreparedStatement credentialsStmt = conn.prepareStatement(credentialsQuery)) {
-                credentialsStmt.setString(1, userID);
+                credentialsStmt.setInt(1, userID);
                 credentialsStmt.setString(2, accessLevel.toString());
                 ResultSet credResult = credentialsStmt.executeQuery();
 
@@ -113,15 +113,14 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     }
 
     private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
-        String doorID = request.getDoorId();
-        String pin = request.getCredentials().getPin();
+        int doorID = request.getDoorId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
-        String doorQuery = "SELECT status FROM door WHERE id = ?";
-        String credentialsQuery = "SELECT accessLevel FROM accessCredentials WHERE badgeid = ? AND pin = ?";
+        String doorQuery = "select status from door where id = ?";
+        String credentialsQuery = "select access_level from access_credentials WHERE user_id = ?";
 
         try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
-            doorStmt.setString(1, doorID);
+            doorStmt.setInt(1, doorID);
             ResultSet doorResult = doorStmt.executeQuery();
 
             if (!doorResult.next()) {
@@ -130,8 +129,8 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             }
 
             try (PreparedStatement credentialsStmt = conn.prepareStatement(credentialsQuery)) {
-                credentialsStmt.setString(1, doorID);
-                credentialsStmt.setString(2, pin);
+                // change proto to use user id
+                credentialsStmt.setInt(1, doorID);
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
@@ -156,24 +155,23 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
     private List<LogEntry> retrieveAccessLogs(GetAccessLogsRequest request) {
         List<LogEntry> logs = new ArrayList<>();
-        String query = "SELECT * FROM logEntry WHERE doorId = ? AND accesstime = ?";
 
-        String doorID = request.getDoorId();
-        String startTime = request.getStartTime().toString();
+        int doorID = request.getDoorId();
+        String time = request.getTime();
 
+        String query = "select * from access_log where door_id = ? AND access_time = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, doorID);
-            stmt.setString(2, startTime);
+            stmt.setInt(1, doorID);
+            stmt.setString(2, time);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String accessTimeStr = rs.getString("accessTime");
-                Timestamp protoTimestamp = Timestamp.newBuilder().build();
 
+                // perhaps change proto to use door id here too
                 LogEntry logEntry = LogEntry.newBuilder()
-                        .setUserId(rs.getString("doorId"))
-                        .setAccessTime(protoTimestamp)
+                        .setUserId(rs.getInt("user_id"))
+                        .setAccessTime(rs.getString("access_time"))
                         .build();
                 logs.add(logEntry);
             }
@@ -184,12 +182,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         return logs;
     }
 
-    private void updateDoorStatus(String doorID, String status) {
-        String updateDoorStatusQuery = "UPDATE door SET status = ? WHERE id = ?";
+    private void updateDoorStatus(int doorID, String status) {
+        String updateDoorStatusQuery = "update door set status = ? WHERE id = ?";
 
         try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
             updateStmt.setString(1, status);
-            updateStmt.setString(2, doorID);
+            updateStmt.setInt(2, doorID);
             updateStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error updating door status: " + e.getMessage());
