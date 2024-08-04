@@ -11,7 +11,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
 
     private final Connection conn;
 
-
     public SmartCoffeeMachineImpl(Connection conn) {
         this.conn = conn;
     }
@@ -121,7 +120,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
             } else {
                 updateInventoryQuantity(InventoryItem.MILK, -milkRequired);
             }
-
 
             conn.commit();
             return true;
