@@ -32,28 +32,48 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
 
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        int quantity = getInventoryQuantity(request.getItem());
+        try {
+            int quantity = getInventoryQuantity(request.getItem());
 
-        InventoryResponse response = InventoryResponse.newBuilder()
-                .setQuantity(quantity)
-                .setSuccess(true)
-                .build();
+            InventoryResponse response = InventoryResponse.newBuilder()
+                    .setQuantity(quantity)
+                    .setSuccess(true)
+                    .build();
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (SQLException e) {
+            System.err.println("Error checking inventory: " + e.getMessage());
+            InventoryResponse response = InventoryResponse.newBuilder()
+                    .setQuantity(0)
+                    .setSuccess(false)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
     }
 
     @Override
     public void refillInventory(RefillItemRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        int newQuantity = refillInventoryInternal(request.getItem(), request.getQuantity());
+        try {
+            int newQuantity = updateInventoryQuantity(request.getItem(), request.getQuantity());
 
-        InventoryResponse response = InventoryResponse.newBuilder()
-                .setQuantity(newQuantity)
-                .setSuccess(true)
-                .build();
+            InventoryResponse response = InventoryResponse.newBuilder()
+                    .setQuantity(newQuantity)
+                    .setSuccess(true)
+                    .build();
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (SQLException e) {
+            System.err.println("Error refilling inventory: " + e.getMessage());
+            InventoryResponse response = InventoryResponse.newBuilder()
+                    .setQuantity(0)
+                    .setSuccess(false)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
     }
 
     // Interal Logic Methods
@@ -87,17 +107,21 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         try {
             conn.setAutoCommit(false);
 
-            if (!checkIngredients(beansRequired, waterRequired, milkRequired)) {
+            if (!(getInventoryQuantity(InventoryItem.COFFEE_BEANS) >= beansRequired &&
+                    getInventoryQuantity(InventoryItem.WATER) >= waterRequired &&
+                    getInventoryQuantity(InventoryItem.MILK) >= milkRequired)) {
                 conn.rollback();
-                System.out.println("Not enough ingredients");
+                System.out.println("Not enough stock, please refill and try again");
                 return false;
             }
 
             updateInventoryQuantity(InventoryItem.COFFEE_BEANS, -beansRequired);
-            updateInventoryQuantity(InventoryItem.WATER, -waterRequired);
-            if (milkRequired > 0) {
+            if (waterRequired > 0) {
+                updateInventoryQuantity(InventoryItem.WATER, -waterRequired);
+            } else {
                 updateInventoryQuantity(InventoryItem.MILK, -milkRequired);
             }
+
 
             conn.commit();
             return true;
@@ -105,51 +129,43 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
             try {
                 conn.rollback();
             } catch (SQLException rollbackEx) {
-                System.out.println("error occurred while connecting to sql database" + e);
+                System.err.println("Error rolling back transaction: " + rollbackEx.getMessage());
             }
-            System.out.println("Error brewing coffee: " + e.getMessage());
+            System.err.println("Error brewing coffee: " + e.getMessage());
             return false;
         } finally {
             try {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
-                System.out.println("error occurred before committing transaction" + e);
+                System.err.println("Error resetting auto-commit: " + e.getMessage());
             }
         }
     }
 
     private int getInventoryQuantity(InventoryItem item) throws SQLException {
         String sql = "SELECT quantity FROM inventoryItem WHERE item = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, item.name());
-            ResultSet rs = pstmt.executeQuery();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, item.name());
+            ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 return rs.getInt("quantity");
             }
+        } catch (SQLException e) {
+            System.out.println("error querying database" + e.getMessage());
         }
         return 0;
     }
 
-    private int refillInventoryInternal(InventoryItem item, int quantity) {
-//        int currentQuantity = inventory.getOrDefault(item, 0);
-//        int newQuantity = currentQuantity + quantity;
-//        inventory.put(item, newQuantity);
-//        return newQuantity;
-        return 0;
-    }
-
-    private boolean checkIngredients(int beansRequired, int waterRequired, int milkRequired) throws SQLException {
-        return (getInventoryQuantity(InventoryItem.COFFEE_BEANS) >= beansRequired &&
-                getInventoryQuantity(InventoryItem.WATER) >= waterRequired &&
-                getInventoryQuantity(InventoryItem.MILK) >= milkRequired);
-    }
-
-    private void updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
+    private int updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
         String sql = "UPDATE inventoryItem SET quantity = quantity + ? WHERE item = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, change);
-            pstmt.setString(2, item.name());
-            pstmt.executeUpdate();
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, change);
+            statement.setString(2, item.name());
+            statement.executeUpdate();
+            return getInventoryQuantity(item);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while querying the database" + e.getMessage());
         }
+        return 0;
     }
 }
