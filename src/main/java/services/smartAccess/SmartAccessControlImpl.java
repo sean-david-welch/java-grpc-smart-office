@@ -114,6 +114,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
     private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
         int doorID = request.getDoorId();
+        int userID = request.getUserId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
         String doorQuery = "select status from door where id = ?";
@@ -129,8 +130,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             }
 
             try (PreparedStatement credentialsStmt = conn.prepareStatement(credentialsQuery)) {
-                // change proto to use user id
-                credentialsStmt.setInt(1, doorID);
+                credentialsStmt.setInt(1, userID);
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
@@ -157,6 +157,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         List<LogEntry> logs = new ArrayList<>();
 
         int doorID = request.getDoorId();
+        int userID = request.getUserId();
         String time = request.getTime();
 
         String query = "select * from access_log where door_id = ? AND access_time = ?";
@@ -168,9 +169,9 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
             while (rs.next()) {
 
-                // perhaps change proto to use door id here too
                 LogEntry logEntry = LogEntry.newBuilder()
                         .setUserId(rs.getInt("user_id"))
+                        .setDoorId(rs.getInt("door_id"))
                         .setAccessTime(rs.getString("access_time"))
                         .build();
                 logs.add(logEntry);
