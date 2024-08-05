@@ -160,10 +160,11 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         int userID = request.getUserId();
         String time = request.getTime();
 
-        String query = "select * from access_log where door_id = ? AND access_time = ?";
+        String query = "select * from access_log where door_id = ? and access_log.user_id = ? and access_time = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, doorID);
-            stmt.setString(2, time);
+            stmt.setInt(2, userID);
+            stmt.setString(3, time);
 
             ResultSet rs = stmt.executeQuery();
 
