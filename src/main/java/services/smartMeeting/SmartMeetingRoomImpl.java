@@ -22,9 +22,8 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     //  <-------- External Grpc methods -------->
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
-        String bookingMessage = bookRoomLogic(request);
+        boolean success = bookRoomLogic(request);
 
-        boolean success = !bookingMessage.isEmpty();
         ActionResponse response = ActionResponse.newBuilder()
                 .setSuccess(success)
                 .setErrorCode(success ? ErrorCode.NONE : ErrorCode.SYSTEM_ERROR)
@@ -56,40 +55,45 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     }
 
     // <------- Interal Logic Methods ------->
-    private String bookRoomLogic(BookRoomRequest request) {
+    private boolean bookRoomLogic(BookRoomRequest request) {
         int roomId = request.getRoomId();
         int userId = request.getUserId();
         String timeSlot = request.getTimeSlot();
 
-        String roomQuery = "select status and location from room_details where room_id = ?";
-        String bookingQuery = "insert into booking (room_id, user_id, time_slot) values (?, ?, ?)";
+        String roomQuery = "SELECT status, location FROM room_details WHERE room_id = ?";
+        String bookingQuery = "INSERT INTO booking (room_id, user_id, time_slot) VALUES (?, ?, ?)";
 
         try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
             roomStmt.setInt(1, roomId);
             ResultSet roomResult = roomStmt.executeQuery();
-            if (!roomResult.next()) return "No Room found with ID: " + roomId;
+            if (!roomResult.next()) {
+                System.out.println("No Room found with ID: " + roomId);
+                return false;
+            }
 
             String status = roomResult.getString("status");
             RoomStatus roomStatus = RoomStatus.valueOf(status);
 
             if (roomStatus == RoomStatus.OCCUPIED || roomStatus == RoomStatus.UNAVAILABLE) {
-                return "Room is unavailable" + roomResult;
+                System.out.println("Room is unavailable: " + roomResult);
+                return false;
             }
 
             try (PreparedStatement bookingStmt = conn.prepareStatement(bookingQuery)) {
                 bookingStmt.setInt(1, roomId);
                 bookingStmt.setInt(2, userId);
                 bookingStmt.setString(3, timeSlot);
+                bookingStmt.executeUpdate();
 
-                return "booking complete";
+                System.out.println("Booking complete");
+                return true;
             } catch (SQLException e) {
-                System.out.println("An error occurred while writing to the database" + e);
-                return "booking not complete" + e;
+                System.out.println("An error occurred while writing to the database: " + e);
+                return false;
             }
-
         } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database" + e);
-            return "Booking not complete" + e;
+            System.out.println("An error occurred while querying the database: " + e);
+            return false;
         }
     }
 

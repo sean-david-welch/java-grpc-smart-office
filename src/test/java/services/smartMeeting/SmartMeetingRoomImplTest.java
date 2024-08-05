@@ -1,7 +1,5 @@
 package services.smartMeeting;
 
-import static org.mockito.Mockito.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static org.mockito.Mockito.*;
 
 public class SmartMeetingRoomImplTest {
 
@@ -69,6 +69,7 @@ public class SmartMeetingRoomImplTest {
 
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getString("status")).thenReturn("OCCUPIED");
+        when(mockResultSet.getString("location")).thenReturn("Room 101");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartMeetingRoom.bookRoom(request, actionResponseObserver);
@@ -115,6 +116,8 @@ public class SmartMeetingRoomImplTest {
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
         when(mockResultSet.getString("available_time")).thenReturn("[\"10:00-11:00\", \"12:00-13:00\"]");
+        when(mockResultSet.getString("location")).thenReturn("Room 101");
+        when(mockResultSet.getInt("room_id")).thenReturn(1);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartMeetingRoom.checkAvailability(request, availabilityResponseObserver);
