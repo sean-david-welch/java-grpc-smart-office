@@ -63,25 +63,21 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         int userID = request.getUserId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
-        String doorQuery = "select id from door where id = ?";
-        String credentialsQuery = "select access_level from access_credentials where user_id = ? and access_level = ?";
+        String doorQuery = "SELECT status FROM door WHERE id = ?";
+        String credentialsQuery = "SELECT access_level FROM access_credentials WHERE user_id = ? AND access_level = ?";
 
-            try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
+        try (PreparedStatement doorStmt = conn.prepareStatement(doorQuery)) {
             doorStmt.setInt(1, doorID);
-            updateDoorStatus(doorID, "locked");
-
             ResultSet doorResult = doorStmt.executeQuery();
 
             if (!doorResult.next()) {
                 System.out.println("Door ID not found: " + doorID);
-                updateDoorStatus(doorID, "locked");
                 return false;
             }
 
             String doorStatus = doorResult.getString("status");
             if (!"locked".equals(doorStatus)) {
                 System.out.println("Door is not locked: " + doorID);
-                updateDoorStatus(doorID, "locked");
                 return false;
             }
 
@@ -91,17 +87,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
-                    System.out.println("No matching access credentials for badgeID: " + userID);
-                    updateDoorStatus(doorID, "locked");
+                    System.out.println("No matching access credentials for userID: " + userID);
                     return false;
                 }
 
-                String userAccessLevel = credResult.getString("accessLevel");
-                if (!userAccessLevel.equals(accessLevel.toString())) {
-                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
-                    updateDoorStatus(doorID, "locked");
-                    return false;
-                }
+                if (checkAccessLevel(userID, accessLevel, credResult)) return false;
+
                 System.out.println("Door unlocked: " + doorID);
                 updateDoorStatus(doorID, "unlocked");
                 return true;
@@ -138,11 +129,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     return false;
                 }
 
-                String userAccessLevel = credResult.getString("accessLevel");
-                if (!userAccessLevel.equals(accessLevel.toString())) {
-                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
-                    return false;
-                }
+                if (checkAccessLevel(userID, accessLevel, credResult)) return false;
 
                 System.out.println("Alarm raised for door: " + doorID);
                 return true;
@@ -151,6 +138,20 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             System.out.println("Error querying database: " + e.getMessage());
             return false;
         }
+    }
+
+    private boolean checkAccessLevel(int userID, AccessLevel accessLevel, ResultSet credResult) throws SQLException {
+        String userAccessLevel = credResult.getString("access_level");
+        if (userAccessLevel == null) {
+            System.out.println("User access level is null for userID: " + userID);
+            return true;
+        }
+
+        if (!userAccessLevel.equals(accessLevel.toString())) {
+            System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+            return true;
+        }
+        return false;
     }
 
     private List<LogEntry> retrieveAccessLogs(GetAccessLogsRequest request) {
