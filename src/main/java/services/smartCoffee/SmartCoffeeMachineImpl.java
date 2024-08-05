@@ -138,6 +138,19 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
     }
 
+    private int updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
+        String sql = "update inventory_item set quantity = quantity + ? WHERE item = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, change);
+            statement.setString(2, item.name());
+            statement.executeUpdate();
+            return getInventoryQuantity(item);
+        } catch (SQLException e) {
+            System.out.println("An error occurred while querying the database" + e.getMessage());
+        }
+        return 0;
+    }
+
     private int getInventoryQuantity(InventoryItem item) throws SQLException {
         String sql = "select quantity from inventory_item where item = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -151,17 +164,5 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
         return 0;
     }
-
-    private int updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
-        String sql = "update main.inventory_item set quantity = quantity + ? WHERE item = ?";
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, change);
-            statement.setString(2, item.name());
-            statement.executeUpdate();
-            return getInventoryQuantity(item);
-        } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database" + e.getMessage());
-        }
-        return 0;
-    }
+    
 }

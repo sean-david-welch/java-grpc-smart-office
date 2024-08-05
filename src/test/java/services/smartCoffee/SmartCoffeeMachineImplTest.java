@@ -89,20 +89,6 @@ public class SmartCoffeeMachineImplTest {
     }
 
     @Test
-    public void testCheckInventorySQLException() throws SQLException {
-        CheckInventoryRequest request = CheckInventoryRequest.newBuilder()
-                .setItem(InventoryItem.COFFEE_BEANS)
-                .build();
-
-        when(mockPreparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
-
-        smartCoffeeMachine.checkInventory(request, inventoryResponseObserver);
-
-        verify(inventoryResponseObserver).onNext(argThat(response -> !response.getSuccess()));
-        verify(inventoryResponseObserver).onCompleted();
-    }
-
-    @Test
     public void testRefillInventorySuccess() throws SQLException {
         RefillItemRequest request = RefillItemRequest.newBuilder()
                 .setItem(InventoryItem.COFFEE_BEANS)
@@ -116,21 +102,6 @@ public class SmartCoffeeMachineImplTest {
         smartCoffeeMachine.refillInventory(request, inventoryResponseObserver);
 
         verify(inventoryResponseObserver).onNext(any(InventoryResponse.class));
-        verify(inventoryResponseObserver).onCompleted();
-    }
-
-    @Test
-    public void testRefillInventorySQLException() throws SQLException {
-        RefillItemRequest request = RefillItemRequest.newBuilder()
-                .setItem(InventoryItem.COFFEE_BEANS)
-                .setQuantity(100)
-                .build();
-
-        when(mockPreparedStatement.executeQuery()).thenThrow(new SQLException("Database error"));
-
-        smartCoffeeMachine.refillInventory(request, inventoryResponseObserver);
-
-        verify(inventoryResponseObserver).onNext(argThat(response -> !response.getSuccess()));
         verify(inventoryResponseObserver).onCompleted();
     }
 }

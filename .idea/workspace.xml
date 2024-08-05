@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="thatll do for today mate">
-      <change afterPath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartMeeting/SmartMeetingRoomImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/TestStreamObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartMeeting/TestStreamObserver.java" afterDir="false" />
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="smart meeting room tests">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartCoffee/SmartCoffeeMachineImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartCoffee/SmartCoffeeMachineImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +58,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.SmartAccessControlImplTest.executor": "Run",
+    "JUnit.SmartCoffeeMachineImplTest.executor": "Run",
     "JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess.executor": "Run",
+    "JUnit.SmartCoffeeMachineImplTest.testCheckInventorySQLException.executor": "Debug",
+    "JUnit.SmartMeetingRoomImplTest (1).executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.testBookRoom.executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.testCheckAvailability.executor": "Run",
@@ -85,7 +89,37 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess">
+  <component name="RunManager" selected="JUnit.SmartAccessControlImplTest">
+    <configuration name="SmartAccessControlImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartAccess.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartAccess" />
+      <option name="MAIN_CLASS_NAME" value="services.smartAccess.SmartAccessControlImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartCoffeeMachineImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartCoffee.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartCoffee" />
+      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SmartCoffeeMachineImplTest.testBrewCoffeeSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smartOffice" />
       <extension name="coverage">
@@ -102,59 +136,44 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartMeetingRoomImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartCoffeeMachineImplTest.testCheckInventorySQLException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smartOffice" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="smartMeeting.*" />
+          <option name="PATTERN" value="services.smartCoffee.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="smartMeeting" />
-      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
+      <option name="PACKAGE_NAME" value="services.smartCoffee" />
+      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
+      <option name="METHOD_NAME" value="testCheckInventorySQLException" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartMeetingRoomImplTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartMeeting.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartMeeting" />
+      <option name="MAIN_CLASS_NAME" value="services.smartMeeting.SmartMeetingRoomImplTest" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SmartMeetingRoomImplTest.testBookRoom" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="smartMeeting.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="smartMeeting" />
-      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
-      <option name="METHOD_NAME" value="testBookRoom" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SmartMeetingRoomImplTest.testCheckAvailability" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="smartMeeting.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="smartMeeting" />
-      <option name="MAIN_CLASS_NAME" value="smartMeeting.SmartMeetingRoomImplTest" />
-      <option name="METHOD_NAME" value="testCheckAvailability" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SmartAccessControlImplTest" />
+        <item itemvalue="JUnit.SmartCoffeeMachineImplTest" />
+        <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testCheckInventorySQLException" />
+        <item itemvalue="JUnit.SmartMeetingRoomImplTest (1)" />
         <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess" />
-        <item itemvalue="JUnit.SmartMeetingRoomImplTest.testBookRoom" />
-        <item itemvalue="JUnit.SmartMeetingRoomImplTest" />
-        <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailability" />
       </list>
     </recent_temporary>
   </component>
@@ -175,46 +194,6 @@
       <option name="presentableId" value="Default" />
       <updated>1722679187864</updated>
       <workItem from="1722679188842" duration="200000" />
-    </task>
-    <task id="LOCAL-00003" summary="praise the lord I got the code gen working">
-      <option name="closed" value="true" />
-      <created>1722688923195</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1722688923195</updated>
-    </task>
-    <task id="LOCAL-00004" summary="implement some basic logic for smart access control">
-      <option name="closed" value="true" />
-      <created>1722693604672</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1722693604672</updated>
-    </task>
-    <task id="LOCAL-00005" summary="implement some basic logic for smart coffee machine">
-      <option name="closed" value="true" />
-      <created>1722693730105</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1722693730105</updated>
-    </task>
-    <task id="LOCAL-00006" summary="implement some basic logic for smart meeting room">
-      <option name="closed" value="true" />
-      <created>1722695091005</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1722695091005</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fix timestamp errors">
-      <option name="closed" value="true" />
-      <created>1722695303469</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1722695303469</updated>
     </task>
     <task id="LOCAL-00008" summary="add instructions">
       <option name="closed" value="true" />
@@ -568,18 +547,53 @@
       <option name="project" value="LOCAL" />
       <updated>1722804988416</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="add unit test for smart coffee">
+      <option name="closed" value="true" />
+      <created>1722846461678</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1722846461678</updated>
+    </task>
+    <task id="LOCAL-00053" summary="quick fix">
+      <option name="closed" value="true" />
+      <created>1722846879370</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1722846879370</updated>
+    </task>
+    <task id="LOCAL-00054" summary="smart access control unit tests">
+      <option name="closed" value="true" />
+      <created>1722846992151</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1722846992151</updated>
+    </task>
+    <task id="LOCAL-00055" summary="smart access control test">
+      <option name="closed" value="true" />
+      <created>1722847088255</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1722847088255</updated>
+    </task>
+    <task id="LOCAL-00056" summary="smart meeting room tests">
+      <option name="closed" value="true" />
+      <created>1722847624078</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1722847624078</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="some commenting" />
-    <MESSAGE value="something or other" />
-    <MESSAGE value="refactor and simplify proto files a bit" />
-    <MESSAGE value="refine sql tables" />
-    <MESSAGE value="refine dummy data for new tables" />
     <MESSAGE value="sure" />
     <MESSAGE value="go for it" />
     <MESSAGE value="redo schema again hai" />
@@ -600,7 +614,12 @@
     <MESSAGE value="fix protos" />
     <MESSAGE value="add user id to proto" />
     <MESSAGE value="thatll do for today mate" />
-    <option name="LAST_COMMIT_MESSAGE" value="thatll do for today mate" />
+    <MESSAGE value="add unit test for smart coffee" />
+    <MESSAGE value="quick fix" />
+    <MESSAGE value="smart access control unit tests" />
+    <MESSAGE value="smart access control test" />
+    <MESSAGE value="smart meeting room tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="smart meeting room tests" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
