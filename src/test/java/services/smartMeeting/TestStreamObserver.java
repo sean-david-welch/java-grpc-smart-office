@@ -1,4 +1,4 @@
-package smartMeeting;
+package services.smartMeeting;
 
 import io.grpc.stub.StreamObserver;
 

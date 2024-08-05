@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="add some basic unit test code">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartMeeting/SmartMeetingRoomImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartMeeting/SmartMeetingRoomImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" afterDir="false" />
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="thatll do for today mate">
+      <change afterPath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/SmartMeetingRoomImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartMeeting/SmartMeetingRoomImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/smartMeeting/TestStreamObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartMeeting/TestStreamObserver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +58,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess.executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.testBookRoom.executor": "Run",
     "JUnit.SmartMeetingRoomImplTest.testCheckAvailability.executor": "Run",
@@ -85,7 +85,23 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartMeetingRoomImplTest.testBookRoom">
+  <component name="RunManager" selected="JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess">
+    <configuration name="SmartCoffeeMachineImplTest.testBrewCoffeeSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartCoffee.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartCoffee" />
+      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
+      <option name="METHOD_NAME" value="testBrewCoffeeSuccess" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SmartMeetingRoomImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smartOffice" />
       <extension name="coverage">
@@ -135,6 +151,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testBrewCoffeeSuccess" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest.testBookRoom" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailability" />
@@ -158,22 +175,6 @@
       <option name="presentableId" value="Default" />
       <updated>1722679187864</updated>
       <workItem from="1722679188842" duration="200000" />
-    </task>
-    <task id="LOCAL-00001" summary="init project">
-      <option name="closed" value="true" />
-      <created>1722679226346</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1722679226346</updated>
-    </task>
-    <task id="LOCAL-00002" summary="ignore">
-      <option name="closed" value="true" />
-      <created>1722688380249</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1722688380249</updated>
     </task>
     <task id="LOCAL-00003" summary="praise the lord I got the code gen working">
       <option name="closed" value="true" />
@@ -503,21 +504,77 @@
       <option name="project" value="LOCAL" />
       <updated>1722790718199</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="add some available time data">
+      <option name="closed" value="true" />
+      <created>1722802747822</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1722802747822</updated>
+    </task>
+    <task id="LOCAL-00045" summary="execute sql">
+      <option name="closed" value="true" />
+      <created>1722802827297</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1722802827297</updated>
+    </task>
+    <task id="LOCAL-00046" summary="pom bro">
+      <option name="closed" value="true" />
+      <created>1722803226744</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1722803226744</updated>
+    </task>
+    <task id="LOCAL-00047" summary="new jackson">
+      <option name="closed" value="true" />
+      <created>1722803485099</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1722803485099</updated>
+    </task>
+    <task id="LOCAL-00048" summary="add parsing for available time">
+      <option name="closed" value="true" />
+      <created>1722803495246</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1722803495246</updated>
+    </task>
+    <task id="LOCAL-00049" summary="fix protos">
+      <option name="closed" value="true" />
+      <created>1722804451563</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1722804451563</updated>
+    </task>
+    <task id="LOCAL-00050" summary="add user id to proto">
+      <option name="closed" value="true" />
+      <created>1722804978239</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1722804978240</updated>
+    </task>
+    <task id="LOCAL-00051" summary="thatll do for today mate">
+      <option name="closed" value="true" />
+      <created>1722804988416</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1722804988416</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="unlock door internal logic" />
-    <MESSAGE value="update door status" />
-    <MESSAGE value="raise alarm logic" />
-    <MESSAGE value="somewhat there with access log retrieval" />
-    <MESSAGE value="changes" />
-    <MESSAGE value="lint" />
-    <MESSAGE value="add code for brew coffee internal" />
-    <MESSAGE value="other methods for smart coffee machine" />
     <MESSAGE value="some commenting" />
     <MESSAGE value="something or other" />
     <MESSAGE value="refactor and simplify proto files a bit" />
@@ -535,7 +592,15 @@
     <MESSAGE value="add some test dependencies" />
     <MESSAGE value="add some base test file" />
     <MESSAGE value="add some basic unit test code" />
-    <option name="LAST_COMMIT_MESSAGE" value="add some basic unit test code" />
+    <MESSAGE value="add some available time data" />
+    <MESSAGE value="execute sql" />
+    <MESSAGE value="pom bro" />
+    <MESSAGE value="new jackson" />
+    <MESSAGE value="add parsing for available time" />
+    <MESSAGE value="fix protos" />
+    <MESSAGE value="add user id to proto" />
+    <MESSAGE value="thatll do for today mate" />
+    <option name="LAST_COMMIT_MESSAGE" value="thatll do for today mate" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

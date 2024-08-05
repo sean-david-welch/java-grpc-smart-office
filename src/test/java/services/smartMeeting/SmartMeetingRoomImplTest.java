@@ -1,11 +1,10 @@
-package smartMeeting;
+package services.smartMeeting;
 
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import services.smartMeeting.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
