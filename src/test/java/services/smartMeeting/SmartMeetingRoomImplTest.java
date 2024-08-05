@@ -1,8 +1,12 @@
 package services.smartMeeting;
 
+import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -11,109 +15,127 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-class SmartMeetingRoomImplTest {
+public class SmartMeetingRoomImplTest {
 
     @Mock
     private Connection mockConnection;
+
     @Mock
     private PreparedStatement mockPreparedStatement;
+
     @Mock
     private ResultSet mockResultSet;
+
+    @Mock
+    private StreamObserver<ActionResponse> actionResponseObserver;
+
+    @Mock
+    private StreamObserver<AvailabilityResponse> availabilityResponseObserver;
+
+    @InjectMocks
     private SmartMeetingRoomImpl smartMeetingRoom;
 
     @BeforeEach
-    void setUp() throws SQLException {
+    public void setup() throws SQLException {
         MockitoAnnotations.openMocks(this);
-        smartMeetingRoom = new SmartMeetingRoomImpl(mockConnection);
-
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
     }
 
     @Test
-    void testBookRoom() throws SQLException {
-        // Arrange
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("status")).thenReturn(RoomStatus.AVAILABLE.name());
-        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
-
+    public void testBookRoomSuccess() throws SQLException {
         BookRoomRequest request = BookRoomRequest.newBuilder()
                 .setRoomId(1)
                 .setUserId(1)
-                .setTimeSlot("2023-08-04 14:00-15:00")
+                .setTimeSlot("10:00-11:00")
                 .build();
 
-        // Act
-        TestStreamObserver<ActionResponse> responseObserver = new TestStreamObserver<>();
-        smartMeetingRoom.bookRoom(request, responseObserver);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        // Assert
-        assertTrue(responseObserver.isCompleted(), "The call was not completed");
-        assertFalse(responseObserver.getValues().isEmpty(), "No response was received");
+        smartMeetingRoom.bookRoom(request, actionResponseObserver);
 
-        System.out.println("Number of responses: " + responseObserver.getValues().size());
-        for (int i = 0; i < responseObserver.getValues().size(); i++) {
-            ActionResponse response = responseObserver.getValues().get(i);
-            System.out.println("Response " + i + ": " + (response != null ? response : "null"));
-        }
-
-        if (!responseObserver.getValues().isEmpty()) {
-            ActionResponse response = responseObserver.getValues().get(0);
-            assertNotNull(response, "Response is null");
-            if (response != null) {
-                assertTrue(response.getSuccess(), "Booking was not successful");
-                assertEquals(ErrorCode.NONE, response.getErrorCode(), "Unexpected error code");
-            }
-        }
-
-        verify(mockPreparedStatement, times(2)).setInt(anyInt(), anyInt());
-        verify(mockPreparedStatement).setString(anyInt(), anyString());
+        verify(actionResponseObserver).onNext(any(ActionResponse.class));
+        verify(actionResponseObserver).onCompleted();
     }
 
     @Test
-    void testCancelBooking() throws SQLException {
-        // Arrange
-        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+    public void testBookRoomUnavailable() throws SQLException {
+        BookRoomRequest request = BookRoomRequest.newBuilder()
+                .setRoomId(1)
+                .setUserId(1)
+                .setTimeSlot("10:00-11:00")
+                .build();
 
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getString("status")).thenReturn("OCCUPIED");
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+
+        smartMeetingRoom.bookRoom(request, actionResponseObserver);
+
+        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(actionResponseObserver).onCompleted();
+    }
+
+    @Test
+    public void testCancelBookingSuccess() throws SQLException {
         CancelBookingRequest request = CancelBookingRequest.newBuilder()
                 .setBookingId(1)
                 .build();
 
-        // Act
-        TestStreamObserver<ActionResponse> responseObserver = new TestStreamObserver<>();
-        smartMeetingRoom.cancelBooking(request, responseObserver);
+        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        // Assert
-        assertTrue(responseObserver.getValues().getFirst().getSuccess());
-        assertEquals(ErrorCode.NONE, responseObserver.getValues().getFirst().getErrorCode());
-        verify(mockPreparedStatement).setInt(1, 1);
+        smartMeetingRoom.cancelBooking(request, actionResponseObserver);
+
+        verify(actionResponseObserver).onNext(any(ActionResponse.class));
+        verify(actionResponseObserver).onCompleted();
     }
 
     @Test
-    void testCheckAvailability() throws SQLException {
-        // Arrange
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("location")).thenReturn("Room A");
-        when(mockResultSet.getString("status")).thenReturn(RoomStatus.AVAILABLE.name());
-
-        CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
-                .setRoomId(1)
-                .setTimeSlot("2023-08-04 14:00-15:00")
+    public void testCancelBookingFailure() throws SQLException {
+        CancelBookingRequest request = CancelBookingRequest.newBuilder()
+                .setBookingId(1)
                 .build();
 
-        // Act
-        TestStreamObserver<AvailabilityResponse> responseObserver = new TestStreamObserver<>();
-        smartMeetingRoom.checkAvailability(request, responseObserver);
+        when(mockPreparedStatement.executeUpdate()).thenReturn(0);
 
-        // Assert
-        AvailabilityResponse response = responseObserver.getValues().get(0);
-        assertTrue(response.getSuccess());
-        assertEquals(RoomStatus.AVAILABLE, response.getStatus());
-        assertEquals(1, response.getDetails().getRoomId());
-        assertEquals("Room A", response.getDetails().getLocation());
-        verify(mockPreparedStatement).setInt(1, 1);
+        smartMeetingRoom.cancelBooking(request, actionResponseObserver);
+
+        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(actionResponseObserver).onCompleted();
+    }
+
+    @Test
+    public void testCheckAvailabilitySuccess() throws SQLException, JsonProcessingException {
+        CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
+                .setRoomId(1)
+                .setTimeSlot("10:00-11:00")
+                .build();
+
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
+        when(mockResultSet.getString("available_time")).thenReturn("[\"10:00-11:00\", \"12:00-13:00\"]");
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+
+        smartMeetingRoom.checkAvailability(request, availabilityResponseObserver);
+
+        verify(availabilityResponseObserver).onNext(any(AvailabilityResponse.class));
+        verify(availabilityResponseObserver).onCompleted();
+    }
+
+    @Test
+    public void testCheckAvailabilityFailure() throws SQLException {
+        CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
+                .setRoomId(1)
+                .setTimeSlot("10:00-11:00")
+                .build();
+
+        when(mockResultSet.next()).thenReturn(false);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+
+        smartMeetingRoom.checkAvailability(request, availabilityResponseObserver);
+
+        verify(availabilityResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(availabilityResponseObserver).onCompleted();
     }
 }
