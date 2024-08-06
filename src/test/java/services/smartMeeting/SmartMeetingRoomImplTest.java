@@ -62,9 +62,9 @@ public class SmartMeetingRoomImplTest {
     @Test
     public void testBookRoomUnavailable() throws SQLException {
         BookRoomRequest request = BookRoomRequest.newBuilder()
-                .setRoomId(1)
-                .setUserId(1)
-                .setTimeSlot("10:00-11:00")
+                .setRoomId(4)
+                .setUserId(101)
+                .setTimeSlot("08:00-09:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
