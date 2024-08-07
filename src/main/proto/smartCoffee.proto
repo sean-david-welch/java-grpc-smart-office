@@ -8,8 +8,8 @@ package services.smartCoffee;
 // Service Methods
 service SmartCoffeeMachine {
   rpc BrewCoffee (BrewCoffeeRequest) returns (ActionResponse) {}
-  rpc CheckInventory (CheckInventoryRequest) returns (InventoryResponse) {}
-  rpc RefillInventory (RefillItemRequest) returns (InventoryResponse) {}
+  rpc CheckInventory (CheckInventoryRequest) returns (stream InventoryResponse) {}
+  rpc RefillInventory (stream RefillItemRequest) returns (InventoryResponse) {}
 }
 
 // Utility types
@@ -43,7 +43,7 @@ message BrewCoffeeRequest {
 }
 
 message CheckInventoryRequest {
-  InventoryItem item = 1;
+  optional InventoryItem item = 1;
 }
 
 message RefillItemRequest {
@@ -52,6 +52,7 @@ message RefillItemRequest {
 }
 
 message InventoryResponse {
-  int32 quantity = 1;
-  bool success = 2;
+  InventoryItem item = 1;
+  int32 quantity = 2;
+  bool success = 3;
 }
