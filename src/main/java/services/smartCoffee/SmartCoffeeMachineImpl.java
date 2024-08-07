@@ -16,6 +16,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     }
 
     //  <-------- External Grpc methods -------->
+    // Simple RPC
     @Override
     public void brewCoffee(BrewCoffeeRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean brewed = brewCoffeeInternal(request);
@@ -29,6 +30,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         responseObserver.onCompleted();
     }
 
+    // Server side streaming
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
         try {
@@ -65,6 +67,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
     }
 
+    // Client side streaming
     @Override
     public StreamObserver<RefillItemRequest> refillInventory(final StreamObserver<InventoryResponse> responseObserver) {
         return new StreamObserver<>() {

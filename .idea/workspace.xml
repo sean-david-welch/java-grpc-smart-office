@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="something else">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartCoffee/SmartCoffeeMachineImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartCoffee/SmartCoffeeMachineImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/proto/smartCoffee.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/smartCoffee.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartCoffee/SmartCoffeeMachineImplTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="fix tests for client and server streaming" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -99,7 +94,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartCoffeeMachineImplTest">
+  <component name="RunManager" selected="Application.GrpcServer">
     <configuration name="GrpcServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="services.GrpcServer" />
       <module name="smartOffice" />
@@ -178,10 +173,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.GrpcServer" />
         <item itemvalue="JUnit.SmartCoffeeMachineImplTest" />
         <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testCheckInventoryAllItemsSuccess" />
         <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testCheckInventorySpecificItemSuccess" />
-        <item itemvalue="Application.GrpcServer" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailabilitySuccess" />
       </list>
     </recent_temporary>
@@ -203,31 +198,7 @@
       <option name="presentableId" value="Default" />
       <updated>1722679187864</updated>
       <workItem from="1722679188842" duration="200000" />
-      <workItem from="1723047585237" duration="3042000" />
-    </task>
-    <task id="LOCAL-00012" summary="database connection">
-      <option name="closed" value="true" />
-      <created>1722705393739</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1722705393739</updated>
-    </task>
-    <task id="LOCAL-00013" summary="some changes to smart access control">
-      <option name="closed" value="true" />
-      <created>1722705427362</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1722705427362</updated>
-    </task>
-    <task id="LOCAL-00014" summary="base code for a grpc client">
-      <option name="closed" value="true" />
-      <created>1722705603131</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1722705603131</updated>
+      <workItem from="1723047585237" duration="3352000" />
     </task>
     <task id="LOCAL-00015" summary="set up table schema">
       <option name="closed" value="true" />
@@ -597,16 +568,37 @@
       <option name="project" value="LOCAL" />
       <updated>1722930405918</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="fix protobuf for client and server streaming">
+      <option name="closed" value="true" />
+      <created>1723051182145</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1723051182145</updated>
+    </task>
+    <task id="LOCAL-00062" summary="fix methods for client and server streaming">
+      <option name="closed" value="true" />
+      <created>1723051196781</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1723051196781</updated>
+    </task>
+    <task id="LOCAL-00063" summary="fix tests for client and server streaming">
+      <option name="closed" value="true" />
+      <created>1723051202695</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1723051202695</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="redo meeting room later" />
-    <MESSAGE value="temp fix for meeting room" />
-    <MESSAGE value="correct errors in smart access control" />
     <MESSAGE value="fix errors in smart coffee machine" />
     <MESSAGE value="do smart meeting service" />
     <MESSAGE value="add some test dependencies" />
@@ -629,7 +621,10 @@
     <MESSAGE value="fix tests for smart access control" />
     <MESSAGE value="fix smart meeting room tests" />
     <MESSAGE value="something else" />
-    <option name="LAST_COMMIT_MESSAGE" value="something else" />
+    <MESSAGE value="fix protobuf for client and server streaming" />
+    <MESSAGE value="fix methods for client and server streaming" />
+    <MESSAGE value="fix tests for client and server streaming" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix tests for client and server streaming" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
