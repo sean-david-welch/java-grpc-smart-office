@@ -32,47 +32,73 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
         try {
-            int quantity = getInventoryQuantity(request.getItem());
-
-            InventoryResponse response = InventoryResponse.newBuilder()
-                    .setQuantity(quantity)
-                    .setSuccess(true)
-                    .build();
-
-            responseObserver.onNext(response);
+            if (request.hasItem()) {
+                // Check specific item
+                InventoryItem item = request.getItem();
+                if (item != InventoryItem.UNKNOWN_ITEM && item != InventoryItem.UNRECOGNIZED) {
+                    int quantity = getInventoryQuantity(item);
+                    InventoryResponse response = InventoryResponse.newBuilder()
+                            .setItem(item)
+                            .setQuantity(quantity)
+                            .setSuccess(true)
+                            .build();
+                    responseObserver.onNext(response);
+                }
+            } else {
+                // Check all items
+                for (InventoryItem item : InventoryItem.values()) {
+                    if (item != InventoryItem.UNKNOWN_ITEM && item != InventoryItem.UNRECOGNIZED) {
+                        int quantity = getInventoryQuantity(item);
+                        InventoryResponse response = InventoryResponse.newBuilder()
+                                .setItem(item)
+                                .setQuantity(quantity)
+                                .setSuccess(true)
+                                .build();
+                        responseObserver.onNext(response);
+                    }
+                }
+            }
             responseObserver.onCompleted();
         } catch (SQLException e) {
             System.err.println("Error checking inventory: " + e.getMessage());
-            InventoryResponse response = InventoryResponse.newBuilder()
-                    .setQuantity(0)
-                    .setSuccess(false)
-                    .build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
+            responseObserver.onError(e);
         }
     }
 
     @Override
-    public void refillInventory(RefillItemRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        try {
-            int newQuantity = updateInventoryQuantity(request.getItem(), request.getQuantity());
+    public StreamObserver<RefillItemRequest> refillInventory(final StreamObserver<InventoryResponse> responseObserver) {
+        return new StreamObserver<>() {
+            private int totalItemsRefilled = 0;
+            private InventoryItem lastItem = null;
 
-            InventoryResponse response = InventoryResponse.newBuilder()
-                    .setQuantity(newQuantity)
-                    .setSuccess(true)
-                    .build();
+            @Override
+            public void onNext(RefillItemRequest request) {
+                try {
+                    int newQuantity = updateInventoryQuantity(request.getItem(), request.getQuantity());
+                    totalItemsRefilled++;
+                    lastItem = request.getItem();
+                } catch (SQLException e) {
+                    System.err.println("Error refilling inventory: " + e.getMessage());
+                }
+            }
 
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
-        } catch (SQLException e) {
-            System.err.println("Error refilling inventory: " + e.getMessage());
-            InventoryResponse response = InventoryResponse.newBuilder()
-                    .setQuantity(0)
-                    .setSuccess(false)
-                    .build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
-        }
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error in refill: " + t.getMessage());
+                responseObserver.onError(t);
+            }
+
+            @Override
+            public void onCompleted() {
+                InventoryResponse response = InventoryResponse.newBuilder()
+                        .setItem(lastItem)
+                        .setQuantity(totalItemsRefilled)
+                        .setSuccess(true)
+                        .build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            }
+        };
     }
 
     // <------- Interal Logic Methods ------->
@@ -164,5 +190,5 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
         return 0;
     }
-    
+
 }
