@@ -62,10 +62,10 @@ create table if not exists booking
 -- dummy data creation --
 
 -- Smart Access Service
-insert into door (status)
-values ('locked'),
-       ('unlocked'),
-       ('locked');
+insert into door (id, status)
+values (1, 'locked'),
+       (2, 'unlocked'),
+       (3, 'locked');
 
 insert into access_credentials (user_id, access_level)
 values (101, 'general'),
@@ -74,10 +74,10 @@ values (101, 'general'),
        (104, 'admin');
 
 insert into access_log (door_id, user_id, access_time)
-values (1, 101, '2024-08-04 09:00'),
-       (2, 102, '2024-08-04 10:00'),
-       (3, 103, '2024-08-04 11:00'),
-       (1, 104, '2024-08-04 13:00');
+values (1, 101, '09:00'),
+       (2, 102, '10:00'),
+       (3, 103, '11:00'),
+       (1, 104, '13:00');
 
 -- Smart Coffee Service
 insert into inventory_item (item, quantity)
@@ -104,7 +104,7 @@ values
 
 -- Corrected booking with valid room_id references
 insert into booking (booking_id, room_id, user_id, time_slot)
-values (1, 1, 101, '14:00-15:00'),
-       (2, 2, 102, '11:00-12:00'),
-       (3, 3, 103, '09:00-10:00'),
-       (4, 1, 104, '13:00-14:00');
+values (1, 4, 101, '14:00-15:00'),
+       (2, 6, 102, '11:00-12:00'),
+       (3, 8, 103, '09:00-10:00'),
+       (4, 9, 104, '13:00-14:00');
