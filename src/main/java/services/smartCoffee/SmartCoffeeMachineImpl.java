@@ -77,7 +77,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
             @Override
             public void onNext(RefillItemRequest request) {
                 try {
-                    int newQuantity = updateInventoryQuantity(request.getItem(), request.getQuantity());
+                    updateInventoryQuantity(request.getItem(), request.getQuantity());
                     totalItemsRefilled++;
                     lastItem = request.getItem();
                 } catch (SQLException e) {
@@ -133,9 +133,11 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         try {
             conn.setAutoCommit(false);
 
-            if (!(getInventoryQuantity(InventoryItem.COFFEE_BEANS) >= beansRequired &&
-                    getInventoryQuantity(InventoryItem.WATER) >= waterRequired &&
-                    getInventoryQuantity(InventoryItem.MILK) >= milkRequired)) {
+            int availableBeans = getInventoryQuantity(InventoryItem.COFFEE_BEANS);
+            int availableWater = getInventoryQuantity(InventoryItem.WATER);
+            int availableMilk = getInventoryQuantity(InventoryItem.MILK);
+
+            if (!(availableBeans >= beansRequired && availableWater >= waterRequired && availableMilk >= milkRequired)) {
                 conn.rollback();
                 System.out.println("Not enough stock, please refill and try again");
                 return false;
@@ -167,26 +169,27 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
     }
 
-    private int updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
+    private void updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
         String sql = "update inventory_item set quantity = quantity + ? WHERE item = ?";
+        System.out.println(change);
+        System.out.println(item.name().toLowerCase());
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, change);
-            statement.setString(2, item.name());
+            statement.setString(2, item.name().toLowerCase());
             statement.executeUpdate();
-            return getInventoryQuantity(item);
+            getInventoryQuantity(item);
         } catch (SQLException e) {
             System.out.println("An error occurred while querying the database" + e.getMessage());
         }
-        return 0;
     }
 
     private int getInventoryQuantity(InventoryItem item) throws SQLException {
         String sql = "select quantity from inventory_item where item = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, item.name());
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("quantity");
+            statement.setString(1, item.name().toLowerCase());
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                return result.getInt("quantity");
             }
         } catch (SQLException e) {
             System.out.println("error querying database" + e.getMessage());
