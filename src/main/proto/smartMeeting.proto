@@ -9,7 +9,7 @@ package services.smartMeeting;
 service SmartMeetingRoom {
   rpc BookRoom (BookRoomRequest) returns (ActionResponse) {}
   rpc CancelBooking (CancelBookingRequest) returns (ActionResponse) {}
-  rpc CheckAvailability (CheckAvailabilityRequest) returns (AvailabilityResponse) {}
+  rpc CheckAvailability (CheckAvailabilityRequest) returns (stream AvailabilityResponse) {}
 }
 
 // Utility Types
