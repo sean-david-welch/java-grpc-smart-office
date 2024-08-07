@@ -11,7 +11,7 @@ import services.smartMeeting.SmartMeetingRoomImpl;
 import java.sql.Connection;
 
 public class GrpcServer {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Database.initializeDatabase();
         try (Connection conn = Database.getConnection()) {
             if (conn != null) {
