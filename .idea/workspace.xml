@@ -104,7 +104,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartMeetingRoomImplTest.testCheckAvailabilitySuccess">
+  <component name="RunManager" selected="JUnit.SmartAccessControlImplTest">
     <configuration name="SmartAccessControlImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smartOffice" />
       <extension name="coverage">
@@ -120,17 +120,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartCoffeeMachineImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="services.smartCoffee.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="services.smartCoffee" />
-      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="pattern" />
+      <patterns>
+        <pattern testClass="services.smartAccess.SmartAccessControlImplTest,testGetAccessLogsSuccess" />
+        <pattern testClass="services.smartAccess.SmartAccessControlImplTest,testGetAccessLogsNoLogs" />
+      </patterns>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -184,11 +180,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SmartAccessControlImplTest" />
+        <item itemvalue="JUnit.SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailabilitySuccess" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest.testBookRoomUnavailable" />
         <item itemvalue="JUnit.SmartMeetingRoomImplTest" />
-        <item itemvalue="JUnit.SmartCoffeeMachineImplTest" />
-        <item itemvalue="JUnit.SmartAccessControlImplTest" />
       </list>
     </recent_temporary>
   </component>

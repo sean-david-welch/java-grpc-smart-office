@@ -115,13 +115,13 @@ public class SmartAccessControlImplTest {
         GetAccessLogsRequest request = GetAccessLogsRequest.newBuilder()
                 .setDoorId(1)
                 .setUserId(1)
-                .setTime("2023-08-05")
+                .setTime("09:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true).thenReturn(false);
         when(mockResultSet.getInt("user_id")).thenReturn(1);
         when(mockResultSet.getInt("door_id")).thenReturn(1);
-        when(mockResultSet.getString("access_time")).thenReturn("2023-08-05");
+        when(mockResultSet.getString("access_time")).thenReturn("09:00");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
@@ -139,7 +139,7 @@ public class SmartAccessControlImplTest {
         GetAccessLogsRequest request = GetAccessLogsRequest.newBuilder()
                 .setDoorId(1)
                 .setUserId(1)
-                .setTime("2023-08-05")
+                .setTime("09:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(false);
