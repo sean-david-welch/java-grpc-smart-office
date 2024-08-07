@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="add comments">
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="some db updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/database/database.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/database/database.db-shm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/database/database.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/database/database.db-wal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartAccess/SmartAccessControlImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartAccess/SmartAccessControlImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/proto/smartAccess.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/smartAccess.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/services/smartAccess/SmartAccessControlImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartAccess/SmartAccessControlImplTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +58,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.GrpcServer.executor": "Run",
+    "JUnit.SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more.executor": "Run",
     "JUnit.SmartAccessControlImplTest.executor": "Run",
+    "JUnit.SmartAccessControlImplTest.testGetAccessLogsSuccess.executor": "Run",
     "JUnit.SmartAccessControlImplTest.testRaiseAlarmSuccess.executor": "Run",
     "JUnit.SmartAccessControlImplTest.testUnlockDoorSuccess.executor": "Run",
     "JUnit.SmartCoffeeMachineImplTest.executor": "Run",
@@ -101,7 +99,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GrpcServer">
+  <component name="RunManager" selected="JUnit.SmartAccessControlImplTest">
     <configuration name="GrpcServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="services.GrpcServer" />
       <module name="smartOffice" />
@@ -111,6 +109,48 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartAccessControlImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartAccess.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartAccess" />
+      <option name="MAIN_CLASS_NAME" value="services.smartAccess.SmartAccessControlImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <option name="TEST_OBJECT" value="pattern" />
+      <patterns>
+        <pattern testClass="services.smartAccess.SmartAccessControlImplTest,testGetAccessLogsSuccess" />
+        <pattern testClass="services.smartAccess.SmartAccessControlImplTest,testGetAccessLogsNoLogs" />
+      </patterns>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartAccessControlImplTest.testGetAccessLogsSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartAccess.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartAccess" />
+      <option name="MAIN_CLASS_NAME" value="services.smartAccess.SmartAccessControlImplTest" />
+      <option name="METHOD_NAME" value="testGetAccessLogsSuccess" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -130,61 +170,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartCoffeeMachineImplTest.testCheckInventoryAllItemsSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="services.smartCoffee.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="services.smartCoffee" />
-      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
-      <option name="METHOD_NAME" value="testCheckInventoryAllItemsSuccess" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SmartCoffeeMachineImplTest.testCheckInventorySpecificItemSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="services.smartCoffee.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="services.smartCoffee" />
-      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
-      <option name="METHOD_NAME" value="testCheckInventorySpecificItemSuccess" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SmartMeetingRoomImplTest.testCheckAvailabilitySuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="services.smartMeeting.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="services.smartMeeting" />
-      <option name="MAIN_CLASS_NAME" value="services.smartMeeting.SmartMeetingRoomImplTest" />
-      <option name="METHOD_NAME" value="testCheckAvailabilitySuccess" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.SmartAccessControlImplTest" />
+        <item itemvalue="JUnit.SmartAccessControlImplTest.testGetAccessLogsSuccess" />
+        <item itemvalue="JUnit.SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more" />
         <item itemvalue="Application.GrpcServer" />
         <item itemvalue="JUnit.SmartCoffeeMachineImplTest" />
-        <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testCheckInventoryAllItemsSuccess" />
-        <item itemvalue="JUnit.SmartCoffeeMachineImplTest.testCheckInventorySpecificItemSuccess" />
-        <item itemvalue="JUnit.SmartMeetingRoomImplTest.testCheckAvailabilitySuccess" />
       </list>
     </recent_temporary>
   </component>
@@ -205,39 +197,7 @@
       <option name="presentableId" value="Default" />
       <updated>1722679187864</updated>
       <workItem from="1722679188842" duration="200000" />
-      <workItem from="1723047585237" duration="5339000" />
-    </task>
-    <task id="LOCAL-00016" summary="dummy data creation">
-      <option name="closed" value="true" />
-      <created>1722706610072</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1722706610072</updated>
-    </task>
-    <task id="LOCAL-00017" summary="add database">
-      <option name="closed" value="true" />
-      <created>1722706842446</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1722706842446</updated>
-    </task>
-    <task id="LOCAL-00018" summary="add database connections to services">
-      <option name="closed" value="true" />
-      <created>1722707269247</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1722707269247</updated>
-    </task>
-    <task id="LOCAL-00019" summary="unlock door internal logic">
-      <option name="closed" value="true" />
-      <created>1722710625772</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1722710625772</updated>
+      <workItem from="1723047585237" duration="6506000" />
     </task>
     <task id="LOCAL-00020" summary="update door status">
       <option name="closed" value="true" />
@@ -599,17 +559,45 @@
       <option name="project" value="LOCAL" />
       <updated>1723051638187</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="update proto for bidirectional streaming">
+      <option name="closed" value="true" />
+      <created>1723053855058</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1723053855058</updated>
+    </task>
+    <task id="LOCAL-00066" summary="bidirectional streaming in service">
+      <option name="closed" value="true" />
+      <created>1723053896699</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1723053896700</updated>
+    </task>
+    <task id="LOCAL-00067" summary="bidirectional streaming in test">
+      <option name="closed" value="true" />
+      <created>1723053901099</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1723053901099</updated>
+    </task>
+    <task id="LOCAL-00068" summary="some db updates">
+      <option name="closed" value="true" />
+      <created>1723053907901</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1723053907901</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="do smart meeting service" />
-    <MESSAGE value="add some test dependencies" />
-    <MESSAGE value="add some base test file" />
-    <MESSAGE value="add some basic unit test code" />
     <MESSAGE value="add some available time data" />
     <MESSAGE value="execute sql" />
     <MESSAGE value="pom bro" />
@@ -631,7 +619,11 @@
     <MESSAGE value="fix methods for client and server streaming" />
     <MESSAGE value="fix tests for client and server streaming" />
     <MESSAGE value="add comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="add comments" />
+    <MESSAGE value="update proto for bidirectional streaming" />
+    <MESSAGE value="bidirectional streaming in service" />
+    <MESSAGE value="bidirectional streaming in test" />
+    <MESSAGE value="some db updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="some db updates" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

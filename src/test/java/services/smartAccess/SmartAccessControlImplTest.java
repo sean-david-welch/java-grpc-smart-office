@@ -125,19 +125,16 @@ public class SmartAccessControlImplTest {
         when(mockResultSet.getString("access_time")).thenReturn("2023-08-05");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        ArgumentCaptor<StreamObserver<GetAccessLogsRequest>> requestObserverCaptor = ArgumentCaptor.forClass(StreamObserver.class);
-        doNothing().when(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
-        doNothing().when(accessLogsResponseObserver).onCompleted();
+        ArgumentCaptor<StreamObserver<AccessLogsResponse>> responseObserverCaptor = ArgumentCaptor.forClass((Class) StreamObserver.class);
+        StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
 
-        smartAccessControl.getAccessLogs(accessLogsResponseObserver);
-
-        StreamObserver<GetAccessLogsRequest> requestObserver = requestObserverCaptor.getValue();
         requestObserver.onNext(request);
         requestObserver.onCompleted();
 
         verify(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
         verify(accessLogsResponseObserver).onCompleted();
     }
+
 
     @Test
     public void testGetAccessLogsNoLogs() throws SQLException {
@@ -147,20 +144,25 @@ public class SmartAccessControlImplTest {
                 .setTime("2023-08-05")
                 .build();
 
+        // Set up the mocks to return no results
         when(mockResultSet.next()).thenReturn(false);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        ArgumentCaptor<StreamObserver<GetAccessLogsRequest>> requestObserverCaptor = ArgumentCaptor.forClass(StreamObserver.class);
+        // Capture the response observer
+        ArgumentCaptor<StreamObserver<AccessLogsResponse>> responseObserverCaptor = ArgumentCaptor.forClass((Class) StreamObserver.class);
         doNothing().when(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
         doNothing().when(accessLogsResponseObserver).onCompleted();
 
-        smartAccessControl.getAccessLogs(accessLogsResponseObserver);
+        // Call the method and get the request observer
+        StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
 
-        StreamObserver<GetAccessLogsRequest> requestObserver = requestObserverCaptor.getValue();
+        // Send the request
         requestObserver.onNext(request);
         requestObserver.onCompleted();
 
+        // Verify interactions with the response observer
         verify(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
         verify(accessLogsResponseObserver).onCompleted();
     }
+
 }
