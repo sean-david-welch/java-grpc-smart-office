@@ -22,9 +22,10 @@ public class GrpcServer {
                         .build();
 
                 ServiceRegister serviceRegister = new ServiceRegister();
-                serviceRegister.registerService("SmartMeetingService");
-                serviceRegister.registerService("SmartCoffeeService");
-                serviceRegister.registerService("SmartAccessService");
+                serviceRegister.registerService("_smartMeeting._tcp.local.", "SmartMeetingService", 8080);
+                serviceRegister.registerService("_smartCoffee._tcp.local.", "SmartCoffeeService", 8080);
+                serviceRegister.registerService("_smartAccess._tcp.local.", "SmartAccessService", 8080);
+
 
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     System.err.println("*** shutting down gRPC server since JVM is shutting down");
