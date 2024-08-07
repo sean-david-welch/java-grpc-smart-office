@@ -71,7 +71,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             }
 
             String status = roomResult.getString("status");
-            RoomStatus roomStatus = RoomStatus.valueOf(status);
+            RoomStatus roomStatus = RoomStatus.valueOf(status.toUpperCase());
 
             if (roomStatus == RoomStatus.OCCUPIED || roomStatus == RoomStatus.UNAVAILABLE) {
                 System.out.println("Room is unavailable: " + roomResult);
@@ -133,7 +133,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                     .build();
 
             List<String> availableTimes;
-            String sqlTimes = roomResult.getString("available_time");
+            String sqlTimes = roomResult.getString("available_times");
 
             ObjectMapper objectMapper = new ObjectMapper();
             try {
@@ -145,22 +145,23 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 return;
             }
 
-            RoomStatus status = RoomStatus.valueOf(roomResult.getString("status"));
+            RoomStatus status = RoomStatus.valueOf(roomResult.getString("status").toUpperCase());
+
+            AvailabilityResponse.Builder responseBuilder = AvailabilityResponse.newBuilder()
+                    .setSuccess(true)
+                    .setStatus(status)
+                    .setDetails(roomDetails);
 
             for (String time : availableTimes) {
-                AvailabilityResponse response = AvailabilityResponse.newBuilder()
-                        .setSuccess(true)
-                        .setStatus(status)
-                        .setDetails(roomDetails)
-                        .addAvailableTimes(time)
-                        .build();
-                responseObserver.onNext(response);
+                responseBuilder.addAvailableTimes(time);
             }
 
+            responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
         } catch (SQLException e) {
             System.out.println("An error occurred while querying the database: " + e.getMessage());
             responseObserver.onCompleted();
         }
     }
+
 }
