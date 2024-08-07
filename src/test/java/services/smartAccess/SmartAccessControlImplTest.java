@@ -3,7 +3,6 @@ package services.smartAccess;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -125,7 +124,6 @@ public class SmartAccessControlImplTest {
         when(mockResultSet.getString("access_time")).thenReturn("2023-08-05");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        ArgumentCaptor<StreamObserver<AccessLogsResponse>> responseObserverCaptor = ArgumentCaptor.forClass((Class) StreamObserver.class);
         StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
 
         requestObserver.onNext(request);
@@ -144,25 +142,18 @@ public class SmartAccessControlImplTest {
                 .setTime("2023-08-05")
                 .build();
 
-        // Set up the mocks to return no results
         when(mockResultSet.next()).thenReturn(false);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        // Capture the response observer
-        ArgumentCaptor<StreamObserver<AccessLogsResponse>> responseObserverCaptor = ArgumentCaptor.forClass((Class) StreamObserver.class);
         doNothing().when(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
         doNothing().when(accessLogsResponseObserver).onCompleted();
 
-        // Call the method and get the request observer
         StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
 
-        // Send the request
         requestObserver.onNext(request);
         requestObserver.onCompleted();
 
-        // Verify interactions with the response observer
         verify(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
         verify(accessLogsResponseObserver).onCompleted();
     }
-
 }

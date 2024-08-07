@@ -99,7 +99,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartAccessControlImplTest">
+  <component name="RunManager" selected="JUnit.SmartAccessControlImplTest.testGetAccessLogsSuccess">
     <configuration name="GrpcServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="services.GrpcServer" />
       <module name="smartOffice" />
@@ -124,6 +124,22 @@
       <option name="PACKAGE_NAME" value="services.smartAccess" />
       <option name="MAIN_CLASS_NAME" value="services.smartAccess.SmartAccessControlImplTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartAccessControlImplTest.testGetAccessLogsNoLogs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartOffice" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="services.smartAccess.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="services.smartAccess" />
+      <option name="MAIN_CLASS_NAME" value="services.smartAccess.SmartAccessControlImplTest" />
+      <option name="METHOD_NAME" value="testGetAccessLogsNoLogs" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -155,28 +171,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartCoffeeMachineImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="smartOffice" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="services.smartCoffee.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="services.smartCoffee" />
-      <option name="MAIN_CLASS_NAME" value="services.smartCoffee.SmartCoffeeMachineImplTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SmartAccessControlImplTest" />
         <item itemvalue="JUnit.SmartAccessControlImplTest.testGetAccessLogsSuccess" />
+        <item itemvalue="JUnit.SmartAccessControlImplTest.testGetAccessLogsNoLogs" />
+        <item itemvalue="JUnit.SmartAccessControlImplTest" />
         <item itemvalue="JUnit.SmartAccessControlImplTest,testGetAccessLogsSuccess and 1 more" />
         <item itemvalue="Application.GrpcServer" />
-        <item itemvalue="JUnit.SmartCoffeeMachineImplTest" />
       </list>
     </recent_temporary>
   </component>
