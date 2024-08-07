@@ -20,6 +20,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     }
 
     //  <-------- External Grpc methods -------->
+    // Simple RPC
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean success = bookRoomLogic(request);
@@ -33,6 +34,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         responseObserver.onCompleted();
     }
 
+    // Simple RPC
     @Override
     public void cancelBooking(CancelBookingRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean canceled = cancelBookingLogic(request.getBookingId());
