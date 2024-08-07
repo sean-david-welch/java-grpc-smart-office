@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="fix tests for client and server streaming" />
+    <list default="true" id="0ca1e98d-4d85-43c2-b58f-87e8dd2987c1" name="Changes" comment="add comments">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/database/database.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/database/database.db-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/database/database.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/database/database.db-wal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/smartAccess/SmartAccessControlImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/smartAccess/SmartAccessControlImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/proto/smartAccess.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/smartAccess.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/services/smartAccess/SmartAccessControlImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/services/smartAccess/SmartAccessControlImplTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -198,15 +205,7 @@
       <option name="presentableId" value="Default" />
       <updated>1722679187864</updated>
       <workItem from="1722679188842" duration="200000" />
-      <workItem from="1723047585237" duration="3352000" />
-    </task>
-    <task id="LOCAL-00015" summary="set up table schema">
-      <option name="closed" value="true" />
-      <created>1722706470471</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1722706470471</updated>
+      <workItem from="1723047585237" duration="5339000" />
     </task>
     <task id="LOCAL-00016" summary="dummy data creation">
       <option name="closed" value="true" />
@@ -592,14 +591,21 @@
       <option name="project" value="LOCAL" />
       <updated>1723051202695</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="add comments">
+      <option name="closed" value="true" />
+      <created>1723051638187</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1723051638187</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix errors in smart coffee machine" />
     <MESSAGE value="do smart meeting service" />
     <MESSAGE value="add some test dependencies" />
     <MESSAGE value="add some base test file" />
@@ -624,7 +630,8 @@
     <MESSAGE value="fix protobuf for client and server streaming" />
     <MESSAGE value="fix methods for client and server streaming" />
     <MESSAGE value="fix tests for client and server streaming" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix tests for client and server streaming" />
+    <MESSAGE value="add comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="add comments" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

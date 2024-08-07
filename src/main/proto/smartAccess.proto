@@ -9,7 +9,7 @@ package services.smartAccess;
 service SmartAccessControl {
   rpc UnlockDoor (UnlockDoorRequest) returns (ActionResponse) {}
   rpc RaiseAlarm (RaiseAlarmRequest) returns (ActionResponse) {}
-  rpc GetAccessLogs (GetAccessLogsRequest) returns (AccessLogsResponse) {}
+  rpc GetAccessLogs (stream GetAccessLogsRequest) returns (stream AccessLogsResponse) {}
 }
 
 // Utility Types
