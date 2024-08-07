@@ -46,7 +46,7 @@ public class SmartMeetingRoomImplTest {
         BookRoomRequest request = BookRoomRequest.newBuilder()
                 .setRoomId(1)
                 .setUserId(1)
-                .setTimeSlot("10:00-11:00")
+                .setTimeSlot("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
@@ -64,12 +64,12 @@ public class SmartMeetingRoomImplTest {
         BookRoomRequest request = BookRoomRequest.newBuilder()
                 .setRoomId(4)
                 .setUserId(101)
-                .setTimeSlot("08:00-09:00")
+                .setTimeSlot("08:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getString("status")).thenReturn("OCCUPIED");
-        when(mockResultSet.getString("location")).thenReturn("Room 101");
+        when(mockResultSet.getString("location")).thenReturn("floor 5");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartMeetingRoom.bookRoom(request, actionResponseObserver);
@@ -109,14 +109,14 @@ public class SmartMeetingRoomImplTest {
     @Test
     public void testCheckAvailabilitySuccess() throws SQLException, JsonProcessingException {
         CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
-                .setRoomId(1)
-                .setTimeSlot("10:00-11:00")
+                .setRoomId(4)
+                .setTimeSlot("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
-        when(mockResultSet.getString("available_time")).thenReturn("[\"10:00-11:00\", \"12:00-13:00\"]");
-        when(mockResultSet.getString("location")).thenReturn("Room 101");
+        when(mockResultSet.getString("available_time")).thenReturn("[\"10:00\", \"12:00\"]");
+        when(mockResultSet.getString("location")).thenReturn("floor 4");
         when(mockResultSet.getInt("room_id")).thenReturn(1);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
@@ -130,7 +130,7 @@ public class SmartMeetingRoomImplTest {
     public void testCheckAvailabilityFailure() throws SQLException {
         CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
                 .setRoomId(1)
-                .setTimeSlot("10:00-11:00")
+                .setTimeSlot("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(false);

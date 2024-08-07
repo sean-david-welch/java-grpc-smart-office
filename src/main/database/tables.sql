@@ -94,17 +94,17 @@ values (1, 'americano'),
 -- Smart Meeting Room Service
 insert into room_details (room_id, location, status, available_times)
 values
-    (4, 'floor 5', 'available', '["08:00-09:00", "13:00-14:00", "16:00-17:00"]'),
+    (4, 'floor 5', 'available', '["08:00", "13:00", "16:00"]'),
     (5, 'floor 6', 'unavailable', '[]'),
-    (6, 'floor 7', 'available', '["10:00-11:00", "15:00-16:00"]'),
-    (7, 'floor 8', 'occupied', '["11:00-12:00", "14:00-15:00"]'),
-    (8, 'floor 9', 'available', '["09:00-10:00", "12:00-13:00", "15:00-16:00"]'),
-    (9, 'floor 10', 'available', '["07:00-08:00", "09:00-10:00", "11:00-12:00"]'),
-    (10, 'floor 11', 'occupied', '["13:00-14:00", "15:00-16:00"]');
+    (6, 'floor 7', 'available', '["10:00", "15:00"]'),
+    (7, 'floor 8', 'occupied', '["11:00", "14:00"]'),
+    (8, 'floor 9', 'available', '["09:00", "12:00", "15:00"]'),
+    (9, 'floor 10', 'available', '["07:00", "09:00", "11:00"]'),
+    (10, 'floor 11', 'occupied', '["13:00", "15:00"]');
 
 -- Corrected booking with valid room_id references
 insert into booking (booking_id, room_id, user_id, time_slot)
-values (1, 4, 101, '14:00-15:00'),
-       (2, 6, 102, '11:00-12:00'),
-       (3, 8, 103, '09:00-10:00'),
-       (4, 9, 104, '13:00-14:00');
+values (1, 4, 101, '14:00'),
+       (2, 6, 102, '11:00'),
+       (3, 8, 103, '09:00'),
+       (4, 9, 104, '13:00');
