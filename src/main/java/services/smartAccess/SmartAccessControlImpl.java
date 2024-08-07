@@ -45,17 +45,33 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     }
 
     @Override
-    public void getAccessLogs(GetAccessLogsRequest request, StreamObserver<AccessLogsResponse> responseObserver) {
-        List<LogEntry> logs = retrieveAccessLogs(request);
+    public StreamObserver<GetAccessLogsRequest> getAccessLogs(StreamObserver<AccessLogsResponse> responseObserver) {
+        return new StreamObserver<>() {
 
-        AccessLogsResponse response = AccessLogsResponse.newBuilder()
-                .addAllLogs(logs)
-                .setErrorCode(ErrorCode.NONE)
-                .build();
+            @Override
+            public void onNext(GetAccessLogsRequest request) {
+                List<LogEntry> logs = retrieveAccessLogs(request);
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+                AccessLogsResponse response = AccessLogsResponse.newBuilder()
+                        .addAllLogs(logs)
+                        .setErrorCode(ErrorCode.NONE)
+                        .build();
+
+                responseObserver.onNext(response);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println("Error receiving GetAccessLogsRequest: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onCompleted();
+            }
+        };
     }
+
 
     // <--------  Interal Logic Methods -------->
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
@@ -94,7 +110,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 if (checkAccessLevel(userID, accessLevel, credResult)) return false;
 
                 System.out.println("Door unlocked: " + doorID);
-                updateDoorStatus(doorID, "unlocked");
+                updateDoorStatus(doorID);
                 return true;
             }
         } catch (SQLException e) {
@@ -170,7 +186,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-
                 LogEntry logEntry = LogEntry.newBuilder()
                         .setUserId(rs.getInt("user_id"))
                         .setDoorId(rs.getInt("door_id"))
@@ -185,11 +200,11 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         return logs;
     }
 
-    private void updateDoorStatus(int doorID, String status) {
+    private void updateDoorStatus(int doorID) {
         String updateDoorStatusQuery = "update door set status = ? WHERE id = ?";
 
         try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
-            updateStmt.setString(1, status);
+            updateStmt.setString(1, "unlocked");
             updateStmt.setInt(2, doorID);
             updateStmt.executeUpdate();
         } catch (SQLException e) {
