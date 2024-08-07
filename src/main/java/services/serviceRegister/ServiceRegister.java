@@ -11,7 +11,7 @@ public class ServiceRegister {
     public void registerService(String serviceType, String serviceName, int port) {
         try {
             jmdns = JmDNS.create(InetAddress.getLocalHost());
-            ServiceInfo serviceInfo = ServiceInfo.create(serviceType, serviceName, port, "path=index.html");
+            ServiceInfo serviceInfo = ServiceInfo.create(serviceType, serviceName, port, serviceName);
             jmdns.registerService(serviceInfo);
             System.out.println("Service registered: " + serviceName);
         } catch (IOException e) {
