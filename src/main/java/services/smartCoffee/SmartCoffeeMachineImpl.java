@@ -193,5 +193,4 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         }
         return 0;
     }
-
 }
