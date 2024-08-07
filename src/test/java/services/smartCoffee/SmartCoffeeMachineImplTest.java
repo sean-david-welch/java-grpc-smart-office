@@ -1,7 +1,5 @@
 package services.smartCoffee;
 
-import static org.mockito.Mockito.*;
-
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.stream.Stream;
+
+import static org.mockito.Mockito.*;
 
 public class SmartCoffeeMachineImplTest {
 
@@ -72,8 +73,27 @@ public class SmartCoffeeMachineImplTest {
         verify(actionResponseObserver).onCompleted();
     }
 
+
     @Test
-    public void testCheckInventorySuccess() throws SQLException {
+    public void testCheckInventoryAllItemsSuccess() throws SQLException {
+        CheckInventoryRequest request = CheckInventoryRequest.newBuilder().build();
+
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getInt("quantity")).thenReturn(50);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+
+        smartCoffeeMachine.checkInventory(request, inventoryResponseObserver);
+
+        int expectedCalls = (int) Stream.of(InventoryItem.values())
+                .filter(item -> item != InventoryItem.UNKNOWN_ITEM && item != InventoryItem.UNRECOGNIZED)
+                .count();
+        verify(inventoryResponseObserver, times(expectedCalls)).onNext(any(InventoryResponse.class));
+        verify(inventoryResponseObserver).onCompleted();
+    }
+
+
+    @Test
+    public void testCheckInventorySpecificItemSuccess() throws SQLException {
         CheckInventoryRequest request = CheckInventoryRequest.newBuilder()
                 .setItem(InventoryItem.COFFEE_BEANS)
                 .build();
@@ -84,7 +104,11 @@ public class SmartCoffeeMachineImplTest {
 
         smartCoffeeMachine.checkInventory(request, inventoryResponseObserver);
 
-        verify(inventoryResponseObserver).onNext(any(InventoryResponse.class));
+        verify(inventoryResponseObserver).onNext(argThat(response ->
+                response.getItem() == InventoryItem.COFFEE_BEANS &&
+                        response.getQuantity() == 50 &&
+                        response.getSuccess()
+        ));
         verify(inventoryResponseObserver).onCompleted();
     }
 
@@ -99,9 +123,16 @@ public class SmartCoffeeMachineImplTest {
         when(mockResultSet.getInt("quantity")).thenReturn(100);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
-        smartCoffeeMachine.refillInventory(request, inventoryResponseObserver);
+        StreamObserver<RefillItemRequest> refillObserver = smartCoffeeMachine.refillInventory(inventoryResponseObserver);
 
-        verify(inventoryResponseObserver).onNext(any(InventoryResponse.class));
+        refillObserver.onNext(request);
+        refillObserver.onCompleted();
+
+        verify(inventoryResponseObserver).onNext(argThat(response ->
+                response.getItem() == InventoryItem.COFFEE_BEANS &&
+                        response.getQuantity() == 1 &&
+                        response.getSuccess()
+        ));
         verify(inventoryResponseObserver).onCompleted();
     }
 }
