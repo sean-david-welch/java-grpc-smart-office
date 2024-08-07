@@ -79,7 +79,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     // <--------  Interal Logic Methods -------->
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
         int doorID = request.getDoorId();
-        int userID = request.getUserId();
+        int userID = request.getCredentials().getUserId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
         String doorQuery = "SELECT status FROM door WHERE id = ?";
@@ -102,7 +102,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
             try (PreparedStatement credentialsStmt = conn.prepareStatement(credentialsQuery)) {
                 credentialsStmt.setInt(1, userID);
-                credentialsStmt.setString(2, accessLevel.toString());
+                credentialsStmt.setString(2, accessLevel.toString().toLowerCase());
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
@@ -110,7 +110,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     return false;
                 }
 
-                if (checkAccessLevel(userID, accessLevel, credResult)) return false;
+                String userAccessLevel = credResult.getString("access_level").toUpperCase();
+
+                if (!userAccessLevel.equals(accessLevel.toString())) {
+                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+                    return false;
+                }
 
                 System.out.println("Door unlocked: " + doorID);
                 updateDoorStatus(doorID);
@@ -124,7 +129,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
     private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
         int doorID = request.getDoorId();
-        int userID = request.getUserId();
+        int userID = request.getCredentials().getUserId();
         AccessLevel accessLevel = request.getCredentials().getLevel();
 
         String doorQuery = "select status from door where id = ?";
@@ -148,7 +153,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     return false;
                 }
 
-                if (checkAccessLevel(userID, accessLevel, credResult)) return false;
+                String userAccessLevel = credResult.getString("access_level").toUpperCase();
+
+                if (!userAccessLevel.equals(accessLevel.toString())) {
+                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+                    return false;
+                }
 
                 System.out.println("Alarm raised for door: " + doorID);
                 return true;
@@ -157,20 +167,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             System.out.println("Error querying database: " + e.getMessage());
             return false;
         }
-    }
-
-    private boolean checkAccessLevel(int userID, AccessLevel accessLevel, ResultSet credResult) throws SQLException {
-        String userAccessLevel = credResult.getString("access_level");
-        if (userAccessLevel == null) {
-            System.out.println("User access level is null for userID: " + userID);
-            return true;
-        }
-
-        if (!userAccessLevel.equals(accessLevel.toString())) {
-            System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
-            return true;
-        }
-        return false;
     }
 
     private List<LogEntry> retrieveAccessLogs(GetAccessLogsRequest request) {

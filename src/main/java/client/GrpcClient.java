@@ -16,7 +16,7 @@ public class GrpcClient {
 
     public GrpcClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext() // For development only, use TLS in production
+                .usePlaintext()
                 .build();
 
         accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
@@ -29,23 +29,18 @@ public class GrpcClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    // Example method for SmartAccessControl service
     public void accessControl(int userId) {
-        // Assuming you have a Request message defined in your proto file
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
-                .setUserId(userId)
                 .build();
         ActionResponse response = accessControlStub.unlockDoor(request);
         System.out.println("Access control response: " + response.toString());
     }
 
-    // Similar methods for SmartCoffeeMachine and SmartMeetingRoom services
 
     public static void main(String[] args) throws Exception {
         GrpcClient client = new GrpcClient("localhost", 8080);
         try {
             client.accessControl(1);
-            // Call other methods as needed
         } finally {
             client.shutdown();
         }
