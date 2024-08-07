@@ -29,7 +29,7 @@ public class GrpcClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public void accessControl(int userId) {
+    public void accessControl() {
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .build();
         ActionResponse response = accessControlStub.unlockDoor(request);
@@ -40,7 +40,7 @@ public class GrpcClient {
     public static void main(String[] args) throws Exception {
         GrpcClient client = new GrpcClient("localhost", 8080);
         try {
-            client.accessControl(1);
+            client.accessControl();
         } finally {
             client.shutdown();
         }
