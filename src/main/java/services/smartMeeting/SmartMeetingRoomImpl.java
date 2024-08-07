@@ -50,10 +50,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
 
     @Override
     public void checkAvailability(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
-        AvailabilityResponse response = checkAvailabilityLogic(request);
-
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+        streamAvailabilityLogic(request, responseObserver);
     }
 
     // <------- Interal Logic Methods ------->
@@ -117,17 +114,17 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         }
     }
 
-    private AvailabilityResponse checkAvailabilityLogic(CheckAvailabilityRequest request) {
+    private void streamAvailabilityLogic(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
         int roomId = request.getRoomId();
-        String timeSlot = request.getTimeSlot();
 
-        String roomQuery = "select * from room_details where room_id = ?";
+        String roomQuery = "SELECT * FROM room_details WHERE room_id = ?";
         try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
             roomStmt.setInt(1, roomId);
             ResultSet roomResult = roomStmt.executeQuery();
 
             if (!roomResult.next()) {
-                return AvailabilityResponse.newBuilder().setSuccess(false).build();
+                responseObserver.onCompleted();
+                return;
             }
 
             RoomDetails roomDetails = RoomDetails.newBuilder()
@@ -144,17 +141,26 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 });
             } catch (JsonProcessingException e) {
                 System.out.println("Error parsing JSON: " + e.getMessage());
-                return AvailabilityResponse.newBuilder().setSuccess(false).build();
+                responseObserver.onCompleted();
+                return;
             }
-            return AvailabilityResponse.newBuilder()
-                    .setSuccess(true)
-                    .setStatus(RoomStatus.valueOf(roomResult.getString("status")))
-                    .setDetails(roomDetails)
-                    .addAllAvailableTimes(availableTimes)
-                    .build();
+
+            RoomStatus status = RoomStatus.valueOf(roomResult.getString("status"));
+
+            for (String time : availableTimes) {
+                AvailabilityResponse response = AvailabilityResponse.newBuilder()
+                        .setSuccess(true)
+                        .setStatus(status)
+                        .setDetails(roomDetails)
+                        .addAvailableTimes(time)
+                        .build();
+                responseObserver.onNext(response);
+            }
+
+            responseObserver.onCompleted();
         } catch (SQLException e) {
-            System.out.println("an error occured while querying the database" + e.getMessage());
-            return AvailabilityResponse.newBuilder().setSuccess(false).build();
+            System.out.println("An error occurred while querying the database: " + e.getMessage());
+            responseObserver.onCompleted();
         }
     }
 }
