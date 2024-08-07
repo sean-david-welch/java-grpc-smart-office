@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -122,8 +123,12 @@ public class SmartMeetingRoomImplTest {
 
         smartMeetingRoom.checkAvailability(request, availabilityResponseObserver);
 
-        verify(availabilityResponseObserver).onNext(any(AvailabilityResponse.class));
-        verify(availabilityResponseObserver).onCompleted();
+        InOrder inOrder = inOrder(availabilityResponseObserver);
+        inOrder.verify(availabilityResponseObserver).onNext(argThat(response ->
+            response.getAvailableTimesList().contains("10:00") && response.getDetails().getLocation().equals("floor 4")));
+        inOrder.verify(availabilityResponseObserver).onNext(argThat(response ->
+            response.getAvailableTimesList().contains("12:00") && response.getDetails().getLocation().equals("floor 4")));
+        inOrder.verify(availabilityResponseObserver).onCompleted();
     }
 
     @Test
@@ -138,7 +143,7 @@ public class SmartMeetingRoomImplTest {
 
         smartMeetingRoom.checkAvailability(request, availabilityResponseObserver);
 
-        verify(availabilityResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(availabilityResponseObserver, never()).onNext(any(AvailabilityResponse.class));
         verify(availabilityResponseObserver).onCompleted();
     }
 }
