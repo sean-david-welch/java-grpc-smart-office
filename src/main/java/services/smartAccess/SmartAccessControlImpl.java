@@ -18,6 +18,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     }
 
     // <---------- External Grpc methods -------->
+    // Simple RPC
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean unlocked = unlockDoorInternal(request);
@@ -31,6 +32,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
+    // Simple RPC
     @Override
     public void raiseAlarm(RaiseAlarmRequest request, StreamObserver<ActionResponse> responseObserver) {
         boolean alarmRaised = raiseAlarmInternal(request);
@@ -44,6 +46,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
+    // Bidirectional Streaming
     @Override
     public StreamObserver<GetAccessLogsRequest> getAccessLogs(StreamObserver<AccessLogsResponse> responseObserver) {
         return new StreamObserver<>() {
