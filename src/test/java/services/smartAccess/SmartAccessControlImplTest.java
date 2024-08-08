@@ -1,11 +1,15 @@
 package services.smartAccess;
 
+import io.grpc.Context;
+import io.grpc.Metadata;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import services.constants.Constants;
+import services.utils.JwtUtility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,8 +45,19 @@ public class SmartAccessControlImplTest {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
     }
 
+    private void createAuthMetadata() {
+        String jwt = JwtUtility.generateToken("testClientId");
+        Metadata metadata = new Metadata();
+        metadata.put(Constants.AUTHORIZATION_METADATA_KEY, Constants.BEARER_TYPE + " " + jwt);
+    }
+
     @Test
     public void testUnlockDoorSuccess() throws SQLException {
+        createAuthMetadata();
+
+        Context ctx = Context.current().withValue(Constants.CLIENT_ID_CONTEXT_KEY, "testClientId");
+        Context previous = ctx.attach();
+
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setDoorId(1)
                 .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
@@ -57,11 +72,17 @@ public class SmartAccessControlImplTest {
 
         verify(actionResponseObserver).onNext(argThat(response -> response.getSuccess() && response.getErrorCode() == ErrorCode.NONE));
         verify(actionResponseObserver).onCompleted();
-    }
 
+        ctx.detach(previous);
+    }
 
     @Test
     public void testUnlockDoorAccessDenied() throws SQLException {
+        createAuthMetadata();
+
+        Context ctx = Context.current().withValue(Constants.CLIENT_ID_CONTEXT_KEY, "testClientId");
+        Context previous = ctx.attach();
+
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setDoorId(1)
                 .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.GENERAL).build())
@@ -75,6 +96,8 @@ public class SmartAccessControlImplTest {
 
         verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess() && response.getErrorCode() == ErrorCode.ACCESS_DENIED));
         verify(actionResponseObserver).onCompleted();
+
+        ctx.detach(previous);
     }
 
     @Test
