@@ -2,11 +2,11 @@ package client;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import services.smartAccess.ActionResponse;
-import services.smartAccess.SmartAccessControlGrpc;
-import services.smartAccess.UnlockDoorRequest;
-import services.smartCoffee.SmartCoffeeMachineGrpc;
-import services.smartMeeting.SmartMeetingRoomGrpc;
+import io.grpc.Metadata;
+
+import services.constants.Constants;
+import services.smartAccess.*;
+import services.utils.JwtUtility;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,15 +14,21 @@ public class GrpcClient {
     private final ManagedChannel channel;
     private final SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub;
 
+
     public GrpcClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
 
+        String jwtToken = JwtUtility.generateToken("testClientId");
+        Metadata metadata = new Metadata();
+        metadata.put(Constants.AUTHORIZATION_METADATA_KEY, Constants.BEARER_TYPE + " " + jwtToken);
+
         accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
-        SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
-        SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
-        SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
+
+        // SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
+        // SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
+        // SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
     }
 
     public void shutdown() throws InterruptedException {
@@ -31,6 +37,8 @@ public class GrpcClient {
 
     public void accessControl() {
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
+                .setDoorId(1)
+                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
         ActionResponse response = accessControlStub.unlockDoor(request);
         System.out.println("Access control response: " + response.toString());
