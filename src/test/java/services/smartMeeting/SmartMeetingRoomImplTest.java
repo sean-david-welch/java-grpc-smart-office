@@ -1,6 +1,5 @@
 package services.smartMeeting;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 
@@ -108,16 +108,15 @@ public class SmartMeetingRoomImplTest {
     }
 
     @Test
-    public void testCheckAvailabilitySuccess() throws SQLException, JsonProcessingException {
+    public void testCheckAvailabilitySuccess() throws SQLException {
         CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
-                .setRoomId(4)
-                .setTimeSlot("10:00")
+                .setRoomId(1)
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
         when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
-        when(mockResultSet.getString("available_time")).thenReturn("[\"10:00\", \"12:00\"]");
-        when(mockResultSet.getString("location")).thenReturn("floor 4");
+        when(mockResultSet.getString("available_times")).thenReturn("[\"08:00\", \"13:00\", \"16:00\"]");
+        when(mockResultSet.getString("location")).thenReturn("floor 5");
         when(mockResultSet.getInt("room_id")).thenReturn(1);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
@@ -125,17 +124,16 @@ public class SmartMeetingRoomImplTest {
 
         InOrder inOrder = inOrder(availabilityResponseObserver);
         inOrder.verify(availabilityResponseObserver).onNext(argThat(response ->
-            response.getAvailableTimesList().contains("10:00") && response.getDetails().getLocation().equals("floor 4")));
-        inOrder.verify(availabilityResponseObserver).onNext(argThat(response ->
-            response.getAvailableTimesList().contains("12:00") && response.getDetails().getLocation().equals("floor 4")));
+                response.getAvailableTimesList().containsAll(Arrays.asList("08:00", "13:00", "16:00")) &&
+                        response.getDetails().getLocation().equals("floor 5")));
         inOrder.verify(availabilityResponseObserver).onCompleted();
     }
+
 
     @Test
     public void testCheckAvailabilityFailure() throws SQLException {
         CheckAvailabilityRequest request = CheckAvailabilityRequest.newBuilder()
                 .setRoomId(1)
-                .setTimeSlot("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(false);
