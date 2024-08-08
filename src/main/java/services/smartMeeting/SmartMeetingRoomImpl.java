@@ -48,6 +48,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         responseObserver.onCompleted();
     }
 
+    // Server side streaming
     @Override
     public void checkAvailability(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
         streamAvailabilityLogic(request, responseObserver);
