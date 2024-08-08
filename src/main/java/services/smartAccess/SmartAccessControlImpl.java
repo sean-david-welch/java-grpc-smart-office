@@ -58,6 +58,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 AccessLogsResponse response = AccessLogsResponse.newBuilder()
                         .addAllLogs(logs)
                         .setErrorCode(ErrorCode.NONE)
+                        .setEndOfStream(false)
                         .build();
 
                 responseObserver.onNext(response);
@@ -70,6 +71,10 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
             @Override
             public void onCompleted() {
+                AccessLogsResponse endOfStreamResponse = AccessLogsResponse.newBuilder()
+                        .setEndOfStream(true)
+                        .build();
+                responseObserver.onNext(endOfStreamResponse);
                 responseObserver.onCompleted();
             }
         };
@@ -173,14 +178,14 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         List<LogEntry> logs = new ArrayList<>();
 
         int doorID = request.getDoorId();
-        int userID = request.getUserId();
-        String time = request.getTime();
+        String startTime = request.getStartTime();
+        String endTime = request.getEndTime();
 
-        String query = "select * from access_log where door_id = ? and access_log.user_id = ? and access_time = ?";
+        String query = "SELECT * FROM access_log WHERE door_id = ? AND access_time BETWEEN ? AND ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, doorID);
-            stmt.setInt(2, userID);
-            stmt.setString(3, time);
+            stmt.setString(2, startTime);
+            stmt.setString(3, endTime);
 
             ResultSet rs = stmt.executeQuery();
 
