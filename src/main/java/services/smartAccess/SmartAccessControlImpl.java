@@ -115,9 +115,8 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     return false;
                 }
 
-                String userAccessLevel = credResult.getString("access_level").toUpperCase();
-
-                if (!userAccessLevel.equals(accessLevel.toString())) {
+                String userAccessLevel = credResult.getString("access_level");
+                if (userAccessLevel == null || !userAccessLevel.toUpperCase().equals(accessLevel.toString())) {
                     System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
                     return false;
                 }
@@ -131,6 +130,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             return false;
         }
     }
+
 
     private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
         int doorID = request.getDoorId();
@@ -158,9 +158,8 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     return false;
                 }
 
-                String userAccessLevel = credResult.getString("access_level").toUpperCase();
-
-                if (!userAccessLevel.equals(accessLevel.toString())) {
+                String userAccessLevel = credResult.getString("access_level");
+                if (userAccessLevel == null || !userAccessLevel.toUpperCase().equals(accessLevel.toString())) {
                     System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
                     return false;
                 }
