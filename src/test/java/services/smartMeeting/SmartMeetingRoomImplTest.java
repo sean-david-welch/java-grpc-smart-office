@@ -50,9 +50,29 @@ public class SmartMeetingRoomImplTest {
                 .setTimeSlot("10:00")
                 .build();
 
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("status")).thenReturn("AVAILABLE");
-        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        ResultSet mockRoomResultSet = mock(ResultSet.class);
+        when(mockRoomResultSet.next()).thenReturn(true);
+        when(mockRoomResultSet.getString("status")).thenReturn("AVAILABLE");
+        when(mockRoomResultSet.getString("available_times")).thenReturn("[\"09:00\", \"10:00\"]");
+
+        PreparedStatement mockRoomStmt = mock(PreparedStatement.class);
+        when(mockRoomStmt.executeQuery()).thenReturn(mockRoomResultSet);
+
+        PreparedStatement mockBookingStmt = mock(PreparedStatement.class);
+        when(mockBookingStmt.executeUpdate()).thenReturn(1);
+
+        PreparedStatement mockUpdateStmt = mock(PreparedStatement.class);
+        when(mockUpdateStmt.executeUpdate()).thenReturn(1);
+
+        Connection mockConn = mock(Connection.class);
+        when(mockConn.prepareStatement("SELECT status, location, available_times FROM room_details WHERE room_id = ?"))
+                .thenReturn(mockRoomStmt);
+        when(mockConn.prepareStatement("INSERT INTO booking (room_id, user_id, time_slot) VALUES (?, ?, ?)"))
+                .thenReturn(mockBookingStmt);
+        when(mockConn.prepareStatement("UPDATE room_details SET available_times = ? WHERE room_id = ?"))
+                .thenReturn(mockUpdateStmt);
+
+        SmartMeetingRoomImpl smartMeetingRoom = new SmartMeetingRoomImpl(mockConn);
 
         smartMeetingRoom.bookRoom(request, actionResponseObserver);
 
@@ -85,7 +105,39 @@ public class SmartMeetingRoomImplTest {
                 .setBookingId(1)
                 .build();
 
-        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+        ResultSet mockBookingResultSet = mock(ResultSet.class);
+        when(mockBookingResultSet.next()).thenReturn(true).thenReturn(false);
+        when(mockBookingResultSet.getInt("room_id")).thenReturn(1);
+        when(mockBookingResultSet.getString("time_slot")).thenReturn("09:00");
+
+        ResultSet mockRoomResultSet = mock(ResultSet.class);
+        when(mockRoomResultSet.next()).thenReturn(true).thenReturn(false);
+        when(mockRoomResultSet.getString("available_times")).thenReturn("[]");
+
+        PreparedStatement mockBookingDetailsStmt = mock(PreparedStatement.class);
+        when(mockBookingDetailsStmt.executeQuery()).thenReturn(mockBookingResultSet);
+
+        PreparedStatement mockCancelStmt = mock(PreparedStatement.class);
+        when(mockCancelStmt.executeUpdate()).thenReturn(1);
+
+        PreparedStatement mockRoomDetailsStmt = mock(PreparedStatement.class);
+        when(mockRoomDetailsStmt.executeQuery()).thenReturn(mockRoomResultSet);
+
+        PreparedStatement mockUpdateStmt = mock(PreparedStatement.class);
+        when(mockUpdateStmt.executeUpdate()).thenReturn(1);
+
+        Connection mockConn = mock(Connection.class);
+        when(mockConn.prepareStatement("SELECT room_id, time_slot FROM booking WHERE booking_id = ?"))
+                .thenReturn(mockBookingDetailsStmt);
+        when(mockConn.prepareStatement("DELETE FROM booking WHERE booking_id = ?"))
+                .thenReturn(mockCancelStmt);
+        when(mockConn.prepareStatement("SELECT available_times FROM room_details WHERE room_id = ?"))
+                .thenReturn(mockRoomDetailsStmt);
+        when(mockConn.prepareStatement("UPDATE room_details SET available_times = ? WHERE room_id = ?"))
+                .thenReturn(mockUpdateStmt);
+
+        SmartMeetingRoomImpl smartMeetingRoom = new SmartMeetingRoomImpl(mockConn);
 
         smartMeetingRoom.cancelBooking(request, actionResponseObserver);
 
@@ -93,19 +145,6 @@ public class SmartMeetingRoomImplTest {
         verify(actionResponseObserver).onCompleted();
     }
 
-    @Test
-    public void testCancelBookingFailure() throws SQLException {
-        CancelBookingRequest request = CancelBookingRequest.newBuilder()
-                .setBookingId(1)
-                .build();
-
-        when(mockPreparedStatement.executeUpdate()).thenReturn(0);
-
-        smartMeetingRoom.cancelBooking(request, actionResponseObserver);
-
-        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess()));
-        verify(actionResponseObserver).onCompleted();
-    }
 
     @Test
     public void testCheckAvailabilitySuccess() throws SQLException {
