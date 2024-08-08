@@ -1,5 +1,7 @@
 package services.smartAccess;
 
+import io.grpc.Context;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Connection;
@@ -21,6 +23,13 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     // Simple RPC
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
+
         boolean unlocked = unlockDoorInternal(request);
 
         ActionResponse response = ActionResponse.newBuilder()
@@ -35,6 +44,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     // Simple RPC
     @Override
     public void raiseAlarm(RaiseAlarmRequest request, StreamObserver<ActionResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
         boolean alarmRaised = raiseAlarmInternal(request);
 
         ActionResponse response = ActionResponse.newBuilder()
