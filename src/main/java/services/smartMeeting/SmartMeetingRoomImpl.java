@@ -117,22 +117,75 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
 
 
     private boolean cancelBookingLogic(int bookingId) {
-        String cancelQuery = "delete from booking where booking_id = ?";
+        String bookingDetailsQuery = "SELECT room_id, time_slot FROM booking WHERE booking_id = ?";
+        String cancelQuery = "DELETE FROM booking WHERE booking_id = ?";
+        String roomDetailsQuery = "SELECT available_times FROM room_details WHERE room_id = ?";
+        String updateDetailsQuery = "UPDATE room_details SET available_times = ? WHERE room_id = ?";
 
-        try (PreparedStatement cancelStmt = conn.prepareStatement(cancelQuery)) {
-            cancelStmt.setInt(1, bookingId);
-            int affectedRows = cancelStmt.executeUpdate();
-            if (affectedRows == 0) {
+        try (PreparedStatement bookingDetailsStmt = conn.prepareStatement(bookingDetailsQuery)) {
+            bookingDetailsStmt.setInt(1, bookingId);
+            ResultSet bookingResult = bookingDetailsStmt.executeQuery();
+
+            if (!bookingResult.next()) {
                 System.out.println("No booking found with that ID");
                 return false;
             }
-            System.out.println("Booking was deleted successfully!");
-            return true;
+
+            int roomId = bookingResult.getInt("room_id");
+            String timeSlot = bookingResult.getString("time_slot");
+
+            try (PreparedStatement cancelStmt = conn.prepareStatement(cancelQuery)) {
+                cancelStmt.setInt(1, bookingId);
+                int affectedRows = cancelStmt.executeUpdate();
+                if (affectedRows == 0) {
+                    System.out.println("No booking found with that ID");
+                    return false;
+                }
+
+                try (PreparedStatement roomDetailsStmt = conn.prepareStatement(roomDetailsQuery)) {
+                    roomDetailsStmt.setInt(1, roomId);
+                    ResultSet roomResult = roomDetailsStmt.executeQuery();
+
+                    if (!roomResult.next()) {
+                        System.out.println("No Room found with ID: " + roomId);
+                        return false;
+                    }
+
+                    String availableTimesJson = roomResult.getString("available_times");
+                    List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {
+                    });
+
+                    if (!availableTimes.contains(timeSlot)) {
+                        availableTimes.add(timeSlot);
+                    }
+
+                    String updatedTimesJson = new ObjectMapper().writeValueAsString(availableTimes);
+
+                    try (PreparedStatement updateStmt = conn.prepareStatement(updateDetailsQuery)) {
+                        updateStmt.setString(1, updatedTimesJson);
+                        updateStmt.setInt(2, roomId);
+                        updateStmt.executeUpdate();
+
+                        System.out.println("Booking was deleted successfully and available times updated!");
+                        return true;
+                    } catch (SQLException e) {
+                        System.out.println("An error occurred while updating the database: " + e.getMessage());
+                        return false;
+                    }
+                } catch (SQLException | IOException e) {
+                    System.out.println("An error occurred while querying the database: " + e.getMessage());
+                    return false;
+                }
+            } catch (SQLException e) {
+                System.out.println("An error occurred while deleting the booking: " + e.getMessage());
+                return false;
+            }
         } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database" + e.getMessage());
+            System.out.println("An error occurred while querying the database: " + e.getMessage());
             return false;
         }
     }
+
 
     private void streamAvailabilityLogic(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
         int roomId = request.getRoomId();
