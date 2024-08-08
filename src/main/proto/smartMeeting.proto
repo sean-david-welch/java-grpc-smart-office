@@ -49,7 +49,6 @@ message CancelBookingRequest {
 
 message CheckAvailabilityRequest {
   int32 roomId = 1;
-  string timeSlot = 2;
 }
 
 message AvailabilityResponse {
