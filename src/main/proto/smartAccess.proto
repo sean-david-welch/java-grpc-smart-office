@@ -45,8 +45,8 @@ message UnlockDoorRequest {
 
 message GetAccessLogsRequest {
   int32 doorId = 1;
-  int32 userId = 2;
-  string time = 3;
+  string startTime = 3;
+  string endTime = 4;
 }
 
 message RaiseAlarmRequest {
@@ -57,6 +57,7 @@ message RaiseAlarmRequest {
 message AccessLogsResponse {
   repeated LogEntry logs = 1;
   ErrorCode errorCode = 2;
+  bool endOfStream = 3;
 }
 
 message ActionResponse {
