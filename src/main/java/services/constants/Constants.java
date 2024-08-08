@@ -27,7 +27,6 @@ public class Constants {
     }
 
     public static void main(String[] args) {
-        // For testing purposes
         System.out.println("Generated JWT Signing Key: " + JWT_SIGNING_KEY);
     }
 }
