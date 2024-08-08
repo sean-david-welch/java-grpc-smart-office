@@ -48,8 +48,9 @@ public class SmartAccessControlImplTest {
                 .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
 
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, true);
         when(mockResultSet.getString("status")).thenReturn("locked");
+        when(mockResultSet.getString("access_level")).thenReturn("ADMIN");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartAccessControl.unlockDoor(request, actionResponseObserver);
@@ -57,6 +58,7 @@ public class SmartAccessControlImplTest {
         verify(actionResponseObserver).onNext(argThat(response -> response.getSuccess() && response.getErrorCode() == ErrorCode.NONE));
         verify(actionResponseObserver).onCompleted();
     }
+
 
     @Test
     public void testUnlockDoorAccessDenied() throws SQLException {
@@ -82,7 +84,9 @@ public class SmartAccessControlImplTest {
                 .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
 
-        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.next()).thenReturn(true, true);
+        when(mockResultSet.getString("status")).thenReturn("locked");
+        when(mockResultSet.getString("access_level")).thenReturn("ADMIN");
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartAccessControl.raiseAlarm(request, actionResponseObserver);
@@ -90,6 +94,7 @@ public class SmartAccessControlImplTest {
         verify(actionResponseObserver).onNext(argThat(response -> response.getSuccess() && response.getErrorCode() == ErrorCode.NONE));
         verify(actionResponseObserver).onCompleted();
     }
+
 
     @Test
     public void testRaiseAlarmAccessDenied() throws SQLException {
