@@ -91,10 +91,7 @@ values (1, 1, '09:00'),
 insert into inventory_item (item, quantity)
 values ('milk', 1000),
        ('water', 5000),
-       ('coffee_beans', 2000),
-       ('milk', 800),
-       ('water', 6000),
-       ('coffee_beans', 2500);
+       ('coffee_beans', 2000);
 
 insert into coffee_order (id, coffee_type)
 values (1, 'americano'),
@@ -106,7 +103,6 @@ values (1, 'americano'),
        (7, 'americano');
 
 -- Smart Meeting Room Service
--- Inserting new room details with room_id starting from 1
 insert into room_details (room_id, location, status, available_times)
 values (1, 'floor 5', 'available', '["08:00", "13:00", "16:00"]'),
        (2, 'floor 6', 'unavailable', '[]'),
