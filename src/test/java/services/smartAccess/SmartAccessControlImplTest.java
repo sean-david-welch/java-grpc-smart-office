@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -44,8 +45,7 @@ public class SmartAccessControlImplTest {
     public void testUnlockDoorSuccess() throws SQLException {
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setCredentials(AccessCredentials.newBuilder().setLevel(AccessLevel.ADMIN))
+                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
@@ -54,7 +54,7 @@ public class SmartAccessControlImplTest {
 
         smartAccessControl.unlockDoor(request, actionResponseObserver);
 
-        verify(actionResponseObserver).onNext(any(ActionResponse.class));
+        verify(actionResponseObserver).onNext(argThat(response -> response.getSuccess() && response.getErrorCode() == ErrorCode.NONE));
         verify(actionResponseObserver).onCompleted();
     }
 
@@ -62,8 +62,7 @@ public class SmartAccessControlImplTest {
     public void testUnlockDoorAccessDenied() throws SQLException {
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setCredentials(AccessCredentials.newBuilder().setLevel(AccessLevel.GENERAL))
+                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.GENERAL).build())
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
@@ -72,7 +71,7 @@ public class SmartAccessControlImplTest {
 
         smartAccessControl.unlockDoor(request, actionResponseObserver);
 
-        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess() && response.getErrorCode() == ErrorCode.ACCESS_DENIED));
         verify(actionResponseObserver).onCompleted();
     }
 
@@ -80,8 +79,7 @@ public class SmartAccessControlImplTest {
     public void testRaiseAlarmSuccess() throws SQLException {
         RaiseAlarmRequest request = RaiseAlarmRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setCredentials(AccessCredentials.newBuilder().setLevel(AccessLevel.ADMIN))
+                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
 
         when(mockResultSet.next()).thenReturn(true);
@@ -89,7 +87,7 @@ public class SmartAccessControlImplTest {
 
         smartAccessControl.raiseAlarm(request, actionResponseObserver);
 
-        verify(actionResponseObserver).onNext(any(ActionResponse.class));
+        verify(actionResponseObserver).onNext(argThat(response -> response.getSuccess() && response.getErrorCode() == ErrorCode.NONE));
         verify(actionResponseObserver).onCompleted();
     }
 
@@ -97,16 +95,15 @@ public class SmartAccessControlImplTest {
     public void testRaiseAlarmAccessDenied() throws SQLException {
         RaiseAlarmRequest request = RaiseAlarmRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setCredentials(AccessCredentials.newBuilder().setLevel(AccessLevel.GENERAL))
+                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.GENERAL).build())
                 .build();
 
-        when(mockResultSet.next()).thenReturn(false);
+        when(mockResultSet.next()).thenReturn(true);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 
         smartAccessControl.raiseAlarm(request, actionResponseObserver);
 
-        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess()));
+        verify(actionResponseObserver).onNext(argThat(response -> !response.getSuccess() && response.getErrorCode() == ErrorCode.SYSTEM_ERROR));
         verify(actionResponseObserver).onCompleted();
     }
 
@@ -114,8 +111,8 @@ public class SmartAccessControlImplTest {
     public void testGetAccessLogsSuccess() throws SQLException {
         GetAccessLogsRequest request = GetAccessLogsRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setTime("09:00")
+                .setStartTime("09:00")
+                .setEndTime("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(true).thenReturn(false);
@@ -129,31 +126,30 @@ public class SmartAccessControlImplTest {
         requestObserver.onNext(request);
         requestObserver.onCompleted();
 
-        verify(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
+        verify(accessLogsResponseObserver).onNext(argThat(response -> {
+            List<LogEntry> logs = response.getLogsList();
+            return !logs.isEmpty() && response.getErrorCode() == ErrorCode.NONE && !response.getEndOfStream();
+        }));
         verify(accessLogsResponseObserver).onCompleted();
     }
-
 
     @Test
     public void testGetAccessLogsNoLogs() throws SQLException {
         GetAccessLogsRequest request = GetAccessLogsRequest.newBuilder()
                 .setDoorId(1)
-                .setUserId(1)
-                .setTime("09:00")
+                .setStartTime("09:00")
+                .setEndTime("10:00")
                 .build();
 
         when(mockResultSet.next()).thenReturn(false);
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-
-        doNothing().when(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
-        doNothing().when(accessLogsResponseObserver).onCompleted();
 
         StreamObserver<GetAccessLogsRequest> requestObserver = smartAccessControl.getAccessLogs(accessLogsResponseObserver);
 
         requestObserver.onNext(request);
         requestObserver.onCompleted();
 
-        verify(accessLogsResponseObserver).onNext(any(AccessLogsResponse.class));
+        verify(accessLogsResponseObserver).onNext(argThat(response -> response.getLogsList().isEmpty() && response.getErrorCode() == ErrorCode.NONE && response.getEndOfStream()));
         verify(accessLogsResponseObserver).onCompleted();
     }
 }
