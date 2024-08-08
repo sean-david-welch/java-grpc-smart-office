@@ -3,6 +3,8 @@ package services.smartMeeting;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.grpc.Context;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
@@ -24,6 +26,13 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     // Simple RPC
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
+
         boolean success = bookRoomLogic(request);
 
         ActionResponse response = ActionResponse.newBuilder()
@@ -38,6 +47,13 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     // Simple RPC
     @Override
     public void cancelBooking(CancelBookingRequest request, StreamObserver<ActionResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
+
         boolean canceled = cancelBookingLogic(request.getBookingId());
 
         ActionResponse response = ActionResponse.newBuilder()
@@ -52,6 +68,12 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
     // Server side streaming
     @Override
     public void checkAvailability(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
         streamAvailabilityLogic(request, responseObserver);
     }
 
