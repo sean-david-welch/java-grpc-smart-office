@@ -3,6 +3,7 @@ package services.smartAccess;
 import io.grpc.Context;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import services.constants.Constants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,12 +24,11 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
     // Simple RPC
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
-        Context context = Context.current();
-        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
-            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+        String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get(Context.current());
+        if (clientId == null) {
+            responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Client not authenticated").asRuntimeException());
             return;
         }
-
 
         boolean unlocked = unlockDoorInternal(request);
 
