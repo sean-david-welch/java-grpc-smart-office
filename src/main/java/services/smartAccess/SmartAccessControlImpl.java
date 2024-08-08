@@ -122,7 +122,15 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 }
 
                 System.out.println("Door unlocked: " + doorID);
-                updateDoorStatus(doorID);
+                String updateDoorStatusQuery = "update door set status = ? WHERE id = ?";
+
+                try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
+                    updateStmt.setString(1, "unlocked");
+                    updateStmt.setInt(2, doorID);
+                    updateStmt.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("Error updating door status: " + e.getMessage());
+                }
                 return true;
             }
         } catch (SQLException e) {
@@ -130,7 +138,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             return false;
         }
     }
-
 
     private boolean raiseAlarmInternal(RaiseAlarmRequest request) {
         int doorID = request.getDoorId();
@@ -201,17 +208,5 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         }
 
         return logs;
-    }
-
-    private void updateDoorStatus(int doorID) {
-        String updateDoorStatusQuery = "update door set status = ? WHERE id = ?";
-
-        try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
-            updateStmt.setString(1, "unlocked");
-            updateStmt.setInt(2, doorID);
-            updateStmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error updating door status: " + e.getMessage());
-        }
     }
 }
