@@ -1,5 +1,7 @@
 package services.smartCoffee;
 
+import io.grpc.Context;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import java.sql.Connection;
@@ -19,6 +21,12 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     // Simple RPC
     @Override
     public void brewCoffee(BrewCoffeeRequest request, StreamObserver<ActionResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
         boolean brewed = brewCoffeeInternal(request);
 
         ActionResponse response = ActionResponse.newBuilder()
@@ -33,9 +41,14 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     // Server side streaming
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
+        Context context = Context.current();
+        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
+            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
+            return;
+        }
+
         try {
             if (request.hasItem()) {
-                // Check specific item
                 InventoryItem item = request.getItem();
                 if (item != InventoryItem.UNKNOWN_ITEM && item != InventoryItem.UNRECOGNIZED) {
                     int quantity = getInventoryQuantity(item);
@@ -47,7 +60,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
                     responseObserver.onNext(response);
                 }
             } else {
-                // Check all items
                 for (InventoryItem item : InventoryItem.values()) {
                     if (item != InventoryItem.UNKNOWN_ITEM && item != InventoryItem.UNRECOGNIZED) {
                         int quantity = getInventoryQuantity(item);
