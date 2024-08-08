@@ -17,7 +17,8 @@ public class JwtServerInterceptor implements ServerInterceptor {
 
         if (authHeader == null || !authHeader.startsWith(Constants.BEARER_TYPE + " ")) {
             call.close(Status.UNAUTHENTICATED.withDescription("Missing or invalid Authorization header"), headers);
-            return new ServerCall.Listener<ReqT>() {};
+            return new ServerCall.Listener<>() {
+            };
         }
 
         String token = authHeader.substring(Constants.BEARER_TYPE.length()).trim();
@@ -28,7 +29,8 @@ public class JwtServerInterceptor implements ServerInterceptor {
             return Contexts.interceptCall(ctx, call, headers, next);
         } catch (Exception e) {
             call.close(Status.UNAUTHENTICATED.withDescription(e.getMessage()), headers);
-            return new ServerCall.Listener<ReqT>() {};
+            return new ServerCall.Listener<>() {
+            };
         }
     }
 }
