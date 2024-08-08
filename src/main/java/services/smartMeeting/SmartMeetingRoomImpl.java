@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.grpc.stub.StreamObserver;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,8 +61,9 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         int userId = request.getUserId();
         String timeSlot = request.getTimeSlot();
 
-        String roomQuery = "SELECT status, location FROM room_details WHERE room_id = ?";
+        String roomQuery = "SELECT status, location, available_times FROM room_details WHERE room_id = ?";
         String bookingQuery = "INSERT INTO booking (room_id, user_id, time_slot) VALUES (?, ?, ?)";
+        String updateDetailsQuery = "UPDATE room_details SET available_times = ? WHERE room_id = ?";
 
         try (PreparedStatement roomStmt = conn.prepareStatement(roomQuery)) {
             roomStmt.setInt(1, roomId);
@@ -72,6 +74,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             }
 
             String status = roomResult.getString("status");
+            String availableTimesJson = roomResult.getString("available_times");
             RoomStatus roomStatus = RoomStatus.valueOf(status.toUpperCase());
 
             if (roomStatus == RoomStatus.OCCUPIED || roomStatus == RoomStatus.UNAVAILABLE) {
@@ -79,11 +82,26 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 return false;
             }
 
-            try (PreparedStatement bookingStmt = conn.prepareStatement(bookingQuery)) {
+            List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {
+            });
+            if (!availableTimes.contains(timeSlot)) {
+                System.out.println("Time slot is not available: " + timeSlot);
+                return false;
+            }
+
+            availableTimes.remove(timeSlot);
+            String updatedTimesJson = new ObjectMapper().writeValueAsString(availableTimes);
+
+            try (PreparedStatement bookingStmt = conn.prepareStatement(bookingQuery);
+                 PreparedStatement updateStmt = conn.prepareStatement(updateDetailsQuery)) {
                 bookingStmt.setInt(1, roomId);
                 bookingStmt.setInt(2, userId);
                 bookingStmt.setString(3, timeSlot);
                 bookingStmt.executeUpdate();
+
+                updateStmt.setString(1, updatedTimesJson);
+                updateStmt.setInt(2, roomId);
+                updateStmt.executeUpdate();
 
                 System.out.println("Booking complete");
                 return true;
@@ -91,11 +109,12 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 System.out.println("An error occurred while writing to the database: " + e);
                 return false;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             System.out.println("An error occurred while querying the database: " + e);
             return false;
         }
     }
+
 
     private boolean cancelBookingLogic(int bookingId) {
         String cancelQuery = "delete from booking where booking_id = ?";
