@@ -40,7 +40,7 @@ message LogEntry {
 // Request/Response Types
 message UnlockDoorRequest {
   int32 doorId = 1;
-  AccessCredentials credentials = 3;
+  AccessCredentials credentials = 2;
 }
 
 message GetAccessLogsRequest {
@@ -51,7 +51,7 @@ message GetAccessLogsRequest {
 
 message RaiseAlarmRequest {
   int32 doorId = 1;
-  AccessCredentials credentials = 3;
+  AccessCredentials credentials = 2;
 }
 
 message AccessLogsResponse {
