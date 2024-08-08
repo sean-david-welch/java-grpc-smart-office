@@ -7,6 +7,7 @@ import services.serviceRegister.ServiceRegister;
 import services.smartAccess.SmartAccessControlImpl;
 import services.smartCoffee.SmartCoffeeMachineImpl;
 import services.smartMeeting.SmartMeetingRoomImpl;
+import services.utils.JwtServerInterceptor;
 
 import java.sql.Connection;
 
@@ -19,6 +20,7 @@ public class GrpcServer {
                         .addService(new SmartAccessControlImpl(conn))
                         .addService(new SmartCoffeeMachineImpl(conn))
                         .addService(new SmartMeetingRoomImpl(conn))
+                        .intercept(new JwtServerInterceptor())
                         .build();
 
                 ServiceRegister serviceRegister = new ServiceRegister();
