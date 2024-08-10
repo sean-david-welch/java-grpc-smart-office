@@ -11,7 +11,7 @@ public class ClientUI extends JFrame {
         grpcClient = new GrpcClient("localhost", 8080);
 
         setTitle("Smart Office gRPC Client");
-        setSize(500, 400);
+        setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
@@ -20,38 +20,15 @@ public class ClientUI extends JFrame {
         headerLabel.setFont(new Font("Jetbrains Mono", Font.BOLD, 24));
         add(headerLabel, BorderLayout.NORTH);
 
-        // Buttons Panel
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBorder(BorderFactory.createTitledBorder("Actions"));
+        // Central Panel for all actions
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
 
-        // Button for unlocking door
-        JButton accessButton = new JButton("Unlock Door");
-        accessButton.addActionListener(e -> {
-            String response = grpcClient.accessControl();
-            displayResponse(response, response.contains("Error"));
-        });
+        centralPanel.add(new CoffeeUI(grpcClient, this));
+        centralPanel.add(new AccessControlUI(grpcClient, this));
+        centralPanel.add(new MeetingRoomUI(grpcClient, this));
 
-        // Button for brewing coffee
-        JButton brewCoffeeButton = new JButton("Brew Coffee");
-        brewCoffeeButton.addActionListener(e -> {
-            String response = grpcClient.brewCoffee();
-            displayResponse(response, response.contains("Error"));
-        });
-
-        // Button for booking a room
-        JButton bookRoomButton = new JButton("Book Room");
-        bookRoomButton.addActionListener(e -> {
-            int roomId = 1;
-            int userId = 1;
-            String timeSlot = "13:00";
-            String response = grpcClient.bookRoom(roomId, userId, timeSlot);
-            displayResponse(response, response.contains("Error"));
-        });
-
-        buttonPanel.add(accessButton);
-        buttonPanel.add(brewCoffeeButton);
-        buttonPanel.add(bookRoomButton);
-        add(buttonPanel, BorderLayout.CENTER);
+        add(centralPanel, BorderLayout.CENTER);
 
         // Response Label
         responseLabel = new JLabel("Response will be displayed here");
@@ -64,7 +41,7 @@ public class ClientUI extends JFrame {
         setVisible(true);
     }
 
-    private void displayResponse(String response, boolean isError) {
+    public void displayResponse(String response, boolean isError) {
         if (isError) {
             responseLabel.setBackground(Color.PINK);
             responseLabel.setForeground(Color.RED);
