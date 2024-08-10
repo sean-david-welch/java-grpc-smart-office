@@ -4,10 +4,10 @@ import io.grpc.StatusRuntimeException;
 import services.smartMeeting.BookRoomRequest;
 import services.smartMeeting.SmartMeetingRoomGrpc;
 
-public class MeetingRoomService {
+public class MeetingRoomClientController {
     private final SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub;
 
-    public MeetingRoomService(SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub) {
+    public MeetingRoomClientController(SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub) {
         this.meetingRoomStub = meetingRoomStub;
     }
 

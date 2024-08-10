@@ -18,7 +18,7 @@ public class GrpcClient {
     private final ManagedChannel channel;
     private final AccessControlClientController accessControlService;
     private final CoffeeMachineClientController coffeeMachineService;
-    private final MeetingRoomService meetingRoomService;
+    private final MeetingRoomClientController meetingRoomService;
 
     public GrpcClient(String host, int port) {
         String jwtToken = JwtUtility.generateToken("testClientId");
@@ -48,7 +48,7 @@ public class GrpcClient {
 
         accessControlService = new AccessControlClientController(blockingStub, asyncStub);
         coffeeMachineService = new CoffeeMachineClientController(SmartCoffeeMachineGrpc.newBlockingStub(channel));
-        meetingRoomService = new MeetingRoomService(SmartMeetingRoomGrpc.newBlockingStub(channel));
+        meetingRoomService = new MeetingRoomClientController(SmartMeetingRoomGrpc.newBlockingStub(channel));
     }
 
     public void shutdown() throws InterruptedException {
