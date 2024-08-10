@@ -17,7 +17,7 @@ public class ClientUI extends JFrame {
 
         // Header
         JLabel headerLabel = new JLabel("Smart Office Control Panel", JLabel.CENTER);
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headerLabel.setFont(new Font("Jetbrains Mono", Font.BOLD, 24));
         add(headerLabel, BorderLayout.NORTH);
 
         // Buttons Panel
