@@ -5,10 +5,10 @@ import services.smartCoffee.BrewCoffeeRequest;
 import services.smartCoffee.CoffeeType;
 import services.smartCoffee.SmartCoffeeMachineGrpc;
 
-public class CoffeeMachineService {
+public class CoffeeMachineClientController {
     private final SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub;
 
-    public CoffeeMachineService(SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub) {
+    public CoffeeMachineClientController(SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub) {
         this.coffeeMachineStub = coffeeMachineStub;
     }
 
