@@ -5,13 +5,19 @@ import client.services.GrpcClient;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientUI extends JFrame {
+    private static final Logger logger = Logger.getLogger(ClientUI.class.getName());
     private final GrpcClient grpcClient;
     private final JLabel responseLabel;
 
     public ClientUI() {
+        logger.info("Initializing ClientUI...");
+
         grpcClient = new GrpcClient("localhost", 8080);
+        logger.info("gRPC client created with localhost:8080");
 
         setTitle("Smart Office gRPC Client");
         setSize(1500, 1000);
@@ -57,21 +63,26 @@ public class ClientUI extends JFrame {
         add(responseLabel, BorderLayout.SOUTH);
 
         setVisible(true);
+        logger.info("ClientUI initialized and visible");
     }
 
     public void displayResponse(String response, boolean isError) {
         if (isError) {
             responseLabel.setBackground(Color.RED.darker());
             responseLabel.setForeground(Color.WHITE);
+            logger.severe("Error response received: " + response);
         } else {
             responseLabel.setBackground(new Color(60, 60, 60));
             responseLabel.setForeground(Color.GREEN);
+            logger.info("Response received: " + response);
         }
         responseLabel.setText(response);
     }
 
     public void shutdown() throws InterruptedException {
+        logger.info("Shutting down gRPC client...");
         grpcClient.shutdown();
+        logger.info("gRPC client shutdown completed");
     }
 
     public static void main(String[] args) {
@@ -81,9 +92,10 @@ public class ClientUI extends JFrame {
                 @Override
                 public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                     try {
+                        logger.info("Window closing, attempting to shutdown...");
                         clientUI.shutdown();
                     } catch (InterruptedException e) {
-                        System.out.println("Something went wrong!");
+                        logger.log(Level.SEVERE, "Something went wrong during shutdown", e);
                     }
                 }
             });

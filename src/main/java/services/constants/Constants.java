@@ -15,8 +15,4 @@ public class Constants {
     private Constants() {
         throw new AssertionError();
     }
-
-    public static void main(String[] args) {
-        System.out.println("Generated JWT Signing Key: " + JWT_SIGNING_KEY);
-    }
 }
