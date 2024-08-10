@@ -11,14 +11,13 @@ import java.sql.SQLException;
 
 public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMachineImplBase {
 
+    private static final System.Logger logger = System.getLogger(SmartCoffeeMachineImpl.class.getName());
     private final Connection conn;
 
     public SmartCoffeeMachineImpl(Connection conn) {
         this.conn = conn;
     }
 
-    //  <-------- External Grpc methods -------->
-    // Simple RPC
     @Override
     public void brewCoffee(BrewCoffeeRequest request, StreamObserver<ActionResponse> responseObserver) {
         Context context = Context.current();
@@ -38,7 +37,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         responseObserver.onCompleted();
     }
 
-    // Server side streaming
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
         try {
@@ -68,12 +66,11 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
             }
             responseObserver.onCompleted();
         } catch (SQLException e) {
-            System.err.println("Error checking inventory: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error checking inventory: {0}", e.getMessage());
             responseObserver.onError(e);
         }
     }
 
-    // Client side streaming
     @Override
     public StreamObserver<RefillItemRequest> refillInventory(final StreamObserver<InventoryResponse> responseObserver) {
         return new StreamObserver<>() {
@@ -87,13 +84,13 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
                     totalItemsRefilled++;
                     lastItem = request.getItem();
                 } catch (SQLException e) {
-                    System.err.println("Error refilling inventory: " + e.getMessage());
+                    logger.log(System.Logger.Level.ERROR, "Error refilling inventory: {0}", e.getMessage());
                 }
             }
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error in refill: " + t.getMessage());
+                logger.log(System.Logger.Level.ERROR, "Error in refill: {0}", t.getMessage());
                 responseObserver.onError(t);
             }
 
@@ -110,7 +107,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
         };
     }
 
-    // <------- Interal Logic Methods ------->
     private boolean brewCoffeeInternal(BrewCoffeeRequest request) {
         CoffeeType type = request.getCoffeeType();
 
@@ -132,7 +128,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
                 milkRequired = 100;
                 break;
             default:
-                System.out.println("Unknown coffee type");
+                logger.log(System.Logger.Level.INFO, "Unknown coffee type");
                 return false;
         }
 
@@ -145,7 +141,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
 
             if (!(availableBeans >= beansRequired && availableWater >= waterRequired && availableMilk >= milkRequired)) {
                 conn.rollback();
-                System.out.println("Not enough stock, please refill and try again");
+                logger.log(System.Logger.Level.INFO, "Not enough stock, please refill and try again");
                 return false;
             }
 
@@ -162,30 +158,29 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
             try {
                 conn.rollback();
             } catch (SQLException rollbackEx) {
-                System.err.println("Error rolling back transaction: " + rollbackEx.getMessage());
+                logger.log(System.Logger.Level.ERROR, "Error rolling back transaction: {0}", rollbackEx.getMessage());
             }
-            System.err.println("Error brewing coffee: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error brewing coffee: {0}", e.getMessage());
             return false;
         } finally {
             try {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
-                System.err.println("Error resetting auto-commit: " + e.getMessage());
+                logger.log(System.Logger.Level.ERROR, "Error resetting auto-commit: {0}", e.getMessage());
             }
         }
     }
 
     private void updateInventoryQuantity(InventoryItem item, int change) throws SQLException {
         String sql = "update inventory_item set quantity = quantity + ? WHERE item = ?";
-        System.out.println(change);
-        System.out.println(item.name().toLowerCase());
+        logger.log(System.Logger.Level.INFO, "Updating inventory: {0} {1}", new Object[]{change, item.name().toLowerCase()});
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setInt(1, change);
             statement.setString(2, item.name().toLowerCase());
             statement.executeUpdate();
             getInventoryQuantity(item);
         } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database" + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "An error occurred while updating inventory: {0}", e.getMessage());
         }
     }
 
@@ -198,7 +193,7 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
                 return result.getInt("quantity");
             }
         } catch (SQLException e) {
-            System.out.println("error querying database" + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error querying database: {0}", e.getMessage());
         }
         return 0;
     }
