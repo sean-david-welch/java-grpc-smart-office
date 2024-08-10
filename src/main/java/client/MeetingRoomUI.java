@@ -1,6 +1,7 @@
 package client;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static client.StyledButtonUI.getjButton;
@@ -14,15 +15,18 @@ public class MeetingRoomUI extends JPanel {
 
         JLabel roomIdLabel = createStyledLabel("Room ID:");
         JTextField roomIdField = getjTextField();
+        roomIdField.setBorder(new EmptyBorder(5, 15, 5, 15));
         add(roomIdLabel);
         add(roomIdField);
 
         JLabel userIdLabel = createStyledLabel("User ID:");
+        userIdLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
         JTextField userIdField = getjTextField();
         add(userIdLabel);
         add(userIdField);
 
         JLabel timeSlotLabel = createStyledLabel("Time Slot:");
+        timeSlotLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
         String[] timeSlots = generateTimeSlots();
         JComboBox<String> timeSlotComboBox = getStringJComboBox(timeSlots);
         add(timeSlotLabel);

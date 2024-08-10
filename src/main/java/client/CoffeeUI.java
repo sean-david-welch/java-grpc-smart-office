@@ -3,6 +3,7 @@ package client;
 import services.smartCoffee.CoffeeType;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static client.StyledButtonUI.getjButton;
@@ -15,7 +16,9 @@ public class CoffeeUI extends JPanel {
         setLayout(new GridLayout(2, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
+
         JLabel coffeeTypeLabel = createStyledLabel("Coffee Type:");
+        coffeeTypeLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
         String[] coffeeTypes = {"AMERICANO", "ESPRESSO", "LATTE"};
         JComboBox<String> coffeeTypeComboBox = getStringJComboBox(coffeeTypes);
         add(coffeeTypeLabel);

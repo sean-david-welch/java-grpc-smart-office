@@ -3,6 +3,7 @@ package client;
 import services.smartAccess.AccessLevel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static client.StyledButtonUI.getjButton;
@@ -14,12 +15,14 @@ public class AccessControlUI extends JPanel {
         setLayout(new GridLayout(3, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
-        JLabel userIdLabel = createStyledLabel("User ID:");
-        JTextField userIdField = getjTextField();
-        add(userIdLabel);
-        add(userIdField);
+        JLabel doorIdLavel = createStyledLabel("Door ID:");
+        doorIdLavel.setBorder(new EmptyBorder(5, 15, 5, 15));
+        JTextField doorIdField = getjTextField();
+        add(doorIdLavel);
+        add(doorIdField);
 
         JLabel accessLevelLabel = createStyledLabel("Access Level:");
+        accessLevelLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
         String[] levels = {"GENERAL", "ADMIN"};
         JComboBox<String> accessLevelComboBox = getStringJComboBox(levels);
         add(accessLevelLabel);
@@ -28,7 +31,7 @@ public class AccessControlUI extends JPanel {
         JButton accessButton = getjButton("Unlock Door");
         accessButton.addActionListener(e -> {
             try {
-                int userId = Integer.parseInt(userIdField.getText());
+                int userId = Integer.parseInt(doorIdField.getText());
                 String accessLevel = (String) accessLevelComboBox.getSelectedItem();
                 AccessLevel level = AccessLevel.valueOf(accessLevel);
                 String response = grpcClient.accessControl(userId, level);
