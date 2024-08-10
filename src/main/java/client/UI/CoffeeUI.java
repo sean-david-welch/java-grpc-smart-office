@@ -34,12 +34,7 @@ public class CoffeeUI extends JPanel {
 
     private void brewCoffeeUI() {
         JLabel coffeeTypeLabel = createStyledLabelWithBorder("Coffee Type:");
-        CoffeeType[] coffeeTypes = CoffeeType.values();
-        String[] coffeeTypeNames = new String[coffeeTypes.length];
-        for (int i = 0; i < coffeeTypes.length; i++) {
-            coffeeTypeNames[i] = coffeeTypes[i].name();
-        }
-        JComboBox<String> coffeeTypeComboBox = getStringJComboBox(coffeeTypeNames);
+        JComboBox<String> coffeeTypeComboBox = createComboBox(CoffeeType.values());
         add(coffeeTypeLabel);
         add(coffeeTypeComboBox);
 
@@ -57,7 +52,9 @@ public class CoffeeUI extends JPanel {
 
     private void checkInventoryUI() {
         JLabel inventoryItemLabel = createStyledLabelWithBorder("Inventory Item:");
-        JComboBox<String> inventoryItemComboBox = itemComboBox(inventoryItemLabel);
+        JComboBox<String> inventoryItemComboBox = createComboBox(InventoryItem.values());
+        add(inventoryItemLabel);
+        add(inventoryItemComboBox);
 
         JButton checkInventoryButton = getjButton("Check Inventory");
         checkInventoryButton.addActionListener(e -> {
@@ -72,7 +69,9 @@ public class CoffeeUI extends JPanel {
 
     private void refillInventoryUI() {
         JLabel refillItemLabel = createStyledLabelWithBorder("Refill Item:");
-        JComboBox<String> refillItemComboBox = itemComboBox(refillItemLabel);
+        JComboBox<String> refillItemComboBox = createComboBox(InventoryItem.values());
+        add(refillItemLabel);
+        add(refillItemComboBox);
 
         JLabel quantityLabel = createStyledLabelWithBorder("Quantity:");
         JTextField quantityField = getjTextField();
@@ -100,17 +99,12 @@ public class CoffeeUI extends JPanel {
         add(refillButton);
     }
 
-    private JComboBox<String> itemComboBox(JLabel refillItemLabel) {
-        InventoryItem[] refillItems = InventoryItem.values();
-        String[] refillItemNames = new String[refillItems.length];
-        for (int i = 0; i < refillItems.length; i++) {
-            refillItemNames[i] = refillItems[i].name();
+    private <T extends Enum<T>> JComboBox<String> createComboBox(T[] enumValues) {
+        String[] enumNames = new String[enumValues.length];
+        for (int i = 0; i < enumValues.length; i++) {
+            enumNames[i] = enumValues[i].name();
         }
-        JComboBox<String> refillItemComboBox = getStringJComboBox(refillItemNames);
-        add(refillItemLabel);
-        add(refillItemComboBox);
-
-        return refillItemComboBox;
+        return getStringJComboBox(enumNames);
     }
 
     private JLabel createStyledLabelWithBorder(String text) {
