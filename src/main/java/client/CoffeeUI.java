@@ -11,14 +11,12 @@ public class CoffeeUI extends JPanel {
         setLayout(new GridLayout(2, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
-        // Coffee Type Input
         JLabel coffeeTypeLabel = createStyledLabel();
         String[] coffeeTypes = {"AMERICANO", "ESPRESSO", "LATTE"};
         JComboBox<String> coffeeTypeComboBox = createStyledComboBox(coffeeTypes);
         add(coffeeTypeLabel);
         add(coffeeTypeComboBox);
 
-        // Brew Coffee Button
         JButton brewCoffeeButton = createStyledButton();
         brewCoffeeButton.addActionListener(e -> {
             String coffeeType = (String) coffeeTypeComboBox.getSelectedItem();
