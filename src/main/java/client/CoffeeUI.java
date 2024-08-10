@@ -5,6 +5,8 @@ import services.smartCoffee.CoffeeType;
 import javax.swing.*;
 import java.awt.*;
 
+import static client.StyledButtonUI.getjButton;
+import static client.UtilityStyles.createStyledLabel;
 import static client.UtilityStyles.getStringJComboBox;
 
 public class CoffeeUI extends JPanel {
@@ -13,13 +15,13 @@ public class CoffeeUI extends JPanel {
         setLayout(new GridLayout(2, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
-        JLabel coffeeTypeLabel = createStyledLabel();
+        JLabel coffeeTypeLabel = createStyledLabel("Coffee Type:");
         String[] coffeeTypes = {"AMERICANO", "ESPRESSO", "LATTE"};
-        JComboBox<String> coffeeTypeComboBox = createStyledComboBox(coffeeTypes);
+        JComboBox<String> coffeeTypeComboBox = getStringJComboBox(coffeeTypes);
         add(coffeeTypeLabel);
         add(coffeeTypeComboBox);
 
-        JButton brewCoffeeButton = createStyledButton();
+        JButton brewCoffeeButton = getjButton("Brew Coffee");
         brewCoffeeButton.addActionListener(e -> {
             String coffeeType = (String) coffeeTypeComboBox.getSelectedItem();
             CoffeeType type = CoffeeType.valueOf(coffeeType);
@@ -29,20 +31,5 @@ public class CoffeeUI extends JPanel {
 
         add(new JLabel());
         add(brewCoffeeButton);
-    }
-
-    private JLabel createStyledLabel() {
-        JLabel label = new JLabel("Coffee Type:");
-        label.setForeground(Color.WHITE);
-        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
-        return label;
-    }
-
-    private JComboBox<String> createStyledComboBox(String[] items) {
-        return getStringJComboBox(items);
-    }
-
-    private JButton createStyledButton() {
-        return StyledButtonUI.getjButton("Brew Coffee");
     }
 }

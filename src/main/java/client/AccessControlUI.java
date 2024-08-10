@@ -5,8 +5,8 @@ import services.smartAccess.AccessLevel;
 import javax.swing.*;
 import java.awt.*;
 
-import static client.UtilityStyles.createStyledLabel;
-import static client.UtilityStyles.getjTextField;
+import static client.StyledButtonUI.getjButton;
+import static client.UtilityStyles.*;
 
 public class AccessControlUI extends JPanel {
     public AccessControlUI(GrpcClient grpcClient, ClientUI parent) {
@@ -15,17 +15,17 @@ public class AccessControlUI extends JPanel {
         setBackground(new Color(40, 40, 40));
 
         JLabel userIdLabel = createStyledLabel("User ID:");
-        JTextField userIdField = createStyledTextField();
+        JTextField userIdField = getjTextField();
         add(userIdLabel);
         add(userIdField);
 
         JLabel accessLevelLabel = createStyledLabel("Access Level:");
         String[] levels = {"GENERAL", "ADMIN"};
-        JComboBox<String> accessLevelComboBox = createStyledComboBox(levels);
+        JComboBox<String> accessLevelComboBox = getStringJComboBox(levels);
         add(accessLevelLabel);
         add(accessLevelComboBox);
 
-        JButton accessButton = createStyledButton();
+        JButton accessButton = getjButton("Unlock Door");
         accessButton.addActionListener(e -> {
             try {
                 int userId = Integer.parseInt(userIdField.getText());
@@ -40,17 +40,5 @@ public class AccessControlUI extends JPanel {
 
         add(new JLabel());
         add(accessButton);
-    }
-
-    private JTextField createStyledTextField() {
-        return getjTextField();
-    }
-
-    private JComboBox<String> createStyledComboBox(String[] items) {
-        return UtilityStyles.getStringJComboBox(items);
-    }
-
-    private JButton createStyledButton() {
-        return StyledButtonUI.getjButton("Unlock Door");
     }
 }

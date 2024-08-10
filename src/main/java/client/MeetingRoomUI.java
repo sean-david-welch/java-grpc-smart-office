@@ -3,6 +3,7 @@ package client;
 import javax.swing.*;
 import java.awt.*;
 
+import static client.StyledButtonUI.getjButton;
 import static client.UtilityStyles.*;
 
 public class MeetingRoomUI extends JPanel {
@@ -12,22 +13,22 @@ public class MeetingRoomUI extends JPanel {
         setBackground(new Color(40, 40, 40));
 
         JLabel roomIdLabel = createStyledLabel("Room ID:");
-        JTextField roomIdField = createStyledTextField();
+        JTextField roomIdField = getjTextField();
         add(roomIdLabel);
         add(roomIdField);
 
         JLabel userIdLabel = createStyledLabel("User ID:");
-        JTextField userIdField = createStyledTextField();
+        JTextField userIdField = getjTextField();
         add(userIdLabel);
         add(userIdField);
 
         JLabel timeSlotLabel = createStyledLabel("Time Slot:");
         String[] timeSlots = generateTimeSlots();
-        JComboBox<String> timeSlotComboBox = createStyledComboBox(timeSlots);
+        JComboBox<String> timeSlotComboBox = getStringJComboBox(timeSlots);
         add(timeSlotLabel);
         add(timeSlotComboBox);
 
-        JButton bookRoomButton = createStyledButton();
+        JButton bookRoomButton = getjButton("Book Room");
         bookRoomButton.addActionListener(e -> {
             try {
                 int roomId = Integer.parseInt(roomIdField.getText());
@@ -43,22 +44,4 @@ public class MeetingRoomUI extends JPanel {
         add(new JLabel());
         add(bookRoomButton);
     }
-
-    private JLabel createStyledLabel(String text) {
-        return UtilityStyles.createStyledLabel(text);
-    }
-
-    private JTextField createStyledTextField() {
-        return getjTextField();
-    }
-
-    private JComboBox<String> createStyledComboBox(String[] items) {
-        return getStringJComboBox(items);
-    }
-
-    private JButton createStyledButton() {
-        return StyledButtonUI.getjButton("Book Room");
-    }
-
-
 }
