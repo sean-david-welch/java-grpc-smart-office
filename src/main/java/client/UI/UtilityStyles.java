@@ -1,6 +1,7 @@
 package client.UI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class UtilityStyles {
@@ -19,6 +20,7 @@ public class UtilityStyles {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
+        label.setBorder(new EmptyBorder(5, 15, 5, 15));
         return label;
     }
 
