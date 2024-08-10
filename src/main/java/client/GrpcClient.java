@@ -56,11 +56,11 @@ public class GrpcClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public String accessControl() {
+    public String accessControl(int userId, AccessLevel level) {
         try {
             UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                     .setDoorId(1)
-                    .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.GENERAL).build())
+                    .setCredentials(AccessCredentials.newBuilder().setUserId(userId).setLevel(level).build())
                     .build();
             services.smartAccess.ActionResponse response = accessControlStub.unlockDoor(request);
             return "Access control response: " + response.toString();
