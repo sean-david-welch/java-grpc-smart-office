@@ -1,6 +1,6 @@
 package client.UI;
 
-import client.services.GrpcClient;
+import client.controllers.GrpcClient;
 import services.smartAccess.AccessLevel;
 import services.smartAccess.AccessLogsResponse;
 

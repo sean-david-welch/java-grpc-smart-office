@@ -1,4 +1,4 @@
-package client.services;
+package client.controllers;
 
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;

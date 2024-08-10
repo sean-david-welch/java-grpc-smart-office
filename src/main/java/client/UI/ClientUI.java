@@ -1,6 +1,6 @@
 package client.UI;
 
-import client.services.GrpcClient;
+import client.controllers.GrpcClient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

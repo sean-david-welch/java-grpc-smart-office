@@ -1,4 +1,4 @@
-package client.services;
+package client.controllers;
 
 import io.grpc.*;
 import services.constants.Constants;
