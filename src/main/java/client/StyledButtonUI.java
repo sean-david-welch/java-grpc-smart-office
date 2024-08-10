@@ -13,6 +13,7 @@ public class StyledButtonUI extends BasicButtonUI {
         button.setOpaque(false);
         button.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         button.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     @Override
