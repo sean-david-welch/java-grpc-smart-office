@@ -5,6 +5,8 @@ import services.smartCoffee.CoffeeType;
 import javax.swing.*;
 import java.awt.*;
 
+import static client.MeetingRoomUI.getStringJComboBox;
+
 public class CoffeeUI extends JPanel {
     public CoffeeUI(GrpcClient grpcClient, ClientUI parent) {
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Coffee Machine", 0, 0, null, Color.WHITE));
@@ -32,15 +34,12 @@ public class CoffeeUI extends JPanel {
     private JLabel createStyledLabel() {
         JLabel label = new JLabel("Coffee Type:");
         label.setForeground(Color.WHITE);
+        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         return label;
     }
 
     private JComboBox<String> createStyledComboBox(String[] items) {
-        JComboBox<String> comboBox = new JComboBox<>(items);
-        comboBox.setBackground(new Color(60, 60, 60));
-        comboBox.setForeground(Color.WHITE);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        return comboBox;
+        return getStringJComboBox(items);
     }
 
     private JButton createStyledButton() {
