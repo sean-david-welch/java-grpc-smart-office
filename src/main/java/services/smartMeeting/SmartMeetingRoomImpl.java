@@ -258,5 +258,4 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             responseObserver.onCompleted();
         }
     }
-
 }
