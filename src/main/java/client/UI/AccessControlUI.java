@@ -119,7 +119,7 @@ public class AccessControlUI extends JPanel {
     }
 
     private JTextField contructTextField(String text) {
-        JLabel IdLabel = createStyledLabelWithBorder("Door ID:");
+        JLabel IdLabel = createStyledLabelWithBorder(text);
         JTextField IdField = getjTextField();
         add(IdLabel);
         add(IdField);
