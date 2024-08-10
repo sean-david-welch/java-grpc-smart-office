@@ -119,8 +119,10 @@ public class AccessControlUI extends JPanel {
                 String startTime = (String) startTimeComboBox.getSelectedItem();
                 String endTime = (String) endTimeComboBox.getSelectedItem();
 
-                List<AccessLogsResponse> logs = grpcClient.getAccessLogs(doorId, startTime, endTime);
-                displayAccessLogs(logs);
+                new Thread(() -> {
+                    List<AccessLogsResponse> logs = grpcClient.getAccessLogs(doorId, startTime, endTime);
+                    SwingUtilities.invokeLater(() -> displayAccessLogs(logs));
+                }).start();
             } catch (NumberFormatException ex) {
                 parent.displayResponse("Error: Please enter a valid numeric Door ID", true);
             }
