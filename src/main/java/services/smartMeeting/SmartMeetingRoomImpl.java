@@ -16,14 +16,13 @@ import java.util.List;
 
 public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomImplBase {
 
+    private static final System.Logger logger = System.getLogger(SmartMeetingRoomImpl.class.getName());
     private final Connection conn;
 
     public SmartMeetingRoomImpl(Connection conn) {
         this.conn = conn;
     }
 
-    //  <-------- External Grpc methods -------->
-    // Simple RPC
     @Override
     public void bookRoom(BookRoomRequest request, StreamObserver<ActionResponse> responseObserver) {
         Context context = Context.current();
@@ -31,7 +30,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
             return;
         }
-
 
         boolean success = bookRoomLogic(request);
 
@@ -44,7 +42,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         responseObserver.onCompleted();
     }
 
-    // Simple RPC
     @Override
     public void cancelBooking(CancelBookingRequest request, StreamObserver<ActionResponse> responseObserver) {
         Context context = Context.current();
@@ -52,7 +49,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
             return;
         }
-
 
         boolean canceled = cancelBookingLogic(request.getBookingId());
 
@@ -65,7 +61,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         responseObserver.onCompleted();
     }
 
-    // Server side streaming
     @Override
     public void checkAvailability(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
         Context context = Context.current();
@@ -77,7 +72,6 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
         streamAvailabilityLogic(request, responseObserver);
     }
 
-    // <------- Interal Logic Methods ------->
     private boolean bookRoomLogic(BookRoomRequest request) {
         int roomId = request.getRoomId();
         int userId = request.getUserId();
@@ -91,7 +85,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             roomStmt.setInt(1, roomId);
             ResultSet roomResult = roomStmt.executeQuery();
             if (!roomResult.next()) {
-                System.out.println("No Room found with ID: " + roomId);
+                logger.log(System.Logger.Level.INFO, "No Room found with ID: {0}", roomId);
                 return false;
             }
 
@@ -100,14 +94,13 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             RoomStatus roomStatus = RoomStatus.valueOf(status.toUpperCase());
 
             if (roomStatus == RoomStatus.OCCUPIED || roomStatus == RoomStatus.UNAVAILABLE) {
-                System.out.println("Room is unavailable: " + roomResult);
+                logger.log(System.Logger.Level.INFO, "Room is unavailable: {0}", roomResult);
                 return false;
             }
 
-            List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {
-            });
+            List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {});
             if (!availableTimes.contains(timeSlot)) {
-                System.out.println("Time slot is not available: " + timeSlot);
+                logger.log(System.Logger.Level.INFO, "Time slot is not available: {0}", timeSlot);
                 return false;
             }
 
@@ -125,18 +118,17 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 updateStmt.setInt(2, roomId);
                 updateStmt.executeUpdate();
 
-                System.out.println("Booking complete");
+                logger.log(System.Logger.Level.INFO, "Booking complete");
                 return true;
             } catch (SQLException e) {
-                System.out.println("An error occurred while writing to the database: " + e);
+                logger.log(System.Logger.Level.ERROR, "An error occurred while writing to the database: {0}", e);
                 return false;
             }
         } catch (SQLException | IOException e) {
-            System.out.println("An error occurred while querying the database: " + e);
+            logger.log(System.Logger.Level.ERROR, "An error occurred while querying the database: {0}", e);
             return false;
         }
     }
-
 
     private boolean cancelBookingLogic(int bookingId) {
         String bookingDetailsQuery = "SELECT room_id, time_slot FROM booking WHERE booking_id = ?";
@@ -149,7 +141,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             ResultSet bookingResult = bookingDetailsStmt.executeQuery();
 
             if (!bookingResult.next()) {
-                System.out.println("No booking found with that ID");
+                logger.log(System.Logger.Level.INFO, "No booking found with that ID");
                 return false;
             }
 
@@ -160,7 +152,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                 cancelStmt.setInt(1, bookingId);
                 int affectedRows = cancelStmt.executeUpdate();
                 if (affectedRows == 0) {
-                    System.out.println("No booking found with that ID");
+                    logger.log(System.Logger.Level.INFO, "No booking found with that ID");
                     return false;
                 }
 
@@ -169,13 +161,12 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                     ResultSet roomResult = roomDetailsStmt.executeQuery();
 
                     if (!roomResult.next()) {
-                        System.out.println("No Room found with ID: " + roomId);
+                        logger.log(System.Logger.Level.INFO, "No Room found with ID: {0}", roomId);
                         return false;
                     }
 
                     String availableTimesJson = roomResult.getString("available_times");
-                    List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {
-                    });
+                    List<String> availableTimes = new ObjectMapper().readValue(availableTimesJson, new TypeReference<>() {});
 
                     if (!availableTimes.contains(timeSlot)) {
                         availableTimes.add(timeSlot);
@@ -188,26 +179,25 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
                         updateStmt.setInt(2, roomId);
                         updateStmt.executeUpdate();
 
-                        System.out.println("Booking was deleted successfully and available times updated!");
+                        logger.log(System.Logger.Level.INFO, "Booking was deleted successfully and available times updated!");
                         return true;
                     } catch (SQLException e) {
-                        System.out.println("An error occurred while updating the database: " + e.getMessage());
+                        logger.log(System.Logger.Level.ERROR, "An error occurred while updating the database: {0}", e.getMessage());
                         return false;
                     }
                 } catch (SQLException | IOException e) {
-                    System.out.println("An error occurred while querying the database: " + e.getMessage());
+                    logger.log(System.Logger.Level.ERROR, "An error occurred while querying the database: {0}", e.getMessage());
                     return false;
                 }
             } catch (SQLException e) {
-                System.out.println("An error occurred while deleting the booking: " + e.getMessage());
+                logger.log(System.Logger.Level.ERROR, "An error occurred while deleting the booking: {0}", e.getMessage());
                 return false;
             }
         } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "An error occurred while querying the database: {0}", e.getMessage());
             return false;
         }
     }
-
 
     private void streamAvailabilityLogic(CheckAvailabilityRequest request, StreamObserver<AvailabilityResponse> responseObserver) {
         int roomId = request.getRoomId();
@@ -232,10 +222,9 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
 
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                availableTimes = objectMapper.readValue(sqlTimes, new TypeReference<>() {
-                });
+                availableTimes = objectMapper.readValue(sqlTimes, new TypeReference<>() {});
             } catch (JsonProcessingException e) {
-                System.out.println("Error parsing JSON: " + e.getMessage());
+                logger.log(System.Logger.Level.ERROR, "Error parsing JSON: {0}", e.getMessage());
                 responseObserver.onCompleted();
                 return;
             }
@@ -254,7 +243,7 @@ public class SmartMeetingRoomImpl extends SmartMeetingRoomGrpc.SmartMeetingRoomI
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
         } catch (SQLException e) {
-            System.out.println("An error occurred while querying the database: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "An error occurred while querying the database: {0}", e.getMessage());
             responseObserver.onCompleted();
         }
     }
