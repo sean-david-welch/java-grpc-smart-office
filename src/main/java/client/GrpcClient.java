@@ -69,10 +69,10 @@ public class GrpcClient {
         }
     }
 
-    public String brewCoffee() {
+    public String brewCoffee(CoffeeType coffeeType) {
         try {
             BrewCoffeeRequest request = BrewCoffeeRequest.newBuilder()
-                    .setCoffeeType(CoffeeType.AMERICANO)
+                    .setCoffeeType(coffeeType)
                     .build();
             services.smartCoffee.ActionResponse response = coffeeMachineStub.brewCoffee(request);
             return "Coffee brewed: " + response.toString();
