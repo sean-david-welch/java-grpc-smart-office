@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GrpcClient {
     private final ManagedChannel channel;
-    private final AccessControlClientService accessControlService;
+    private final AccessControlClientController accessControlService;
     private final CoffeeMachineService coffeeMachineService;
     private final MeetingRoomService meetingRoomService;
 
@@ -46,7 +46,7 @@ public class GrpcClient {
         SmartAccessControlGrpc.SmartAccessControlBlockingStub blockingStub = SmartAccessControlGrpc.newBlockingStub(channel);
         SmartAccessControlGrpc.SmartAccessControlStub asyncStub = SmartAccessControlGrpc.newStub(channel);
 
-        accessControlService = new AccessControlClientService(blockingStub, asyncStub);
+        accessControlService = new AccessControlClientController(blockingStub, asyncStub);
         coffeeMachineService = new CoffeeMachineService(SmartCoffeeMachineGrpc.newBlockingStub(channel));
         meetingRoomService = new MeetingRoomService(SmartMeetingRoomGrpc.newBlockingStub(channel));
     }

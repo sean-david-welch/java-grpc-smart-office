@@ -6,12 +6,12 @@ import services.smartAccess.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccessControlClientService {
+public class AccessControlClientController {
     private final SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub;
     private final SmartAccessControlGrpc.SmartAccessControlStub asyncAccessControlStub;
 
-    public AccessControlClientService(SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub,
-                                      SmartAccessControlGrpc.SmartAccessControlStub asyncAccessControlStub) {
+    public AccessControlClientController(SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub,
+                                         SmartAccessControlGrpc.SmartAccessControlStub asyncAccessControlStub) {
         this.accessControlStub = accessControlStub;
         this.asyncAccessControlStub = asyncAccessControlStub;
     }
