@@ -2,10 +2,13 @@ package client.UI;
 
 import client.services.GrpcClient;
 import services.smartAccess.AccessLevel;
+import services.smartAccess.AccessLogsResponse;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.List;
+
 
 import static client.UI.StyledButtonUI.getjButton;
 import static client.UI.UtilityStyles.*;
@@ -20,15 +23,15 @@ public class AccessControlUI extends JPanel {
         this.parent = parent;
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Access Control", 0, 0, null, Color.WHITE));
-        setLayout(new GridLayout(9, 2, 5, 5));
+        setLayout(new GridLayout(12, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
-        initUnlockDoorUI();
-        initRaiseAlarmUI();
-//        initGetAccessLogsUI();
+        UnlockDoorUI();
+        RaiseAlarmUI();
+        GetAccessLogsUI();
     }
 
-    private void initUnlockDoorUI() {
+    private void UnlockDoorUI() {
         JLabel doorIdLabel = createStyledLabelWithBorder("Door ID:");
         JTextField doorIdField = getjTextField();
         add(doorIdLabel);
@@ -55,7 +58,7 @@ public class AccessControlUI extends JPanel {
         add(unlockDoorButton);
     }
 
-    private void initRaiseAlarmUI() {
+    private void RaiseAlarmUI() {
         JLabel raiseAlarmDoorIdLabel = createStyledLabelWithBorder("Alarm Door ID:");
         JTextField raiseAlarmDoorIdField = getjTextField();
         add(raiseAlarmDoorIdLabel);
@@ -88,6 +91,47 @@ public class AccessControlUI extends JPanel {
         add(raiseAlarmButton);
     }
 
+    private void GetAccessLogsUI() {
+        JLabel doorIdLabel = createStyledLabelWithBorder("Door ID:");
+        JTextField doorIdField = getjTextField();
+        add(doorIdLabel);
+        add(doorIdField);
+
+        JLabel startTimeLabel = createStyledLabelWithBorder("Start Time:");
+        JTextField startTimeField = getjTextField();
+        add(startTimeLabel);
+        add(startTimeField);
+
+        JLabel endTimeLabel = createStyledLabelWithBorder("End Time:");
+        JTextField endTimeField = getjTextField();
+        add(endTimeLabel);
+        add(endTimeField);
+
+        JButton getLogsButton = getjButton("Get Access Logs");
+        getLogsButton.addActionListener(e -> {
+            try {
+                int doorId = Integer.parseInt(doorIdField.getText());
+                String startTime = startTimeField.getText();
+                String endTime = endTimeField.getText();
+
+                List<AccessLogsResponse> logs = grpcClient.getAccessLogs(doorId, startTime, endTime);
+                displayAccessLogs(logs);
+            } catch (NumberFormatException ex) {
+                parent.displayResponse("Error: Please enter a valid numeric Door ID", true);
+            }
+        });
+        add(new JLabel());
+        add(getLogsButton);
+    }
+
+    private void displayAccessLogs(List<AccessLogsResponse> logs) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Access Logs:\n");
+        for (AccessLogsResponse log : logs) {
+            sb.append(log.toString()).append("\n");
+        }
+        parent.displayResponse(sb.toString(), false);
+    }
 
     private JComboBox<String> createAccessLevelComboBox() {
         AccessLevel[] levels = AccessLevel.values();
