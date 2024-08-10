@@ -33,10 +33,10 @@ public class CoffeeMachineClientController {
         }
     }
 
-    public void checkInventory(Optional<InventoryItem> itemOptional) {
+    public String checkInventory(Optional<InventoryItem> itemOptional) {
+        StringBuilder responseBuilder = new StringBuilder("Inventory Status:\n");
         try {
             CheckInventoryRequest.Builder requestBuilder = CheckInventoryRequest.newBuilder();
-
             itemOptional.ifPresent(requestBuilder::setItem);
             CheckInventoryRequest request = requestBuilder.build();
 
@@ -44,11 +44,15 @@ public class CoffeeMachineClientController {
 
             while (responses.hasNext()) {
                 InventoryResponse response = responses.next();
-                System.out.println("Item: " + response.getItem() + ", Quantity: " + response.getQuantity());
+                responseBuilder.append("Item: ").append(response.getItem())
+                        .append(", Quantity: ").append(response.getQuantity())
+                        .append("\n");
             }
         } catch (StatusRuntimeException e) {
-            System.err.println("Error: " + e.getStatus().getDescription());
+            return "Error: " + e.getStatus().getDescription();
         }
+
+        return responseBuilder.toString();
     }
 
     public String refillInventory(Map<InventoryItem, Integer> itemsToRefill) {

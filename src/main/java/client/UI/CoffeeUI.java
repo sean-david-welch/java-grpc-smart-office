@@ -66,19 +66,21 @@ public class CoffeeUI extends JPanel {
         JButton checkInventoryButton = getjButton("Check Inventory");
         checkInventoryButton.addActionListener(e -> {
             String selectedItem = (String) inventoryItemComboBox.getSelectedItem();
+            String response;
 
             if ("All Items".equals(selectedItem)) {
-                grpcClient.checkInventory(Optional.empty());
+                response = grpcClient.checkInventory(Optional.empty());
             } else {
                 InventoryItem inventoryItem = InventoryItem.valueOf(selectedItem);
-                grpcClient.checkInventory(Optional.of(inventoryItem));
+                response = grpcClient.checkInventory(Optional.of(inventoryItem));
             }
+
+            parent.displayResponse(response, response.contains("Error"));
         });
 
         add(new JLabel());
         add(checkInventoryButton);
     }
-
 
     private void refillInventoryUI() {
         JLabel refillItemLabel = createStyledLabelWithBorder("Refill Item:");

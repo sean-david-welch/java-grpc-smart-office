@@ -83,8 +83,8 @@ public class GrpcClient {
         return coffeeMachineController.brewCoffee(coffeeType, Deadline.after(5, TimeUnit.SECONDS));
     }
 
-    public void checkInventory(Optional<InventoryItem> itemOptional) {
-        coffeeMachineController.checkInventory(itemOptional);
+    public String checkInventory(Optional<InventoryItem> itemOptional) {
+        return coffeeMachineController.checkInventory(itemOptional);
     }
 
     public String refillInventory(Map<InventoryItem, Integer> itemsToRefill) {
