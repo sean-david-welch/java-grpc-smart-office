@@ -80,7 +80,7 @@ public class GrpcClient {
 
     // Coffee Machine Methods
     public String brewCoffee(CoffeeType coffeeType) {
-        return coffeeMachineService.brewCoffee(coffeeType);
+        return coffeeMachineService.brewCoffee(coffeeType, Deadline.after(5, TimeUnit.SECONDS));
     }
 
     public void checkInventory(Optional<InventoryItem> itemOptional) {
