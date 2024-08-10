@@ -1,9 +1,6 @@
 -- Enable foreign key constraints
 pragma foreign_keys = on;
 
--- Set journal mode to wal
-pragma journal_mode = wal;
-
 -- Smart Access Service
 create table if not exists door
 (
