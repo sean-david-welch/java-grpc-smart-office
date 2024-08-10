@@ -1,14 +1,15 @@
-package client;
+package client.UI;
 
+import client.services.GrpcClient;
 import services.smartCoffee.CoffeeType;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static client.StyledButtonUI.getjButton;
-import static client.UtilityStyles.createStyledLabel;
-import static client.UtilityStyles.getStringJComboBox;
+import static client.UI.StyledButtonUI.getjButton;
+import static client.UI.UtilityStyles.createStyledLabel;
+import static client.UI.UtilityStyles.getStringJComboBox;
 
 public class CoffeeUI extends JPanel {
     public CoffeeUI(GrpcClient grpcClient, ClientUI parent) {

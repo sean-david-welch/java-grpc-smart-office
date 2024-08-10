@@ -1,11 +1,13 @@
-package client;
+package client.UI;
+
+import client.services.GrpcClient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static client.StyledButtonUI.getjButton;
-import static client.UtilityStyles.*;
+import static client.UI.StyledButtonUI.getjButton;
+import static client.UI.UtilityStyles.*;
 
 public class MeetingRoomUI extends JPanel {
     public MeetingRoomUI(GrpcClient grpcClient, ClientUI parent) {
