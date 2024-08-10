@@ -20,8 +20,12 @@ public class CoffeeUI extends JPanel {
 
         JLabel coffeeTypeLabel = createStyledLabel("Coffee Type:");
         coffeeTypeLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
-        String[] coffeeTypes = {"AMERICANO", "ESPRESSO", "LATTE"};
-        JComboBox<String> coffeeTypeComboBox = getStringJComboBox(coffeeTypes);
+        CoffeeType[] coffeeTypes = CoffeeType.values();
+        String[] coffeeTypeNames = new String[coffeeTypes.length];
+        for (int i = 0; i < coffeeTypes.length; i++) {
+            coffeeTypeNames[i] = coffeeTypes[i].name();
+        }
+        JComboBox<String> coffeeTypeComboBox = getStringJComboBox(coffeeTypeNames);
         add(coffeeTypeLabel);
         add(coffeeTypeComboBox);
 
