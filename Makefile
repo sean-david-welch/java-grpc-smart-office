@@ -3,3 +3,6 @@ client:
 
 database:
 	cd src/main/database && sqlite3 database.db < tables.sql
+
+resetDB:
+	cd src/main/database && rm -rf database.db
