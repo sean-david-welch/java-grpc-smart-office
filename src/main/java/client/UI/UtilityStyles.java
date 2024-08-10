@@ -32,11 +32,10 @@ public class UtilityStyles {
     }
 
     static String[] generateTimeSlots() {
-        String[] timeSlots = new String[10];
-        for (int i = 8; i < 18; i++) {
+        String[] timeSlots = new String[17];
+        for (int i = 8; i < 25; i++) {
             timeSlots[i - 8] = String.format("%02d:00", i);
         }
         return timeSlots;
     }
-
 }

@@ -16,10 +16,10 @@ public class AccessControlClientController {
         this.asyncAccessControlStub = asyncAccessControlStub;
     }
 
-    public String unlockDoor(int userId, AccessLevel level) {
+    public String unlockDoor(int doorId, int userId, AccessLevel level) {
         try {
             UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
-                    .setDoorId(1)
+                    .setDoorId(doorId)
                     .setCredentials(AccessCredentials.newBuilder().setUserId(userId).setLevel(level).build())
                     .build();
             ActionResponse response = accessControlStub.unlockDoor(request);

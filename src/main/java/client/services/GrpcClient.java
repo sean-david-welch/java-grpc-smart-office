@@ -56,8 +56,8 @@ public class GrpcClient {
     }
 
     // Access control methods
-    public String unlockDoor(int userId, AccessLevel level) {
-        return accessControlService.unlockDoor(userId, level);
+    public String unlockDoor(int doorId, int userId, AccessLevel level) {
+        return accessControlService.unlockDoor(doorId, userId, level);
     }
 
     public String raiseAlarm(int doorId, int userId, AccessLevel level) {

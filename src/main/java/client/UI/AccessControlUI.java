@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
-
 import static client.UI.StyledButtonUI.getjButton;
 import static client.UI.UtilityStyles.*;
 
@@ -37,6 +36,11 @@ public class AccessControlUI extends JPanel {
         add(doorIdLabel);
         add(doorIdField);
 
+        JLabel userIdLabel = createStyledLabelWithBorder("User ID:");
+        JTextField userIdField = getjTextField();
+        add(userIdLabel);
+        add(userIdField);
+
         JLabel accessLevelLabel = createStyledLabelWithBorder("Access Level:");
         JComboBox<String> accessLevelComboBox = createAccessLevelComboBox();
         add(accessLevelLabel);
@@ -45,10 +49,11 @@ public class AccessControlUI extends JPanel {
         JButton unlockDoorButton = getjButton("Unlock Door");
         unlockDoorButton.addActionListener(e -> {
             try {
+                int doorId = Integer.parseInt(userIdField.getText());
                 int userId = Integer.parseInt(doorIdField.getText());
                 String accessLevel = (String) accessLevelComboBox.getSelectedItem();
                 AccessLevel level = AccessLevel.valueOf(accessLevel);
-                String response = grpcClient.unlockDoor(userId, level);
+                String response = grpcClient.unlockDoor(doorId, userId, level);
                 parent.displayResponse(response, response.contains("Error"));
             } catch (NumberFormatException ex) {
                 parent.displayResponse("Error: Please enter a valid numeric User ID", true);
@@ -59,7 +64,7 @@ public class AccessControlUI extends JPanel {
     }
 
     private void RaiseAlarmUI() {
-        JLabel raiseAlarmDoorIdLabel = createStyledLabelWithBorder("Alarm Door ID:");
+        JLabel raiseAlarmDoorIdLabel = createStyledLabelWithBorder("Door ID:");
         JTextField raiseAlarmDoorIdField = getjTextField();
         add(raiseAlarmDoorIdLabel);
         add(raiseAlarmDoorIdField);
@@ -98,21 +103,21 @@ public class AccessControlUI extends JPanel {
         add(doorIdField);
 
         JLabel startTimeLabel = createStyledLabelWithBorder("Start Time:");
-        JTextField startTimeField = getjTextField();
+        JComboBox<String> startTimeComboBox = getStringJComboBox(generateTimeSlots());
         add(startTimeLabel);
-        add(startTimeField);
+        add(startTimeComboBox);
 
         JLabel endTimeLabel = createStyledLabelWithBorder("End Time:");
-        JTextField endTimeField = getjTextField();
+        JComboBox<String> endTimeComboBox = getStringJComboBox(generateTimeSlots());
         add(endTimeLabel);
-        add(endTimeField);
+        add(endTimeComboBox);
 
         JButton getLogsButton = getjButton("Get Access Logs");
         getLogsButton.addActionListener(e -> {
             try {
                 int doorId = Integer.parseInt(doorIdField.getText());
-                String startTime = startTimeField.getText();
-                String endTime = endTimeField.getText();
+                String startTime = (String) startTimeComboBox.getSelectedItem();
+                String endTime = (String) endTimeComboBox.getSelectedItem();
 
                 List<AccessLogsResponse> logs = grpcClient.getAccessLogs(doorId, startTime, endTime);
                 displayAccessLogs(logs);
