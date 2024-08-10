@@ -22,7 +22,7 @@ public class AccessControlUI extends JPanel {
         add(accessLevelLabel);
         add(accessLevelComboBox);
 
-        JButton accessButton = createStyledButton("Unlock Door");
+        JButton accessButton = createStyledButton();
         accessButton.addActionListener(e -> {
             try {
                 int userId = Integer.parseInt(userIdField.getText());
@@ -61,7 +61,7 @@ public class AccessControlUI extends JPanel {
         return comboBox;
     }
 
-    private JButton createStyledButton(String text) {
-        return StyledButtonUI.getjButton(text);
+    private JButton createStyledButton() {
+        return StyledButtonUI.getjButton("Unlock Door");
     }
 }
