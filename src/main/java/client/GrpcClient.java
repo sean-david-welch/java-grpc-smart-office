@@ -1,11 +1,11 @@
 package client;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Metadata;
-
+import io.grpc.*;
 import services.constants.Constants;
-import services.smartAccess.*;
+import services.smartAccess.AccessCredentials;
+import services.smartAccess.AccessLevel;
+import services.smartAccess.SmartAccessControlGrpc;
+import services.smartAccess.UnlockDoorRequest;
 import services.smartCoffee.BrewCoffeeRequest;
 import services.smartCoffee.CoffeeType;
 import services.smartCoffee.SmartCoffeeMachineGrpc;
@@ -22,11 +22,28 @@ public class GrpcClient {
     private final SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub;
 
     public GrpcClient(String host, int port) {
+        String jwtToken = JwtUtility.generateToken("testClientId");
+
+        ClientInterceptor authInterceptor = new ClientInterceptor() {
+            @Override
+            public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+                    MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+                return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
+                        next.newCall(method, callOptions)) {
+                    @Override
+                    public void start(Listener<RespT> responseListener, Metadata headers) {
+                        headers.put(Constants.AUTHORIZATION_METADATA_KEY, Constants.BEARER_TYPE + " " + jwtToken);
+                        super.start(responseListener, headers);
+                    }
+                };
+            }
+        };
+
         channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
+                .intercept(authInterceptor)
                 .build();
 
-        String jwtToken = JwtUtility.generateToken("testClientId");
         Metadata metadata = new Metadata();
         metadata.put(Constants.AUTHORIZATION_METADATA_KEY, Constants.BEARER_TYPE + " " + jwtToken);
 
@@ -40,29 +57,41 @@ public class GrpcClient {
     }
 
     public String accessControl() {
-        UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
-                .setDoorId(1)
-                .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
-                .build();
-        services.smartAccess.ActionResponse response = accessControlStub.unlockDoor(request);
-        return "Access control response: " + response.toString();
+        try {
+            UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
+                    .setDoorId(1)
+                    .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
+                    .build();
+            services.smartAccess.ActionResponse response = accessControlStub.unlockDoor(request);
+            return "Access control response: " + response.toString();
+        } catch (StatusRuntimeException e) {
+            return "Error: " + e.getStatus().getDescription();
+        }
     }
 
     public String brewCoffee() {
-        BrewCoffeeRequest request = BrewCoffeeRequest.newBuilder()
-                .setCoffeeType(CoffeeType.AMERICANO)
-                .build();
-        services.smartCoffee.ActionResponse response = coffeeMachineStub.brewCoffee(request);
-        return "Coffee brewed: " + response.toString();
+        try {
+            BrewCoffeeRequest request = BrewCoffeeRequest.newBuilder()
+                    .setCoffeeType(CoffeeType.AMERICANO)
+                    .build();
+            services.smartCoffee.ActionResponse response = coffeeMachineStub.brewCoffee(request);
+            return "Coffee brewed: " + response.toString();
+        } catch (StatusRuntimeException e) {
+            return "Error: " + e.getStatus().getDescription();
+        }
     }
 
     public String bookRoom(int roomId, int userId, String time) {
-        BookRoomRequest request = BookRoomRequest.newBuilder()
-                .setRoomId(roomId)
-                .setUserId(userId)
-                .setTimeSlot(time)
-                .build();
-        services.smartMeeting.ActionResponse response = meetingRoomStub.bookRoom(request);
-        return "Room booking response: " + response.toString();
+        try {
+            BookRoomRequest request = BookRoomRequest.newBuilder()
+                    .setRoomId(roomId)
+                    .setUserId(userId)
+                    .setTimeSlot(time)
+                    .build();
+            services.smartMeeting.ActionResponse response = meetingRoomStub.bookRoom(request);
+            return "Room booking response: " + response.toString();
+        } catch (StatusRuntimeException e) {
+            return "Error: " + e.getStatus().getDescription();
+        }
     }
 }
