@@ -5,12 +5,13 @@ import java.awt.*;
 
 public class UtilityStyles {
     public static JTextField getjTextField() {
-        JTextField textField = new JTextField(10);
+        JTextField textField = new JTextField(1);
         textField.setBackground(new Color(60, 60, 60));
         textField.setForeground(Color.WHITE);
         textField.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         textField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         textField.setCaretColor(Color.WHITE);
+        textField.setHorizontalAlignment(JTextField.CENTER);
         return textField;
     }
 

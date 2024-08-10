@@ -3,6 +3,8 @@ package client;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
 public class StyledButtonUI extends BasicButtonUI {
@@ -11,7 +13,7 @@ public class StyledButtonUI extends BasicButtonUI {
         super.installUI(c);
         JButton button = (JButton) c;
         button.setOpaque(false);
-        button.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         button.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
@@ -25,7 +27,7 @@ public class StyledButtonUI extends BasicButtonUI {
         int width = b.getWidth();
         int height = b.getHeight();
 
-        Shape border = new RoundRectangle2D.Float(0, 0, width, height, 30, 30);
+        Shape border = new RoundRectangle2D.Float(0, 0, width, height, 10, 10);
         g2.setColor(b.getBackground());
         g2.fill(border);
 
@@ -47,6 +49,18 @@ public class StyledButtonUI extends BasicButtonUI {
         button.setBackground(new Color(60, 60, 60));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(button.getBackground().brighter());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(new Color(60, 60, 60));
+            }
+        });
         return button;
     }
 }
