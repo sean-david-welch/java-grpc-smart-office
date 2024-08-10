@@ -37,14 +37,12 @@ public class ClientUI extends JFrame {
         centralPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         centralPanel.add(new MeetingRoomUI(grpcClient, this));
 
-        // Create a JScrollPane and add the centralPanel to it
         JScrollPane scrollPane = new JScrollPane(centralPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setBackground(new Color(40, 40, 40));
 
-        // Add the scrollPane to the frame instead of the centralPanel
         add(scrollPane, BorderLayout.CENTER);
 
         responseLabel = new JLabel("Response will be displayed here");
