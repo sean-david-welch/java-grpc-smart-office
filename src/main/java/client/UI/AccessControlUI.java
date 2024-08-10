@@ -24,8 +24,12 @@ public class AccessControlUI extends JPanel {
 
         JLabel accessLevelLabel = createStyledLabel("Access Level:");
         accessLevelLabel.setBorder(new EmptyBorder(5, 15, 5, 15));
-        String[] levels = {"GENERAL", "ADMIN"};
-        JComboBox<String> accessLevelComboBox = getStringJComboBox(levels);
+        AccessLevel[] levels = AccessLevel.values();
+        String[] levelNames = new String[levels.length];
+        for (int i = 0; i < levels.length; i++) {
+            levelNames[i] = levels[i].name();
+        }
+        JComboBox<String> accessLevelComboBox = getStringJComboBox(levelNames);
         add(accessLevelLabel);
         add(accessLevelComboBox);
 
