@@ -5,25 +5,26 @@ import java.awt.*;
 
 public class MeetingRoomUI extends JPanel {
     public MeetingRoomUI(GrpcClient grpcClient, ClientUI parent) {
-        setBorder(BorderFactory.createTitledBorder("Meeting Room"));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Meeting Room", 0, 0, null, Color.WHITE));
         setLayout(new GridLayout(4, 2, 5, 5));
+        setBackground(new Color(40, 40, 40));
 
-        JLabel roomIdLabel = new JLabel("Room ID:");
-        JTextField roomIdField = new JTextField(10);
+        JLabel roomIdLabel = createStyledLabel("Room ID:");
+        JTextField roomIdField = createStyledTextField();
         add(roomIdLabel);
         add(roomIdField);
 
-        JLabel userIdLabel = new JLabel("User ID:");
-        JTextField userIdField = new JTextField(10);
+        JLabel userIdLabel = createStyledLabel("User ID:");
+        JTextField userIdField = createStyledTextField();
         add(userIdLabel);
         add(userIdField);
 
-        JLabel timeSlotLabel = new JLabel("Time Slot:");
-        JTextField timeSlotField = new JTextField(10);
+        JLabel timeSlotLabel = createStyledLabel("Time Slot:");
+        JTextField timeSlotField = createStyledTextField();
         add(timeSlotLabel);
         add(timeSlotField);
 
-        JButton bookRoomButton = new JButton("Book Room");
+        JButton bookRoomButton = createStyledButton();
         bookRoomButton.addActionListener(e -> {
             try {
                 int roomId = Integer.parseInt(roomIdField.getText());
@@ -36,7 +37,25 @@ public class MeetingRoomUI extends JPanel {
             }
         });
 
-        add(new JLabel()); // Empty cell for alignment
+        add(new JLabel());
         add(bookRoomButton);
+    }
+
+    private JLabel createStyledLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        return label;
+    }
+
+    private JTextField createStyledTextField() {
+        JTextField textField = new JTextField(10);
+        textField.setBackground(new Color(60, 60, 60));
+        textField.setForeground(Color.WHITE);
+        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        return textField;
+    }
+
+    private JButton createStyledButton() {
+        return StyledButtonUI.getjButton("Book Room");
     }
 }
