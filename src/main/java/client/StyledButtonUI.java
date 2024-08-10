@@ -11,7 +11,8 @@ public class StyledButtonUI extends BasicButtonUI {
         super.installUI(c);
         JButton button = (JButton) c;
         button.setOpaque(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        button.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
     }
 
     @Override
@@ -23,7 +24,7 @@ public class StyledButtonUI extends BasicButtonUI {
         int width = b.getWidth();
         int height = b.getHeight();
 
-        Shape border = new RoundRectangle2D.Float(0, 0, width, height, 40, 40);
+        Shape border = new RoundRectangle2D.Float(0, 0, width, height, 30, 30);
         g2.setColor(b.getBackground());
         g2.fill(border);
 
@@ -38,13 +39,13 @@ public class StyledButtonUI extends BasicButtonUI {
         g2.dispose();
     }
 
-        static JButton getjButton(String text) {
+    static JButton getjButton(String text) {
         JButton button = new JButton(text);
         button.setUI(new StyledButtonUI());
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(60, 60, 60));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         return button;
     }
 }
