@@ -10,8 +10,13 @@ import services.smartMeeting.SmartMeetingRoomImpl;
 import services.utils.JwtServerInterceptor;
 
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GrpcServer {
+
+    private static final Logger logger = Logger.getLogger(GrpcServer.class.getName());
+
     public static void main(String[] args) {
         Database.initializeDatabase();
         try (Connection conn = Database.getConnection()) {
@@ -28,20 +33,21 @@ public class GrpcServer {
                 serviceRegister.registerService("_smartCoffee._tcp.local.", "SmartCoffeeService", 8080);
                 serviceRegister.registerService("_smartAccess._tcp.local.", "SmartAccessService", 8080);
 
-
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    System.err.println("*** shutting down gRPC server since JVM is shutting down");
+                    logger.log(Level.INFO, "*** Shutting down gRPC server since JVM is shutting down");
                     server.shutdown();
                     serviceRegister.unregisterService();
-                    System.err.println("*** server shut down");
+                    logger.log(Level.INFO, "*** Server shut down");
                 }));
 
                 server.start();
-                System.out.println("Server started on port 8080");
+                logger.log(Level.INFO, "Server started on port 8080");
                 server.awaitTermination();
+            } else {
+                logger.log(Level.SEVERE, "Failed to obtain database connection");
             }
         } catch (Exception e) {
-            System.out.println("Failed to start server: " + e.getMessage());
+            logger.log(Level.SEVERE, "Failed to start server: {0}", e.getMessage());
         }
     }
 }
