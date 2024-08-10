@@ -12,30 +12,33 @@ public class ClientUI extends JFrame {
         grpcClient = new GrpcClient("localhost", 8080);
 
         setTitle("Smart Office gRPC Client");
-        setSize(1500, 1500);
+        setSize(1500, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(new Color(40, 40, 40));
         setLocationRelativeTo(null);
 
         JLabel headerLabel = new JLabel("Smart Office Control Panel", JLabel.CENTER);
-        headerLabel.setFont(new Font("Jetbrains Mono", Font.BOLD, 24));
+        headerLabel.setFont(new Font("Jetbrains Mono", Font.BOLD, 20));
         headerLabel.setForeground(Color.WHITE);
+        headerLabel.setBorder(new EmptyBorder(30, 15, 15, 15));
         add(headerLabel, BorderLayout.NORTH);
-
 
         JPanel centralPanel = new JPanel();
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         centralPanel.setBackground(new Color(40, 40, 40));
+        centralPanel.setBorder(new EmptyBorder(50, 50, 50, 50));
 
         centralPanel.add(new CoffeeUI(grpcClient, this));
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         centralPanel.add(new AccessControlUI(grpcClient, this));
+        centralPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         centralPanel.add(new MeetingRoomUI(grpcClient, this));
 
         add(centralPanel, BorderLayout.CENTER);
 
         responseLabel = new JLabel("Response will be displayed here");
-        responseLabel.setPreferredSize(new Dimension(450, 50));
+        responseLabel.setPreferredSize(new Dimension(450, 40));
         responseLabel.setHorizontalAlignment(SwingConstants.CENTER);
         responseLabel.setOpaque(true);
         responseLabel.setBackground(new Color(60, 60, 60));
