@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 
 public class GrpcClient {
     private final ManagedChannel channel;
-    private final AccessControlClientController accessControlService;
-    private final CoffeeMachineClientController coffeeMachineService;
-    private final MeetingRoomClientController meetingRoomService;
+    private final AccessControlClientController accessControlController;
+    private final CoffeeMachineClientController coffeeMachineController;
+    private final MeetingRoomClientController meetingRoomController;
 
     public GrpcClient(String host, int port) {
         String jwtToken = JwtUtility.generateToken("testClientId");
@@ -49,16 +49,16 @@ public class GrpcClient {
         // Access control
         SmartAccessControlGrpc.SmartAccessControlBlockingStub accessBlockingStub = SmartAccessControlGrpc.newBlockingStub(channel);
         SmartAccessControlGrpc.SmartAccessControlStub accessAsyncStub = SmartAccessControlGrpc.newStub(channel);
-        accessControlService = new AccessControlClientController(accessBlockingStub, accessAsyncStub);
+        accessControlController = new AccessControlClientController(accessBlockingStub, accessAsyncStub);
 
         // Coffee machine
         SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeBlockingStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
         SmartCoffeeMachineGrpc.SmartCoffeeMachineStub coffeeAsyncStub = SmartCoffeeMachineGrpc.newStub(channel);
-        coffeeMachineService = new CoffeeMachineClientController(coffeeBlockingStub, coffeeAsyncStub);
+        coffeeMachineController = new CoffeeMachineClientController(coffeeBlockingStub, coffeeAsyncStub);
 
         // Meeting room
         SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingBlockingStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
-        meetingRoomService = new MeetingRoomClientController(meetingBlockingStub);
+        meetingRoomController = new MeetingRoomClientController(meetingBlockingStub);
     }
 
     public void shutdown() throws InterruptedException {
@@ -67,32 +67,32 @@ public class GrpcClient {
 
     // Access control methods
     public String unlockDoor(int doorId, int userId, AccessLevel level) {
-        return accessControlService.unlockDoor(doorId, userId, level);
+        return accessControlController.unlockDoor(doorId, userId, level);
     }
 
     public String raiseAlarm(int doorId, int userId, AccessLevel level) {
-        return accessControlService.raiseAlarm(doorId, userId, level);
+        return accessControlController.raiseAlarm(doorId, userId, level);
     }
 
     public List<AccessLogsResponse> getAccessLogs(int doorId, String startTime, String endTime) {
-        return accessControlService.getAccessLogs(doorId, startTime, endTime);
+        return accessControlController.getAccessLogs(doorId, startTime, endTime);
     }
 
     // Coffee Machine Methods
     public String brewCoffee(CoffeeType coffeeType) {
-        return coffeeMachineService.brewCoffee(coffeeType, Deadline.after(5, TimeUnit.SECONDS));
+        return coffeeMachineController.brewCoffee(coffeeType, Deadline.after(5, TimeUnit.SECONDS));
     }
 
     public void checkInventory(Optional<InventoryItem> itemOptional) {
-        coffeeMachineService.checkInventory(itemOptional);
+        coffeeMachineController.checkInventory(itemOptional);
     }
 
     public String refillInventory(Map<InventoryItem, Integer> itemsToRefill) {
-        return coffeeMachineService.refillInventory(itemsToRefill);
+        return coffeeMachineController.refillInventory(itemsToRefill);
     }
 
     // Meeting Room Methods
     public String bookRoom(int roomId, int userId, String time) {
-        return meetingRoomService.bookRoom(roomId, userId, time);
+        return meetingRoomController.bookRoom(roomId, userId, time);
     }
 }
