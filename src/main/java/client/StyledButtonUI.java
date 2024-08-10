@@ -23,12 +23,10 @@ public class StyledButtonUI extends BasicButtonUI {
         int width = b.getWidth();
         int height = b.getHeight();
 
-        // Create a rounded rectangle for the button background
         Shape border = new RoundRectangle2D.Float(0, 0, width, height, 40, 40);
         g2.setColor(b.getBackground());
         g2.fill(border);
 
-        // Draw the button label
         g2.setColor(b.getForeground());
         g2.setFont(b.getFont());
         FontMetrics fm = g2.getFontMetrics();
