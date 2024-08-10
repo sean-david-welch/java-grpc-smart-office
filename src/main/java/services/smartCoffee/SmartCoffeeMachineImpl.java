@@ -41,12 +41,6 @@ public class SmartCoffeeMachineImpl extends SmartCoffeeMachineGrpc.SmartCoffeeMa
     // Server side streaming
     @Override
     public void checkInventory(CheckInventoryRequest request, StreamObserver<InventoryResponse> responseObserver) {
-        Context context = Context.current();
-        if (context.getDeadline() != null && context.getDeadline().isExpired()) {
-            responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Deadline exceeded").asRuntimeException());
-            return;
-        }
-
         try {
             if (request.hasItem()) {
                 InventoryItem item = request.getItem();
