@@ -1,10 +1,13 @@
 package client.services;
+
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import services.smartAccess.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class AccessControlClientController {
     private final SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub;
@@ -44,6 +47,7 @@ public class AccessControlClientController {
 
     public List<AccessLogsResponse> getAccessLogs(int doorId, String startTime, String endTime) {
         List<AccessLogsResponse> logsResponses = new ArrayList<>();
+        CountDownLatch latch = new CountDownLatch(1);
 
         StreamObserver<GetAccessLogsRequest> requestObserver = asyncAccessControlStub.getAccessLogs(new StreamObserver<>() {
             @Override
@@ -54,11 +58,13 @@ public class AccessControlClientController {
             @Override
             public void onError(Throwable t) {
                 System.err.println("Error retrieving access logs: " + t.getMessage());
+                latch.countDown();
             }
 
             @Override
             public void onCompleted() {
                 System.out.println("Completed receiving access logs.");
+                latch.countDown();
             }
         });
 
@@ -71,6 +77,8 @@ public class AccessControlClientController {
 
             requestObserver.onNext(request);
             requestObserver.onCompleted();
+
+            latch.await(5, TimeUnit.SECONDS);
 
             return logsResponses;
         } catch (Exception e) {
