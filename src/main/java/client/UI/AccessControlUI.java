@@ -31,15 +31,9 @@ public class AccessControlUI extends JPanel {
     }
 
     private void UnlockDoorUI() {
-        JLabel doorIdLabel = createStyledLabelWithBorder("Door ID:");
-        JTextField doorIdField = getjTextField();
-        add(doorIdLabel);
-        add(doorIdField);
+        JTextField doorIdField = contructTextField("Door ID:");
+        JTextField userIdField = contructTextField("User ID:");
 
-        JLabel userIdLabel = createStyledLabelWithBorder("User ID:");
-        JTextField userIdField = getjTextField();
-        add(userIdLabel);
-        add(userIdField);
 
         JLabel accessLevelLabel = createStyledLabelWithBorder("Access Level:");
         JComboBox<String> accessLevelComboBox = createAccessLevelComboBox();
@@ -49,8 +43,8 @@ public class AccessControlUI extends JPanel {
         JButton unlockDoorButton = getjButton("Unlock Door");
         unlockDoorButton.addActionListener(e -> {
             try {
-                int doorId = Integer.parseInt(userIdField.getText());
-                int userId = Integer.parseInt(doorIdField.getText());
+                int doorId = Integer.parseInt(doorIdField.getText());
+                int userId = Integer.parseInt(userIdField.getText());
                 String accessLevel = (String) accessLevelComboBox.getSelectedItem();
                 AccessLevel level = AccessLevel.valueOf(accessLevel);
                 String response = grpcClient.unlockDoor(doorId, userId, level);
@@ -64,15 +58,8 @@ public class AccessControlUI extends JPanel {
     }
 
     private void RaiseAlarmUI() {
-        JLabel raiseAlarmDoorIdLabel = createStyledLabelWithBorder("Door ID:");
-        JTextField raiseAlarmDoorIdField = getjTextField();
-        add(raiseAlarmDoorIdLabel);
-        add(raiseAlarmDoorIdField);
-
-        JLabel raiseAlarmUserIdLabel = createStyledLabelWithBorder("User ID:");
-        JTextField raiseAlarmUserIdField = getjTextField();
-        add(raiseAlarmUserIdLabel);
-        add(raiseAlarmUserIdField);
+        JTextField doorIdField = contructTextField("Door ID:");
+        JTextField userIdField = contructTextField("User ID:");
 
         JLabel accessLevelLabel = createStyledLabelWithBorder("Access Level:");
         JComboBox<String> accessLevelComboBox = createAccessLevelComboBox();
@@ -82,8 +69,8 @@ public class AccessControlUI extends JPanel {
         JButton raiseAlarmButton = getjButton("Raise Alarm");
         raiseAlarmButton.addActionListener(e -> {
             try {
-                int doorId = Integer.parseInt(raiseAlarmDoorIdField.getText());
-                int userId = Integer.parseInt(raiseAlarmUserIdField.getText());
+                int doorId = Integer.parseInt(doorIdField.getText());
+                int userId = Integer.parseInt(userIdField.getText());
                 String accessLevel = (String) accessLevelComboBox.getSelectedItem();
                 AccessLevel level = AccessLevel.valueOf(accessLevel);
                 String response = grpcClient.raiseAlarm(doorId, userId, level);
@@ -129,6 +116,15 @@ public class AccessControlUI extends JPanel {
         });
         add(new JLabel());
         add(getLogsButton);
+    }
+
+    private JTextField contructTextField(String text) {
+        JLabel IdLabel = createStyledLabelWithBorder("Door ID:");
+        JTextField IdField = getjTextField();
+        add(IdLabel);
+        add(IdField);
+
+        return IdField;
     }
 
     private void displayAccessLogs(List<AccessLogsResponse> logs) {
