@@ -42,23 +42,26 @@ public class AccessControlUI extends JPanel {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
+        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         return label;
     }
 
     private JTextField createStyledTextField() {
+        return getjTextField();
+    }
+
+    static JTextField getjTextField() {
         JTextField textField = new JTextField(10);
         textField.setBackground(new Color(60, 60, 60));
         textField.setForeground(Color.WHITE);
+        textField.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         textField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        textField.setCaretColor(Color.WHITE); // White cursor for better visibility
         return textField;
     }
 
     private JComboBox<String> createStyledComboBox(String[] items) {
-        JComboBox<String> comboBox = new JComboBox<>(items);
-        comboBox.setBackground(new Color(60, 60, 60));
-        comboBox.setForeground(Color.WHITE);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        return comboBox;
+        return MeetingRoomUI.getStringJComboBox(items);
     }
 
     private JButton createStyledButton() {
