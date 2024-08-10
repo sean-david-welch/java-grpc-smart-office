@@ -15,13 +15,12 @@ import java.util.List;
 public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessControlImplBase {
 
     private final Connection conn;
+    private static final System.Logger logger = System.getLogger(SmartAccessControlImpl.class.getName());
 
     public SmartAccessControlImpl(Connection conn) {
         this.conn = conn;
     }
 
-    // <---------- External Grpc methods -------->
-    // Simple RPC
     @Override
     public void unlockDoor(UnlockDoorRequest request, StreamObserver<ActionResponse> responseObserver) {
         String clientId = Constants.CLIENT_ID_CONTEXT_KEY.get(Context.current());
@@ -41,7 +40,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
-    // Simple RPC
     @Override
     public void raiseAlarm(RaiseAlarmRequest request, StreamObserver<ActionResponse> responseObserver) {
         Context context = Context.current();
@@ -61,7 +59,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         responseObserver.onCompleted();
     }
 
-    // Bidirectional Streaming
     @Override
     public StreamObserver<GetAccessLogsRequest> getAccessLogs(StreamObserver<AccessLogsResponse> responseObserver) {
         return new StreamObserver<>() {
@@ -81,7 +78,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error receiving GetAccessLogsRequest: " + t.getMessage());
+                logger.log(System.Logger.Level.ERROR, "Error receiving GetAccessLogsRequest: {0}", t.getMessage());
             }
 
             @Override
@@ -95,8 +92,6 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
         };
     }
 
-
-    // <--------  Interal Logic Methods -------->
     private boolean unlockDoorInternal(UnlockDoorRequest request) {
         int doorID = request.getDoorId();
         int userID = request.getCredentials().getUserId();
@@ -110,13 +105,13 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             ResultSet doorResult = doorStmt.executeQuery();
 
             if (!doorResult.next()) {
-                System.out.println("Door ID not found: " + doorID);
+                logger.log(System.Logger.Level.INFO, "Door ID not found: {0}", doorID);
                 return false;
             }
 
             String doorStatus = doorResult.getString("status");
             if (!"locked".equals(doorStatus)) {
-                System.out.println("Door is not locked: " + doorID);
+                logger.log(System.Logger.Level.INFO, "Door is not locked: {0}", doorID);
                 return false;
             }
 
@@ -126,17 +121,17 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
-                    System.out.println("No matching access credentials for userID: " + userID);
+                    logger.log(System.Logger.Level.INFO, "No matching access credentials for userID: {0}", userID);
                     return false;
                 }
 
                 String userAccessLevel = credResult.getString("access_level");
                 if (userAccessLevel == null || !userAccessLevel.toUpperCase().equals(accessLevel.toString())) {
-                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+                    logger.log(System.Logger.Level.INFO, "Access level mismatch: required {0}, found {1}", new Object[]{accessLevel, userAccessLevel});
                     return false;
                 }
 
-                System.out.println("Door unlocked: " + doorID);
+                logger.log(System.Logger.Level.INFO, "Door unlocked: {0}", doorID);
                 String updateDoorStatusQuery = "update door set status = ? WHERE id = ?";
 
                 try (PreparedStatement updateStmt = conn.prepareStatement(updateDoorStatusQuery)) {
@@ -144,12 +139,12 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                     updateStmt.setInt(2, doorID);
                     updateStmt.executeUpdate();
                 } catch (SQLException e) {
-                    System.out.println("Error updating door status: " + e.getMessage());
+                    logger.log(System.Logger.Level.ERROR, "Error updating door status: {0}", e.getMessage());
                 }
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println("Error querying door status: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error querying door status: {0}", e.getMessage());
             return false;
         }
     }
@@ -167,7 +162,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
             ResultSet doorResult = doorStmt.executeQuery();
 
             if (!doorResult.next()) {
-                System.out.println("No door found with ID: " + doorID);
+                logger.log(System.Logger.Level.INFO, "No door found with ID: {0}", doorID);
                 return false;
             }
 
@@ -176,21 +171,21 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 ResultSet credResult = credentialsStmt.executeQuery();
 
                 if (!credResult.next()) {
-                    System.out.println("Invalid PIN or insufficient access level for raising an alarm.");
+                    logger.log(System.Logger.Level.INFO, "Invalid PIN or insufficient access level for raising an alarm.");
                     return false;
                 }
 
                 String userAccessLevel = credResult.getString("access_level");
                 if (userAccessLevel == null || !userAccessLevel.toUpperCase().equals(accessLevel.toString())) {
-                    System.out.println("Access level mismatch: required " + accessLevel + ", found " + userAccessLevel);
+                    logger.log(System.Logger.Level.INFO, "Access level mismatch: required {0}, found {1}", new Object[]{accessLevel, userAccessLevel});
                     return false;
                 }
 
-                System.out.println("Alarm raised for door: " + doorID);
+                logger.log(System.Logger.Level.INFO, "Alarm raised for door: {0}", doorID);
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println("Error querying database: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error querying database: {0}", e.getMessage());
             return false;
         }
     }
@@ -219,7 +214,7 @@ public class SmartAccessControlImpl extends SmartAccessControlGrpc.SmartAccessCo
                 logs.add(logEntry);
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving access logs: " + e.getMessage());
+            logger.log(System.Logger.Level.ERROR, "Error retrieving access logs: {0}", e.getMessage());
         }
 
         return logs;
