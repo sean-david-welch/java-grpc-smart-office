@@ -3,13 +3,10 @@ package services.constants;
 import io.grpc.Context;
 import io.grpc.Metadata;
 
-import java.security.SecureRandom;
-import java.util.Base64;
-
 import static io.grpc.Metadata.ASCII_STRING_MARSHALLER;
 
 public class Constants {
-    public static final String JWT_SIGNING_KEY = generateRandomSigningKey();
+    public static final String JWT_SIGNING_KEY = "static-signing-key";
     public static final String BEARER_TYPE = "Bearer";
 
     public static final Metadata.Key<String> AUTHORIZATION_METADATA_KEY = Metadata.Key.of("Authorization", ASCII_STRING_MARSHALLER);
@@ -17,13 +14,6 @@ public class Constants {
 
     private Constants() {
         throw new AssertionError();
-    }
-
-    private static String generateRandomSigningKey() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] key = new byte[32];
-        secureRandom.nextBytes(key);
-        return Base64.getEncoder().encodeToString(key);
     }
 
     public static void main(String[] args) {

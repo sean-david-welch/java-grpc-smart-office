@@ -60,7 +60,7 @@ public class GrpcClient {
         try {
             UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                     .setDoorId(1)
-                    .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
+                    .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.GENERAL).build())
                     .build();
             services.smartAccess.ActionResponse response = accessControlStub.unlockDoor(request);
             return "Access control response: " + response.toString();
