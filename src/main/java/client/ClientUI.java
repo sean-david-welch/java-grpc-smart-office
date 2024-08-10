@@ -7,12 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class GrpcClientUI extends Application {
-
+public class ClientUI extends Application {
     private GrpcClient grpcClient;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         grpcClient = new GrpcClient("localhost", 8080);
 
         Label responseLabel = new Label("Response will be displayed here");

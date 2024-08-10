@@ -6,6 +6,8 @@ import io.grpc.Metadata;
 
 import services.constants.Constants;
 import services.smartAccess.*;
+import services.smartCoffee.SmartCoffeeMachineGrpc;
+import services.smartMeeting.SmartMeetingRoomGrpc;
 import services.utils.JwtUtility;
 
 import java.util.concurrent.TimeUnit;
@@ -13,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 public class GrpcClient {
     private final ManagedChannel channel;
     private final SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub;
-
 
     public GrpcClient(String host, int port) {
         channel = ManagedChannelBuilder.forAddress(host, port)
@@ -26,22 +27,22 @@ public class GrpcClient {
 
         accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
 
-        // SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
-        // SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
-        // SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
+         SmartAccessControlGrpc.SmartAccessControlBlockingStub accessControlStub = SmartAccessControlGrpc.newBlockingStub(channel);
+         SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeMachineStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
+         SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingRoomStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
     }
 
     public void shutdown() throws InterruptedException {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public void accessControl() {
+    public String accessControl() {
         UnlockDoorRequest request = UnlockDoorRequest.newBuilder()
                 .setDoorId(1)
                 .setCredentials(AccessCredentials.newBuilder().setUserId(1).setLevel(AccessLevel.ADMIN).build())
                 .build();
         ActionResponse response = accessControlStub.unlockDoor(request);
-        System.out.println("Access control response: " + response.toString());
+        return "Access control response: " + response.toString();
     }
 
 
