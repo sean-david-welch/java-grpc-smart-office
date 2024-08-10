@@ -95,4 +95,12 @@ public class GrpcClient {
     public String bookRoom(int roomId, int userId, String time) {
         return meetingRoomController.bookRoom(roomId, userId, time);
     }
+
+    public String cancelBooking(int bookingId) {
+        return meetingRoomController.cancelBooking(bookingId);
+    }
+
+    public String checkAvailability(int roomId) {
+        return meetingRoomController.checkAvailability(roomId);
+    }
 }
