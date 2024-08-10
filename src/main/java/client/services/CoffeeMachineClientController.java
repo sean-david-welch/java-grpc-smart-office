@@ -1,5 +1,6 @@
 package client.services;
 
+import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import services.smartCoffee.*;
@@ -18,12 +19,14 @@ public class CoffeeMachineClientController {
         this.asyncCoffeeMachineStub = asyncCoffeeMachineStub;
     }
 
-    public String brewCoffee(CoffeeType coffeeType) {
+    public String brewCoffee(CoffeeType coffeeType, Deadline deadline) {
         try {
             BrewCoffeeRequest request = BrewCoffeeRequest.newBuilder()
                     .setCoffeeType(coffeeType)
                     .build();
-            ActionResponse response = coffeeMachineStub.brewCoffee(request);
+            ActionResponse response = coffeeMachineStub
+                    .withDeadline(deadline)
+                    .brewCoffee(request);
             return "Coffee brewed: " + response.toString();
         } catch (StatusRuntimeException e) {
             return "Error: " + e.getStatus().getDescription();
