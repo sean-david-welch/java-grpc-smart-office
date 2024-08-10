@@ -5,6 +5,9 @@ import services.smartAccess.AccessLevel;
 import javax.swing.*;
 import java.awt.*;
 
+import static client.UtilityStyles.createStyledLabel;
+import static client.UtilityStyles.getjTextField;
+
 public class AccessControlUI extends JPanel {
     public AccessControlUI(GrpcClient grpcClient, ClientUI parent) {
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Access Control", 0, 0, null, Color.WHITE));
@@ -39,25 +42,8 @@ public class AccessControlUI extends JPanel {
         add(accessButton);
     }
 
-    private JLabel createStyledLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setForeground(Color.WHITE);
-        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
-        return label;
-    }
-
     private JTextField createStyledTextField() {
         return getjTextField();
-    }
-
-    static JTextField getjTextField() {
-        JTextField textField = new JTextField(10);
-        textField.setBackground(new Color(60, 60, 60));
-        textField.setForeground(Color.WHITE);
-        textField.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
-        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        textField.setCaretColor(Color.WHITE); // White cursor for better visibility
-        return textField;
     }
 
     private JComboBox<String> createStyledComboBox(String[] items) {

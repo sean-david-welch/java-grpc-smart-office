@@ -3,7 +3,8 @@ package client;
 import javax.swing.*;
 import java.awt.*;
 
-import static client.AccessControlUI.getjTextField;
+import static client.UtilityStyles.generateTimeSlots;
+import static client.UtilityStyles.getjTextField;
 
 public class MeetingRoomUI extends JPanel {
     public MeetingRoomUI(GrpcClient grpcClient, ClientUI parent) {
@@ -45,10 +46,7 @@ public class MeetingRoomUI extends JPanel {
     }
 
     private JLabel createStyledLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setForeground(Color.WHITE);
-        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
-        return label;
+        return UtilityStyles.createStyledLabel(text);
     }
 
     private JTextField createStyledTextField() {
@@ -72,11 +70,5 @@ public class MeetingRoomUI extends JPanel {
         return StyledButtonUI.getjButton("Book Room");
     }
 
-    private String[] generateTimeSlots() {
-        String[] timeSlots = new String[10];
-        for (int i = 8; i < 18; i++) {
-            timeSlots[i - 8] = String.format("%02d:00", i);
-        }
-        return timeSlots;
-    }
+
 }
