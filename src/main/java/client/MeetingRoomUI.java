@@ -3,6 +3,8 @@ package client;
 import javax.swing.*;
 import java.awt.*;
 
+import static client.AccessControlUI.getjTextField;
+
 public class MeetingRoomUI extends JPanel {
     public MeetingRoomUI(GrpcClient grpcClient, ClientUI parent) {
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Meeting Room", 0, 0, null, Color.WHITE));
@@ -20,16 +22,17 @@ public class MeetingRoomUI extends JPanel {
         add(userIdField);
 
         JLabel timeSlotLabel = createStyledLabel("Time Slot:");
-        JTextField timeSlotField = createStyledTextField();
+        String[] timeSlots = generateTimeSlots();
+        JComboBox<String> timeSlotComboBox = createStyledComboBox(timeSlots);
         add(timeSlotLabel);
-        add(timeSlotField);
+        add(timeSlotComboBox);
 
         JButton bookRoomButton = createStyledButton();
         bookRoomButton.addActionListener(e -> {
             try {
                 int roomId = Integer.parseInt(roomIdField.getText());
                 int userId = Integer.parseInt(userIdField.getText());
-                String timeSlot = timeSlotField.getText();
+                String timeSlot = (String) timeSlotComboBox.getSelectedItem();
                 String response = grpcClient.bookRoom(roomId, userId, timeSlot);
                 parent.displayResponse(response, response.contains("Error"));
             } catch (NumberFormatException ex) {
@@ -44,18 +47,36 @@ public class MeetingRoomUI extends JPanel {
     private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(Color.WHITE);
+        label.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         return label;
     }
 
     private JTextField createStyledTextField() {
-        JTextField textField = new JTextField(10);
-        textField.setBackground(new Color(60, 60, 60));
-        textField.setForeground(Color.WHITE);
-        textField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        return textField;
+        return getjTextField();
+    }
+
+    private JComboBox<String> createStyledComboBox(String[] items) {
+        return getStringJComboBox(items);
+    }
+
+    static JComboBox<String> getStringJComboBox(String[] items) {
+        JComboBox<String> comboBox = new JComboBox<>(items);
+        comboBox.setBackground(new Color(60, 60, 60));
+        comboBox.setForeground(Color.WHITE);
+        comboBox.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
+        comboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        return comboBox;
     }
 
     private JButton createStyledButton() {
         return StyledButtonUI.getjButton("Book Room");
+    }
+
+    private String[] generateTimeSlots() {
+        String[] timeSlots = new String[10];
+        for (int i = 8; i < 18; i++) {
+            timeSlots[i - 8] = String.format("%02d:00", i);
+        }
+        return timeSlots;
     }
 }
