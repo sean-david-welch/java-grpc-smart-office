@@ -21,10 +21,8 @@ public class UtilityStyles {
         return label;
     }
 
-    public static JComboBox<String> getStringJComboBox() {
-        String[] timeSlots = generateTimeSlots();
-
-        JComboBox<String> comboBox = new JComboBox<>(timeSlots);
+    public static JComboBox<String> getStringJComboBox(String[] items) {
+        JComboBox<String> comboBox = new JComboBox<>(items);
         comboBox.setBackground(new Color(60, 60, 60));
         comboBox.setForeground(Color.WHITE);
         comboBox.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));

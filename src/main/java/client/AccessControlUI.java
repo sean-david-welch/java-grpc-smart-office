@@ -47,7 +47,7 @@ public class AccessControlUI extends JPanel {
     }
 
     private JComboBox<String> createStyledComboBox(String[] items) {
-        return MeetingRoomUI.getStringJComboBox(items);
+        return UtilityStyles.getStringJComboBox(items);
     }
 
     private JButton createStyledButton() {

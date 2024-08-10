@@ -5,7 +5,7 @@ import services.smartCoffee.CoffeeType;
 import javax.swing.*;
 import java.awt.*;
 
-import static client.MeetingRoomUI.getStringJComboBox;
+import static client.UtilityStyles.getStringJComboBox;
 
 public class CoffeeUI extends JPanel {
     public CoffeeUI(GrpcClient grpcClient, ClientUI parent) {

@@ -3,8 +3,7 @@ package client;
 import javax.swing.*;
 import java.awt.*;
 
-import static client.UtilityStyles.generateTimeSlots;
-import static client.UtilityStyles.getjTextField;
+import static client.UtilityStyles.*;
 
 public class MeetingRoomUI extends JPanel {
     public MeetingRoomUI(GrpcClient grpcClient, ClientUI parent) {
@@ -55,15 +54,6 @@ public class MeetingRoomUI extends JPanel {
 
     private JComboBox<String> createStyledComboBox(String[] items) {
         return getStringJComboBox(items);
-    }
-
-    static JComboBox<String> getStringJComboBox(String[] items) {
-        JComboBox<String> comboBox = new JComboBox<>(items);
-        comboBox.setBackground(new Color(60, 60, 60));
-        comboBox.setForeground(Color.WHITE);
-        comboBox.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        return comboBox;
     }
 
     private JButton createStyledButton() {
