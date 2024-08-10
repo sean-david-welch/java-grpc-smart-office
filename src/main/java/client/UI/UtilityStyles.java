@@ -24,8 +24,8 @@ public class UtilityStyles {
 
     public static JComboBox<String> getStringJComboBox(String[] items) {
         JComboBox<String> comboBox = new JComboBox<>(items);
-        comboBox.setBackground(new Color(60, 60, 60));
-        comboBox.setForeground(Color.WHITE);
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setForeground(Color.BLACK);
         comboBox.setFont(new Font("Jetbrains Mono", Font.PLAIN, 12));
         comboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         return comboBox;
