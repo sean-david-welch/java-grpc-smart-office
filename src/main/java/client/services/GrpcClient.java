@@ -6,11 +6,14 @@ import services.smartAccess.AccessLevel;
 import services.smartAccess.AccessLogsResponse;
 import services.smartAccess.SmartAccessControlGrpc;
 import services.smartCoffee.CoffeeType;
+import services.smartCoffee.InventoryItem;
 import services.smartCoffee.SmartCoffeeMachineGrpc;
 import services.smartMeeting.SmartMeetingRoomGrpc;
 import services.utils.JwtUtility;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -43,12 +46,19 @@ public class GrpcClient {
                 .intercept(authInterceptor)
                 .build();
 
-        SmartAccessControlGrpc.SmartAccessControlBlockingStub blockingStub = SmartAccessControlGrpc.newBlockingStub(channel);
-        SmartAccessControlGrpc.SmartAccessControlStub asyncStub = SmartAccessControlGrpc.newStub(channel);
+        // Access control
+        SmartAccessControlGrpc.SmartAccessControlBlockingStub accessBlockingStub = SmartAccessControlGrpc.newBlockingStub(channel);
+        SmartAccessControlGrpc.SmartAccessControlStub accessAsyncStub = SmartAccessControlGrpc.newStub(channel);
+        accessControlService = new AccessControlClientController(accessBlockingStub, accessAsyncStub);
 
-        accessControlService = new AccessControlClientController(blockingStub, asyncStub);
-        coffeeMachineService = new CoffeeMachineClientController(SmartCoffeeMachineGrpc.newBlockingStub(channel));
-        meetingRoomService = new MeetingRoomClientController(SmartMeetingRoomGrpc.newBlockingStub(channel));
+        // Coffee machine
+        SmartCoffeeMachineGrpc.SmartCoffeeMachineBlockingStub coffeeBlockingStub = SmartCoffeeMachineGrpc.newBlockingStub(channel);
+        SmartCoffeeMachineGrpc.SmartCoffeeMachineStub coffeeAsyncStub = SmartCoffeeMachineGrpc.newStub(channel);
+        coffeeMachineService = new CoffeeMachineClientController(coffeeBlockingStub, coffeeAsyncStub);
+
+        // Meeting room
+        SmartMeetingRoomGrpc.SmartMeetingRoomBlockingStub meetingBlockingStub = SmartMeetingRoomGrpc.newBlockingStub(channel);
+        meetingRoomService = new MeetingRoomClientController(meetingBlockingStub);
     }
 
     public void shutdown() throws InterruptedException {
@@ -71,6 +81,14 @@ public class GrpcClient {
     // Coffee Machine Methods
     public String brewCoffee(CoffeeType coffeeType) {
         return coffeeMachineService.brewCoffee(coffeeType);
+    }
+
+    public void checkInventory(Optional<InventoryItem> itemOptional) {
+        coffeeMachineService.checkInventory(itemOptional);
+    }
+
+    public String refillInventory(Map<InventoryItem, Integer> itemsToRefill) {
+        return coffeeMachineService.refillInventory(itemsToRefill);
     }
 
     // Meeting Room Methods
