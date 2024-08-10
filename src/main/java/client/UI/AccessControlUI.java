@@ -22,7 +22,7 @@ public class AccessControlUI extends JPanel {
         this.parent = parent;
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Access Control", 0, 0, null, Color.WHITE));
-        setLayout(new GridLayout(12, 2, 5, 5));
+        setLayout(new GridLayout(13, 2, 5, 5));
         setBackground(new Color(40, 40, 40));
 
         UnlockDoorUI();
